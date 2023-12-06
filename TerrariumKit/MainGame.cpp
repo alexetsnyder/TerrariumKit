@@ -10,6 +10,8 @@ MainGame::MainGame()
 	_screenWidth = 1024;
 	_screenHeight = 768;
 	_gameState = GameState::RUNNING;
+	_vao = 0;
+	_vbo = 0;
 }
 
 void MainGame::run()
@@ -41,6 +43,7 @@ void MainGame::initSystems()
 	}
 
 	glViewport(0, 0, _screenWidth, _screenHeight);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	
 	createShaderProgram();
 
@@ -53,7 +56,6 @@ void MainGame::setGLAttributes()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 }
 
 void MainGame::createWindow()
@@ -64,7 +66,6 @@ void MainGame::createWindow()
 		SDL_WINDOWPOS_CENTERED,
 		_screenWidth,
 		_screenHeight,
-		SDL_WINDOW_SHOWN |
 		SDL_WINDOW_OPENGL
 	);
 
@@ -146,8 +147,8 @@ void MainGame::processInput()
 
 void MainGame::drawGame()
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	_shaders.use();
 
