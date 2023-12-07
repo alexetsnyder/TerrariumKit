@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Shaders.h"
+#include "Triangle.h"
+
 #include <SDL/SDL.h>
 
 enum GameState
@@ -34,6 +36,6 @@ class MainGame
 		int _screenHeight;
 		GameState _gameState;
 		Shaders _shaders;
-		unsigned int _vao, _vbo;
+		Triangle _triangle;
 };
 
