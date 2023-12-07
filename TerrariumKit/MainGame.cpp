@@ -89,8 +89,8 @@ void MainGame::createGLContext()
 void MainGame::createShaderProgram()
 {
 	char infoLog[512];
-	if (!_shaders.setShader("Shaders/vertex.glsl", GL_VERTEX_SHADER) ||
-		!_shaders.setShader("Shaders/fragment.glsl", GL_FRAGMENT_SHADER) ||
+	if (!_shaders.setVertexShader("Shaders/vertex.glsl") ||
+		!_shaders.setFragmentShader("Shaders/fragment.glsl") ||
 		!_shaders.compile(infoLog) ||
 		!_shaders.link(infoLog))
 	{

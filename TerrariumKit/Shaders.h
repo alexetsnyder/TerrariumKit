@@ -7,7 +7,9 @@ class Shaders
 	public:
 		Shaders();
 
-		bool setShader(std::string shaderPath, int glShader);
+		bool setVertexShader(std::string shaderPath);
+
+		bool setFragmentShader(std::string shaderPath);
 
 		bool compile(char infoLog[512]);
 		
@@ -16,6 +18,7 @@ class Shaders
 		void use();
 
 	private:
+		bool setShader(std::string shaderPath, int glShader);
 		std::string readFile(std::string filePath);
 		bool compile(unsigned int shader, char infoLog[512]);
 

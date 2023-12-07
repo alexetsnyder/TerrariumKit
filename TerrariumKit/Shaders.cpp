@@ -11,6 +11,16 @@ Shaders::Shaders()
 	_fragment = 0;
 }
 
+bool Shaders::setVertexShader(std::string shaderPath)
+{
+	return setShader(shaderPath, GL_VERTEX_SHADER);
+}
+
+bool Shaders::setFragmentShader(std::string shaderPath)
+{
+	return setShader(shaderPath, GL_FRAGMENT_SHADER);
+}
+
 bool Shaders::setShader(std::string shaderPath, int glShaderType)
 {
 	std::string shaderSourceStr = readFile(shaderPath);
