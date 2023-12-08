@@ -137,6 +137,7 @@
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Square.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="Square.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <ItemGroup>

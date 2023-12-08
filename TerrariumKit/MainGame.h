@@ -2,6 +2,7 @@
 
 #include "Shaders.h"
 #include "Triangle.h"
+#include "Square.h"
 
 #include <SDL/SDL.h>
 
@@ -24,7 +25,6 @@ class MainGame
 		void createWindow();
 		void createGLContext();
 		void createShaderProgram();
-		void createTriangle();
 
 		void gameLoop();
 		void processInput();
@@ -37,5 +37,7 @@ class MainGame
 		GameState _gameState;
 		Shaders _shaders;
 		Triangle _triangle;
+		Square _square;
+
 };
 

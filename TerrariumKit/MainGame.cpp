@@ -46,6 +46,7 @@ void MainGame::initSystems()
 	createShaderProgram();
 
 	_triangle.init();
+	_square.init();
 }
 
 void MainGame::setGLAttributes()
@@ -127,7 +128,8 @@ void MainGame::drawGame()
 
 	_shaders.use();
 
-	_triangle.draw();
+	//_triangle.draw();
+	_square.draw();
 
 	SDL_GL_SwapWindow(_window);
 }
