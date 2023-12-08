@@ -34,8 +34,11 @@ class MainGame
 		SDL_Window* _window;
 		int _screenWidth;
 		int _screenHeight;
+
 		GameState _gameState;
 		Shaders _shaders;
+
+		bool _drawWireFrame;
 		Triangle _triangle;
 		Square _square;
 

@@ -8,8 +8,8 @@ float squareVertices[] = {
 };
 
 unsigned int indices[] = {
-    0, 1, 3,
-    1, 2, 3,
+    0, 1, 3,    //first triangle
+    1, 2, 3,    //second triangle
 };
 
 Square::Square()

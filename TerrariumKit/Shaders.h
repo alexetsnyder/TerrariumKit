@@ -6,6 +6,7 @@ class Shaders
 {
 	public:
 		Shaders();
+		~Shaders();
 
 		bool setVertexShader(std::string shaderPath);
 

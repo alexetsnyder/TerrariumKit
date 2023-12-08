@@ -10,6 +10,7 @@ MainGame::MainGame()
 	_screenWidth = 1024;
 	_screenHeight = 768;
 	_gameState = GameState::RUNNING;
+	_drawWireFrame = false;
 }
 
 void MainGame::run()
@@ -47,6 +48,11 @@ void MainGame::initSystems()
 
 	_triangle.init();
 	_square.init();
+
+	if (_drawWireFrame)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
 }
 
 void MainGame::setGLAttributes()

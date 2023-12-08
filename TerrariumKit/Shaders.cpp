@@ -11,6 +11,14 @@ Shaders::Shaders()
 	_fragment = 0;
 }
 
+Shaders::~Shaders()
+{
+	if (_program != 0)
+	{
+		glDeleteProgram(_program);
+	}
+}
+
 bool Shaders::setVertexShader(std::string shaderPath)
 {
 	return setShader(shaderPath, GL_VERTEX_SHADER);
