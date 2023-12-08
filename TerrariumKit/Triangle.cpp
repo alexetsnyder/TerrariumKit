@@ -8,6 +8,16 @@ float vertices[] = {
 	 0.0f,  0.5f, 0.0f  // top   
 };
 
+Triangle::Triangle()
+{
+
+}
+
+Triangle::~Triangle()
+{
+	deleteBuffers();
+}
+
 void Triangle::init()
 {
 	genBuffers();

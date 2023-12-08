@@ -28,3 +28,16 @@ void Shape::unbindVertexArray()
 {
 	glBindVertexArray(0);
 }
+
+void Shape::deleteBuffers()
+{
+	if (_vbo != 0)
+	{
+		glDeleteBuffers(1, &_vbo);
+	}
+
+	if (_vao != 0)
+	{
+		glDeleteVertexArrays(1, &_vao);
+	}
+}

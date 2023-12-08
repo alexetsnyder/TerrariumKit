@@ -1,4 +1,6 @@
 #pragma once
+#include <glad/glad.h>
+
 class Shape
 {
 	public:
@@ -17,7 +19,9 @@ class Shape
 
 		void unbindVertexArray();
 
-		unsigned int _vao;
-		unsigned int _vbo;
+		void deleteBuffers();
+
+		GLuint _vao{0};
+		GLuint _vbo{0};
 };
 

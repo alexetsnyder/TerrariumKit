@@ -122,8 +122,7 @@ void MainGame::processInput()
 }
 
 void MainGame::drawGame()
-{
-	
+{	
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	_shaders.use();
