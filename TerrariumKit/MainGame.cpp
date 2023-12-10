@@ -24,11 +24,7 @@ void MainGame::run()
 
 void MainGame::initSystems()
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-	{
-		std::cout << "Error::SDL_Init::" << SDL_GetError() << std::endl;
-		SDL_Quit();
-	}
+	initSDL();
 
 	setGLAttributes();
 
@@ -36,22 +32,21 @@ void MainGame::initSystems()
 
 	createGLContext();
 
-	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
-		std::cout << "Error::gladLoadGLLoader\n";
-		SDL_Quit();
-	}
+	initGlad();
 
-	glViewport(0, 0, _screenWidth, _screenHeight);
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	setGLSettings();
 	
 	createShaderProgram();
 
-	_triangle.init();
-	_square.init();
+	initShapes();
+}
 
-	if (_drawWireFrame)
+void MainGame::initSDL()
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		std::cout << "Error::SDL_Init::" << SDL_GetError() << std::endl;
+		SDL_Quit();
 	}
 }
 
@@ -91,6 +86,25 @@ void MainGame::createGLContext()
 	}
 }
 
+void MainGame::initGlad()
+{
+	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+		std::cout << "Error::gladLoadGLLoader\n";
+		SDL_Quit();
+	}
+}
+
+void MainGame::setGLSettings()
+{
+	glViewport(0, 0, _screenWidth, _screenHeight);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+	if (_drawWireFrame)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+}
+
 void MainGame::createShaderProgram()
 {
 	char infoLog[512];
@@ -102,6 +116,12 @@ void MainGame::createShaderProgram()
 		std::cout << "Error::CreateShaderProgram::" << infoLog << std::endl;
 		SDL_Quit();
 	}
+}
+
+void MainGame::initShapes()
+{
+	_triangle.init();
+	_square.init();
 }
 
 void MainGame::gameLoop()

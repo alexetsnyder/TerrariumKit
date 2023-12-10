@@ -21,10 +21,14 @@ class MainGame
 		
 	private:
 		void initSystems();
+		void initSDL();
 		void setGLAttributes();
 		void createWindow();
 		void createGLContext();
+		void initGlad();
+		void setGLSettings();
 		void createShaderProgram();
+		void initShapes();
 
 		void gameLoop();
 		void processInput();
