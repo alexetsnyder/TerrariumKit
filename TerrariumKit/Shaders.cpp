@@ -1,6 +1,8 @@
 #include "Shaders.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <iostream>
 #include <fstream>
 
@@ -88,6 +90,12 @@ bool Shaders::link(char infoLog[512])
 void Shaders::use()
 {
 	glUseProgram(_program);
+}
+
+void Shaders::setUniform(std::string name, glm::mat4 matrix)
+{
+	GLuint mat4Loc = glGetUniformLocation(_program, name.c_str());
+	glUniformMatrix4fv(mat4Loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 std::string Shaders::readFile(std::string filePath)

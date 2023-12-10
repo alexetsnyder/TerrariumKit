@@ -2,6 +2,9 @@
 #include "Shaders.h"
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <iostream>
 
 MainGame::MainGame()
@@ -153,6 +156,10 @@ void MainGame::drawGame()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	_shaders.use();
+
+	glm::mat4 transform = glm::mat4(1.0f);
+	transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	_shaders.setUniform("transform", transform);
 
 	//_triangle.draw();
 	_square.draw();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <string>
 
 class Shaders
@@ -17,6 +18,8 @@ class Shaders
 		bool link(char infoLog[512]);
 
 		void use();
+
+		void setUniform(std::string name, glm::mat4 matrix);
 
 	private:
 		bool setShader(std::string shaderPath, int glShader);
