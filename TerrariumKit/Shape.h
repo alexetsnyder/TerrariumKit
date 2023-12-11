@@ -11,8 +11,8 @@ class Shape
 	protected:
 		virtual void sendBufferData() = 0;
 
-		void genBuffers();
-		void bindBuffers();
+		void genAll();
+		void bindAll();
 
 		void bindVertexArray();
 		void bindVertexBuffer();
@@ -21,7 +21,7 @@ class Shape
 		void unbindBuffers();
 		void unbindVertexArray();
 
-		void deleteBuffers();
+		void deleteAll();
 
 	private:
 		GLuint _vao{0};

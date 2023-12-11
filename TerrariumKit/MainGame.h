@@ -3,6 +3,7 @@
 #include "ShaderProgram.h"
 #include "Triangle.h"
 #include "Square.h"
+#include "Cube.h"
 
 #include <SDL/SDL.h>
 
@@ -45,5 +46,6 @@ class MainGame
 		bool _drawWireFrame;
 		Triangle _triangle;
 		Square _square;
+		Cube _cube;
 };
 

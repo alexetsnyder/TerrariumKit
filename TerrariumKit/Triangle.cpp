@@ -15,12 +15,12 @@ Triangle::Triangle()
 
 Triangle::~Triangle()
 {
-	deleteBuffers();
+	deleteAll();
 }
 
 void Triangle::init()
 {
-	genBuffers();
+	genAll();
 	sendBufferData();
 }
 
@@ -33,7 +33,7 @@ void Triangle::draw()
 
 void Triangle::sendBufferData()
 {
-	bindBuffers();
+	bindAll();
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);

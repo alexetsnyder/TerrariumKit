@@ -126,6 +126,7 @@ void MainGame::initShapes()
 {
 	_triangle.init();
 	_square.init();
+	_cube.init();
 }
 
 void MainGame::gameLoop()
@@ -158,12 +159,21 @@ void MainGame::drawGame()
 
 	_shaderProgram.use();
 
-	glm::mat4 transform = glm::mat4(1.0f);
-	transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	_shaderProgram.setUniform("transform", transform);
+	glm::mat4 model{ 1.0f };
+	glm::mat4 view{ 1.0f };
+	glm::mat4 projection{ 1.0f };
+	
+	model = glm::rotate(model, (SDL_GetTicks() / 1000.0f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	projection = glm::perspective(glm::radians(45.0f), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
 
+	_shaderProgram.setUniform("model", model);
+	_shaderProgram.setUniform("view", view);
+	_shaderProgram.setUniform("projection", projection);
+	
 	//_triangle.draw();
-	_square.draw();
+	//_square.draw();
+	_cube.draw();
 
 	SDL_GL_SwapWindow(_window);
 }

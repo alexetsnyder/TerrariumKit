@@ -2,14 +2,14 @@
 
 #include <glad/glad.h>
 
-void Shape::genBuffers()
+void Shape::genAll()
 {
 	glGenVertexArrays(1, &_vao);
 	glGenBuffers(1, &_vbo);
 	glGenBuffers(1, &_ebo);
 }
 
-void Shape::bindBuffers()
+void Shape::bindAll()
 {
 	bindVertexArray();
 	bindVertexBuffer();
@@ -42,7 +42,7 @@ void Shape::unbindVertexArray()
 	glBindVertexArray(0);
 }
 
-void Shape::deleteBuffers()
+void Shape::deleteAll()
 {
 	if (_vbo != 0)
 	{

@@ -19,12 +19,12 @@ Square::Square()
 
 Square::~Square()
 {
-    deleteBuffers();
+    deleteAll();
 }
 
 void Square::init()
 {
-    genBuffers();
+    genAll();
     sendBufferData();
 }
 
@@ -37,7 +37,7 @@ void Square::draw()
 
 void Square::sendBufferData()
 {
-    bindBuffers();
+    bindAll();
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(squareVertices), squareVertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
