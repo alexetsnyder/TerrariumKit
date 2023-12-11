@@ -13,7 +13,5 @@ public:
 
 private:
 	void sendBufferData() override;
-
-	GLuint _ebo{0};
 };
 

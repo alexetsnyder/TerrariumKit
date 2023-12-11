@@ -40,4 +40,5 @@ void Triangle::sendBufferData()
 	glEnableVertexAttribArray(0);
 
 	unbindVertexArray();
+	unbindBuffers();
 }
