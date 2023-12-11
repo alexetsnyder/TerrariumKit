@@ -1,5 +1,5 @@
 #include "MainGame.h"
-#include "Shaders.h"
+#include "ShaderProgram.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -101,6 +101,7 @@ void MainGame::setGLSettings()
 {
 	glViewport(0, 0, _screenWidth, _screenHeight);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
 
 	if (_drawWireFrame)
 	{
@@ -111,10 +112,10 @@ void MainGame::setGLSettings()
 void MainGame::createShaderProgram()
 {
 	char infoLog[512];
-	if (!_shaders.setVertexShader("Shaders/vertex.glsl") ||
-		!_shaders.setFragmentShader("Shaders/fragment.glsl") ||
-		!_shaders.compile(infoLog) ||
-		!_shaders.link(infoLog))
+	if (!_shaderProgram.setVertexShader("Shaders/vertex.glsl") ||
+		!_shaderProgram.setFragmentShader("Shaders/fragment.glsl") ||
+		!_shaderProgram.compile(infoLog) ||
+		!_shaderProgram.link(infoLog))
 	{
 		std::cout << "Error::CreateShaderProgram::" << infoLog << std::endl;
 		SDL_Quit();
@@ -153,13 +154,13 @@ void MainGame::processInput()
 
 void MainGame::drawGame()
 {	
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	_shaders.use();
+	_shaderProgram.use();
 
 	glm::mat4 transform = glm::mat4(1.0f);
 	transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	_shaders.setUniform("transform", transform);
+	_shaderProgram.setUniform("transform", transform);
 
 	//_triangle.draw();
 	_square.draw();

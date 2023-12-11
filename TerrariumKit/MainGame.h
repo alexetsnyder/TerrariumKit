@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Shaders.h"
+#include "ShaderProgram.h"
 #include "Triangle.h"
 #include "Square.h"
 
@@ -40,11 +40,10 @@ class MainGame
 		int _screenHeight;
 
 		GameState _gameState;
-		Shaders _shaders;
+		ShaderProgram _shaderProgram;
 
 		bool _drawWireFrame;
 		Triangle _triangle;
 		Square _square;
-
 };
 

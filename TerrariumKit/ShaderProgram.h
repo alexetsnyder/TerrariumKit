@@ -3,11 +3,11 @@
 #include <glm/glm.hpp>
 #include <string>
 
-class Shaders
+class ShaderProgram
 {
 	public:
-		Shaders();
-		~Shaders();
+		ShaderProgram();
+		~ShaderProgram();
 
 		bool setVertexShader(std::string shaderPath);
 

@@ -1,4 +1,4 @@
-#include "Shaders.h"
+#include "ShaderProgram.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -6,14 +6,14 @@
 #include <iostream>
 #include <fstream>
 
-Shaders::Shaders()
+ShaderProgram::ShaderProgram()
 {
 	_program = 0;
 	_vertex = 0;
 	_fragment = 0;
 }
 
-Shaders::~Shaders()
+ShaderProgram::~ShaderProgram()
 {
 	if (_program != 0)
 	{
@@ -21,17 +21,17 @@ Shaders::~Shaders()
 	}
 }
 
-bool Shaders::setVertexShader(std::string shaderPath)
+bool ShaderProgram::setVertexShader(std::string shaderPath)
 {
 	return setShader(shaderPath, GL_VERTEX_SHADER);
 }
 
-bool Shaders::setFragmentShader(std::string shaderPath)
+bool ShaderProgram::setFragmentShader(std::string shaderPath)
 {
 	return setShader(shaderPath, GL_FRAGMENT_SHADER);
 }
 
-bool Shaders::setShader(std::string shaderPath, int glShaderType)
+bool ShaderProgram::setShader(std::string shaderPath, int glShaderType)
 {
 	std::string shaderSourceStr = readFile(shaderPath);
 	const char* shaderSource = shaderSourceStr.c_str();
@@ -55,7 +55,7 @@ bool Shaders::setShader(std::string shaderPath, int glShaderType)
 	return true;
 }
 
-bool Shaders::compile(char infoLog[512])
+bool ShaderProgram::compile(char infoLog[512])
 {
 	if (compile(_vertex, infoLog) && compile(_fragment, infoLog))
 	{
@@ -65,7 +65,7 @@ bool Shaders::compile(char infoLog[512])
 	return false;
 }
 
-bool Shaders::link(char infoLog[512])
+bool ShaderProgram::link(char infoLog[512])
 {
 	int success;
 
@@ -87,18 +87,18 @@ bool Shaders::link(char infoLog[512])
 	return true;
 }
 
-void Shaders::use()
+void ShaderProgram::use()
 {
 	glUseProgram(_program);
 }
 
-void Shaders::setUniform(std::string name, glm::mat4 matrix)
+void ShaderProgram::setUniform(std::string name, glm::mat4 matrix)
 {
 	GLuint mat4Loc = glGetUniformLocation(_program, name.c_str());
 	glUniformMatrix4fv(mat4Loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-std::string Shaders::readFile(std::string filePath)
+std::string ShaderProgram::readFile(std::string filePath)
 {
 	std::string fileStr = "";
 	std::string line;
@@ -120,7 +120,7 @@ std::string Shaders::readFile(std::string filePath)
 	return fileStr;
 }
 
-bool Shaders::compile(unsigned int shader, char infoLog[512])
+bool ShaderProgram::compile(unsigned int shader, char infoLog[512])
 {
 	int success;
 	glCompileShader(shader);
