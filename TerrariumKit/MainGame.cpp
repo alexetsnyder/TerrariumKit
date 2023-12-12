@@ -1,6 +1,7 @@
 #include "MainGame.h"
 #include "ShaderProgram.h"
 
+#include <SDL/SDL_image.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -42,6 +43,8 @@ void MainGame::initSystems()
 	createShaderProgram();
 
 	initShapes();
+
+	initTextures();
 }
 
 void MainGame::initSDL()
@@ -50,6 +53,11 @@ void MainGame::initSDL()
 	{
 		std::cout << "Error::SDL_Init::" << SDL_GetError() << std::endl;
 		SDL_Quit();
+	}
+
+	if (!IMG_Init(IMG_INIT_PNG))
+	{
+		std::cout << "Error::IMG_Init::" << SDL_GetError() << std::endl;
 	}
 }
 
@@ -129,6 +137,25 @@ void MainGame::initShapes()
 	_cube.init();
 }
 
+void MainGame::initTextures()
+{
+	glGenTextures(1, &_texture);
+	glBindTexture(GL_TEXTURE_2D, _texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	SDL_Surface* imageSurface = LoadImage("Assets/Textures/Dirt.png");
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSurface->w, imageSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageSurface->pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SDL_FreeSurface(imageSurface);
+}
+
 void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
@@ -166,11 +193,13 @@ void MainGame::drawGame()
 	model = glm::rotate(model, (SDL_GetTicks() / 1000.0f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 	projection = glm::perspective(glm::radians(45.0f), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
-
+	
 	_shaderProgram.setUniform("model", model);
 	_shaderProgram.setUniform("view", view);
 	_shaderProgram.setUniform("projection", projection);
 	
+	glBindTexture(GL_TEXTURE_2D, _texture);
+
 	//_triangle.draw();
 	//_square.draw();
 	_cube.draw();
@@ -182,4 +211,35 @@ void MainGame::terminate()
 {
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
+}
+
+SDL_Surface* MainGame::LoadImage(const char* filePath)
+{
+	SDL_Surface* sourceSurface = IMG_Load(filePath);
+	SDL_Rect imageFrame{ 0, 0, sourceSurface->w, sourceSurface->h };
+
+	uint32_t redMask;
+	uint32_t greenMask;
+	uint32_t blueMask;
+	uint32_t alphaMask;
+
+#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+	redMask = 0xff000000;
+	greenMask = 0x00ff0000;
+	blueMask = 0x0000ff00;
+	alphaMask = 0x000000ff;
+#else
+	redMask = 0x000000ff;
+	greenMask = 0x0000ff00;
+	blueMask = 0x00ff0000;
+	alphaMask = 0xff000000;
+#endif
+
+	SDL_Surface* targetSurface = SDL_CreateRGBSurface(0, imageFrame.w, imageFrame.h, 32, redMask, greenMask, blueMask, alphaMask);
+
+	SDL_BlitSurface(sourceSurface, &imageFrame, targetSurface, &imageFrame);
+
+	SDL_FreeSurface(sourceSurface);
+
+	return targetSurface;
 }

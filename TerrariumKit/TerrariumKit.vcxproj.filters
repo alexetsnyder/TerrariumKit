@@ -50,6 +50,9 @@
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
       <Filter>Dlls</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="..\Dependencies\dlls\SDL2_image.dll">
+      <Filter>Dlls</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h">

@@ -30,11 +30,14 @@ class MainGame
 		void setGLSettings();
 		void createShaderProgram();
 		void initShapes();
+		void initTextures();
 
 		void gameLoop();
 		void processInput();
 		void drawGame();
 		void terminate();
+
+		SDL_Surface* LoadImage(const char* filePath);
 
 		SDL_Window* _window;
 		int _screenWidth;
@@ -47,5 +50,7 @@ class MainGame
 		Triangle _triangle;
 		Square _square;
 		Cube _cube;
+
+		GLuint _texture;
 };
 

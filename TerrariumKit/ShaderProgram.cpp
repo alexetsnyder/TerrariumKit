@@ -81,6 +81,8 @@ bool ShaderProgram::link(char infoLog[512])
 		return false;
 	}
 
+	glDetachShader(_program, _vertex);
+	glDetachShader(_program, _fragment);
 	glDeleteShader(_vertex);
 	glDeleteShader(_fragment);
 

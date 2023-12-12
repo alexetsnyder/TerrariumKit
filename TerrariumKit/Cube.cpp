@@ -3,40 +3,40 @@
 const float cubeVertices[] =
 {
      //Front Face
-    -0.5f,  0.5f, -0.5f,   //0
-     0.5f,  0.5f, -0.5f,   //1
-    -0.5f, -0.5f, -0.5f,   //2
-     0.5f, -0.5f, -0.5f,   //3
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  //0
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  //1
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  //2
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  //3
 
      //Back Face
-     0.5f,  0.5f,  0.5f,   //4
-    -0.5f,  0.5f,  0.5f,   //5
-     0.5f, -0.5f,  0.5f,   //6
-    -0.5f, -0.5f,  0.5f,   //7
+     0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  //4
+    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  //5
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  //6
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  //7
 
      //Left Face
-    -0.5f,  0.5f, -0.5f,   //8
-    -0.5f,  0.5f,  0.5f,   //9
-    -0.5f, -0.5f, -0.5f,   //10
-    -0.5f, -0.5f,  0.5f,   //11
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  //8
+    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  //9
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  //10
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  //11
 
      //Right Face
-     0.5f,  0.5f,  0.5f,   //12
-     0.5f,  0.5f, -0.5f,   //13
-     0.5f, -0.5f,  0.5f,   //14
-     0.5f, -0.5f, -0.5f,   //15
+     0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  //12
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  //13
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  //14
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  //15
 
      //Top Face
-    -0.5f,  0.5f, -0.5f,   //16
-     0.5f,  0.5f, -0.5f,   //17
-    -0.5f,  0.5f,  0.5f,   //18
-     0.5f,  0.5f,  0.5f,   //19
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  //16
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  //17
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,  //18
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  //19
 
      //Bottom Face
-     0.5f, -0.5f, -0.5f,   //20
-    -0.5f, -0.5f, -0.5f,   //21
-     0.5f, -0.5f,  0.5f,   //22
-    -0.5f, -0.5f,  0.5f,   //23
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  //20
+    -0.5f, -0.5f, -0.5f,  1.0f, 1.0f,  //21
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  //22
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  //23
 };
 
 const unsigned int cubeIndices[] =
@@ -77,10 +77,13 @@ void Cube::sendBufferData()
     bindAll();
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     unbindVertexArray();
     unbindBuffers();
