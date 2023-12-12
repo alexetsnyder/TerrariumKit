@@ -21,17 +21,17 @@ ShaderProgram::~ShaderProgram()
 	}
 }
 
-bool ShaderProgram::setVertexShader(std::string shaderPath)
+bool ShaderProgram::setVertexShader(const std::string shaderPath)
 {
 	return setShader(shaderPath, GL_VERTEX_SHADER);
 }
 
-bool ShaderProgram::setFragmentShader(std::string shaderPath)
+bool ShaderProgram::setFragmentShader(const std::string shaderPath)
 {
 	return setShader(shaderPath, GL_FRAGMENT_SHADER);
 }
 
-bool ShaderProgram::setShader(std::string shaderPath, int glShaderType)
+bool ShaderProgram::setShader(const std::string shaderPath, int glShaderType)
 {
 	std::string shaderSourceStr = readFile(shaderPath);
 	const char* shaderSource = shaderSourceStr.c_str();
@@ -92,13 +92,13 @@ void ShaderProgram::use()
 	glUseProgram(_program);
 }
 
-void ShaderProgram::setUniform(std::string name, glm::mat4 matrix)
+void ShaderProgram::setUniform(const std::string name, glm::mat4 matrix)
 {
 	GLuint mat4Loc = glGetUniformLocation(_program, name.c_str());
 	glUniformMatrix4fv(mat4Loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-std::string ShaderProgram::readFile(std::string filePath)
+std::string ShaderProgram::readFile(const std::string filePath)
 {
 	std::string fileStr = "";
 	std::string line;

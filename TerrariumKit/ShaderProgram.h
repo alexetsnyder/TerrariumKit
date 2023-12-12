@@ -9,9 +9,9 @@ class ShaderProgram
 		ShaderProgram();
 		~ShaderProgram();
 
-		bool setVertexShader(std::string shaderPath);
+		bool setVertexShader(const std::string shaderPath);
 
-		bool setFragmentShader(std::string shaderPath);
+		bool setFragmentShader(const std::string shaderPath);
 
 		bool compile(char infoLog[512]);
 		
@@ -19,11 +19,11 @@ class ShaderProgram
 
 		void use();
 
-		void setUniform(std::string name, glm::mat4 matrix);
+		void setUniform(const std::string name, glm::mat4 matrix);
 
 	private:
-		bool setShader(std::string shaderPath, int glShader);
-		std::string readFile(std::string filePath);
+		bool setShader(const std::string shaderPath, int glShader);
+		std::string readFile(const std::string filePath);
 		bool compile(unsigned int shader, char infoLog[512]);
 
 		unsigned int _program;
