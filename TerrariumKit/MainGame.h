@@ -37,6 +37,8 @@ class MainGame
 		void drawGame();
 		void terminate();
 
+		void fatalError();
+
 		SDL_Surface* LoadImage(const char* filePath);
 
 		SDL_Window* _window;

@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
+#include <cstdlib>
 
 MainGame::MainGame()
 {
@@ -15,6 +16,7 @@ MainGame::MainGame()
 	_screenHeight = 768;
 	_gameState = GameState::RUNNING;
 	_drawWireFrame = false;
+	_texture = 0;
 }
 
 void MainGame::run()
@@ -52,12 +54,13 @@ void MainGame::initSDL()
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		std::cout << "Error::SDL_Init::" << SDL_GetError() << std::endl;
-		SDL_Quit();
+		fatalError();
 	}
 
 	if (!IMG_Init(IMG_INIT_PNG))
 	{
 		std::cout << "Error::IMG_Init::" << SDL_GetError() << std::endl;
+		fatalError();
 	}
 }
 
@@ -83,7 +86,7 @@ void MainGame::createWindow()
 	if (_window == NULL)
 	{
 		std::cout << "Error::SDL_CreateWindow::" << SDL_GetError() << std::endl;
-		SDL_Quit();
+		fatalError();
 	}
 }
 
@@ -93,7 +96,7 @@ void MainGame::createGLContext()
 	if (glContext == NULL)
 	{
 		std::cout << "Error::SDL_GL_CreateContext::" << SDL_GetError() << std::endl;
-		SDL_Quit();
+		fatalError();
 	}
 }
 
@@ -101,7 +104,7 @@ void MainGame::initGlad()
 {
 	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
 		std::cout << "Error::gladLoadGLLoader\n";
-		SDL_Quit();
+		fatalError();
 	}
 }
 
@@ -126,7 +129,7 @@ void MainGame::createShaderProgram()
 		!_shaderProgram.link(infoLog))
 	{
 		std::cout << "Error::CreateShaderProgram::" << infoLog << std::endl;
-		SDL_Quit();
+		fatalError();
 	}
 }
 
@@ -210,7 +213,14 @@ void MainGame::drawGame()
 void MainGame::terminate()
 {
 	SDL_DestroyWindow(_window);
+	IMG_Quit();
 	SDL_Quit();
+}
+
+void MainGame::fatalError()
+{
+	terminate();
+	exit(EXIT_FAILURE);
 }
 
 SDL_Surface* MainGame::LoadImage(const char* filePath)
