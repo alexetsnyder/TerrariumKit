@@ -1,9 +1,9 @@
 #include "ShaderProgram.h"
+#include "ErrorLog.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <iostream>
 #include <fstream>
 
 ShaderProgram::ShaderProgram()
@@ -48,24 +48,32 @@ bool ShaderProgram::setShader(const std::string shaderPath, int glShaderType)
 	}
 	else
 	{
-		std::cout << "Error glShader was neither GL_VERTEX_SHADER nor GL_FRAGMENT_SHADER\n";
+		logError("ShaderProgram::setShader", "Error glShader was neither GL_VERTEX_SHADER nor GL_FRAGMENT_SHADER");
 		return false;
 	}
 
 	return true;
 }
 
-bool ShaderProgram::compile(char infoLog[512])
+bool ShaderProgram::compile()
 {
-	if (compile(_vertex, infoLog) && compile(_fragment, infoLog))
+	char infoLog[512];
+	if (!compile(_vertex, infoLog))
 	{
-		return true;
+		logError("ShaderProgram::compile(vertexShader)", infoLog);
+		return false;
 	}
 
-	return false;
+	if (!compile(_fragment, infoLog))
+	{
+		logError("ShaderProgram::compile(fragmentShader)", infoLog);
+		return false;
+	}
+
+	return true;
 }
 
-bool ShaderProgram::link(char infoLog[512])
+bool ShaderProgram::link()
 {
 	int success;
 
@@ -74,10 +82,12 @@ bool ShaderProgram::link(char infoLog[512])
 	glAttachShader(_program, _fragment);
 	glLinkProgram(_program);
 
+	char infoLog[512];
 	glGetProgramiv(_program, GL_LINK_STATUS, &success);
 	if (!success)
 	{
 		glGetProgramInfoLog(_program, 512, NULL, infoLog);
+		logError("ShaderProgram::link", infoLog);
 		return false;
 	}
 
@@ -116,7 +126,7 @@ std::string ShaderProgram::readFile(const std::string filePath)
 	}
 	else
 	{
-		std::cout << "Unable to open file " << filePath << std::endl;
+		logError("ShaderProgram::readFile", "Unable to open file: " + filePath);
 	}
 
 	return fileStr;

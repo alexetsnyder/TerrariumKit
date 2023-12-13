@@ -1,12 +1,12 @@
 #include "MainGame.h"
 #include "ShaderProgram.h"
+#include "ErrorLog.h"
 
 #include <SDL/SDL_image.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <iostream>
 #include <cstdlib>
 
 MainGame::MainGame()
@@ -53,13 +53,13 @@ void MainGame::initSDL()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		std::cout << "Error::SDL_Init::" << SDL_GetError() << std::endl;
+		logError("SDL_INIT(SDL_INIT_EVERYTHING)", SDL_GetError());
 		fatalError();
 	}
 
-	if (!IMG_Init(IMG_INIT_PNG))
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
-		std::cout << "Error::IMG_Init::" << SDL_GetError() << std::endl;
+		logError("IMG_Init(IMG_INIT_PNG)", IMG_GetError());
 		fatalError();
 	}
 }
@@ -85,7 +85,7 @@ void MainGame::createWindow()
 
 	if (_window == NULL)
 	{
-		std::cout << "Error::SDL_CreateWindow::" << SDL_GetError() << std::endl;
+		logError("SDL_CreateWindow", SDL_GetError());
 		fatalError();
 	}
 }
@@ -95,15 +95,16 @@ void MainGame::createGLContext()
 	SDL_GLContext glContext = SDL_GL_CreateContext(_window);
 	if (glContext == NULL)
 	{
-		std::cout << "Error::SDL_GL_CreateContext::" << SDL_GetError() << std::endl;
+		logError("SDL_GL_CreateContext", SDL_GetError());
 		fatalError();
 	}
 }
 
 void MainGame::initGlad()
 {
-	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
-		std::cout << "Error::gladLoadGLLoader\n";
+	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+	{
+		logError("initGlad::gladLoadGLLoader", "Problem initializing glad.");
 		fatalError();
 	}
 }
@@ -122,13 +123,11 @@ void MainGame::setGLSettings()
 
 void MainGame::createShaderProgram()
 {
-	char infoLog[512];
 	if (!_shaderProgram.setVertexShader("Shaders/vertex.glsl") ||
 		!_shaderProgram.setFragmentShader("Shaders/fragment.glsl") ||
-		!_shaderProgram.compile(infoLog) ||
-		!_shaderProgram.link(infoLog))
+		!_shaderProgram.compile() ||
+		!_shaderProgram.link())
 	{
-		std::cout << "Error::CreateShaderProgram::" << infoLog << std::endl;
 		fatalError();
 	}
 }

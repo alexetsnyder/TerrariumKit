@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="ErrorLog.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="ErrorLog.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Shape.h" />

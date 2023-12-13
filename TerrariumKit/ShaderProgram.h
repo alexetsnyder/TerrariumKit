@@ -13,9 +13,9 @@ class ShaderProgram
 
 		bool setFragmentShader(const std::string shaderPath);
 
-		bool compile(char infoLog[512]);
+		bool compile();
 		
-		bool link(char infoLog[512]);
+		bool link();
 
 		void use();
 
