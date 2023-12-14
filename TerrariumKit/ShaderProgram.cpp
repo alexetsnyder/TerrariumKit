@@ -5,28 +5,29 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <fstream>
+#include <vector>
 
 ShaderProgram::ShaderProgram()
 {
-	_program = 0;
-	_vertex = 0;
-	_fragment = 0;
+	_programID = 0;
+	_vertexID = 0;
+	_fragmentID = 0;
 }
 
 ShaderProgram::~ShaderProgram()
 {
-	if (_program != 0)
+	if (_programID != 0)
 	{
-		glDeleteProgram(_program);
+		glDeleteProgram(_programID);
 	}
 }
 
-bool ShaderProgram::setVertexShader(const std::string shaderPath)
+bool ShaderProgram::setVertexShader(const std::string& shaderPath)
 {
 	return setShader(shaderPath, GL_VERTEX_SHADER);
 }
 
-bool ShaderProgram::setFragmentShader(const std::string shaderPath)
+bool ShaderProgram::setFragmentShader(const std::string& shaderPath)
 {
 	return setShader(shaderPath, GL_FRAGMENT_SHADER);
 }
@@ -38,17 +39,17 @@ bool ShaderProgram::setShader(const std::string shaderPath, int glShaderType)
 
 	if (glShaderType == GL_VERTEX_SHADER)
 	{
-		_vertex = glCreateShader(glShaderType);
-		glShaderSource(_vertex, 1, &shaderSource, NULL);
+		_vertexID = glCreateShader(glShaderType);
+		glShaderSource(_vertexID, 1, &shaderSource, NULL);
 	}
 	else if (glShaderType == GL_FRAGMENT_SHADER)
 	{
-		_fragment = glCreateShader(glShaderType);
-		glShaderSource(_fragment, 1, &shaderSource, NULL);
+		_fragmentID = glCreateShader(glShaderType);
+		glShaderSource(_fragmentID, 1, &shaderSource, NULL);
 	}
 	else
 	{
-		logError("ShaderProgram::setShader", "Error glShader was neither GL_VERTEX_SHADER nor GL_FRAGMENT_SHADER");
+		logError("ShaderProgram::setShader", "Error glShaderType was neither GL_VERTEX_SHADER nor GL_FRAGMENT_SHADER");
 		return false;
 	}
 
@@ -57,16 +58,16 @@ bool ShaderProgram::setShader(const std::string shaderPath, int glShaderType)
 
 bool ShaderProgram::compile()
 {
-	char infoLog[512];
-	if (!compile(_vertex, infoLog))
+	std::vector<GLchar> infoLog;
+	if (!compile(_vertexID, infoLog))
 	{
-		logError("ShaderProgram::compile(vertexShader)", infoLog);
+		logError("ShaderProgram::compile(vertexShader)", &infoLog[0]);
 		return false;
 	}
 
-	if (!compile(_fragment, infoLog))
+	if (!compile(_fragmentID, infoLog))
 	{
-		logError("ShaderProgram::compile(fragmentShader)", infoLog);
+		logError("ShaderProgram::compile(fragmentShader)", &infoLog[0]);
 		return false;
 	}
 
@@ -75,42 +76,49 @@ bool ShaderProgram::compile()
 
 bool ShaderProgram::link()
 {
-	int success;
+	bool success = true;
 
-	_program = glCreateProgram();
-	glAttachShader(_program, _vertex);
-	glAttachShader(_program, _fragment);
-	glLinkProgram(_program);
+	_programID = glCreateProgram();
+	glAttachShader(_programID, _vertexID);
+	glAttachShader(_programID, _fragmentID);
+	glLinkProgram(_programID);
+	
+	int isLinked;
+	glGetProgramiv(_programID, GL_LINK_STATUS, &isLinked);
 
-	char infoLog[512];
-	glGetProgramiv(_program, GL_LINK_STATUS, &success);
-	if (!success)
+	if (!isLinked)
 	{
-		glGetProgramInfoLog(_program, 512, NULL, infoLog);
-		logError("ShaderProgram::link", infoLog);
-		return false;
+		success = false;
+
+		GLint maxLength{ 0 };
+		glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &maxLength);
+
+		std::vector<GLchar> infoLog(maxLength);
+		glGetProgramInfoLog(_programID, 512, NULL, &infoLog[0]);
+
+		logError("ShaderProgram::link", &infoLog[0]);
 	}
 
-	glDetachShader(_program, _vertex);
-	glDetachShader(_program, _fragment);
-	glDeleteShader(_vertex);
-	glDeleteShader(_fragment);
+	glDetachShader(_programID, _vertexID);
+	glDetachShader(_programID, _fragmentID);
+	glDeleteShader(_vertexID);
+	glDeleteShader(_fragmentID);
 
-	return true;
+	return success;
 }
 
 void ShaderProgram::use()
 {
-	glUseProgram(_program);
+	glUseProgram(_programID);
 }
 
 void ShaderProgram::setUniform(const std::string name, glm::mat4 matrix)
 {
-	GLuint mat4Loc = glGetUniformLocation(_program, name.c_str());
+	GLuint mat4Loc = glGetUniformLocation(_programID, name.c_str());
 	glUniformMatrix4fv(mat4Loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-std::string ShaderProgram::readFile(const std::string filePath)
+std::string ShaderProgram::readFile(const std::string& filePath)
 {
 	std::string fileStr = "";
 	std::string line;
@@ -132,15 +140,23 @@ std::string ShaderProgram::readFile(const std::string filePath)
 	return fileStr;
 }
 
-bool ShaderProgram::compile(unsigned int shader, char infoLog[512])
+bool ShaderProgram::compile(GLuint shader, std::vector<GLchar>& infoLog)
 {
-	int success;
 	glCompileShader(shader);
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-	if (!success)
+	GLint isCompiled;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+
+	if (isCompiled == GL_FALSE)
 	{
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		GLint maxLength{ 0 };
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+		infoLog.resize(maxLength);
+		glGetShaderInfoLog(shader, 512, NULL, &infoLog[0]);
+
+		glDeleteShader(shader);
+
 		return false;
 	}
 

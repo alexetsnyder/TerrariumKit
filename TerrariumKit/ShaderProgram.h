@@ -1,7 +1,9 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glad/glad.h>
 #include <string>
+#include <vector>
 
 class ShaderProgram
 {
@@ -9,9 +11,9 @@ class ShaderProgram
 		ShaderProgram();
 		~ShaderProgram();
 
-		bool setVertexShader(const std::string shaderPath);
+		bool setVertexShader(const std::string& shaderPath);
 
-		bool setFragmentShader(const std::string shaderPath);
+		bool setFragmentShader(const std::string& shaderPath);
 
 		bool compile();
 		
@@ -23,11 +25,11 @@ class ShaderProgram
 
 	private:
 		bool setShader(const std::string shaderPath, int glShader);
-		std::string readFile(const std::string filePath);
-		bool compile(unsigned int shader, char infoLog[512]);
+		std::string readFile(const std::string& filePath);
+		bool compile(GLuint shader, std::vector<GLchar>& infoLog);
 
-		unsigned int _program;
-		unsigned int _vertex;
-		unsigned int _fragment;
+		GLuint _programID;
+		GLuint _vertexID;
+		GLuint _fragmentID;
 };
 
