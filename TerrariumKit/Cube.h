@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Shape.h"
+#include "Mesh.h"
 
 class Cube : public Shape
 {
@@ -13,5 +14,6 @@ class Cube : public Shape
 
 	private:
 		void sendBufferData() override;
+        Mesh getCubeMesh();
 };
 
