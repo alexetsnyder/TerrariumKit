@@ -20,7 +20,7 @@ MainGame::MainGame()
 	_gameState = GameState::RUNNING;
 	_drawWireFrame = false;
 	_texture = 0;
-	_deltaTime = std::chrono::duration<float, std::milli>(0);
+	_deltaTime = std::chrono::duration<double>(0.0);
 	_lastFrame = std::chrono::high_resolution_clock::now();
 }
 
@@ -173,6 +173,8 @@ void MainGame::gameLoop()
 
 		processInput();
 
+		handleKeys();
+
 		drawGame();
 	}
 }
@@ -188,20 +190,16 @@ void MainGame::processInput()
 				_gameState = GameState::EXIT;
 				break;
 			case SDL_KEYDOWN:
-				switch (event.key.keysym.sym)
+				if (_keyCodes.empty() || find(event.key.keysym.sym, _keyCodes) == _keyCodes.end())
 				{
-					case SDLK_w:
-						_camera.move(CameraDirection::FORWARD, _deltaTime.count());
-						break;
-					case SDLK_s:
-						_camera.move(CameraDirection::BACKWARD, _deltaTime.count());
-						break;
-					case SDLK_a:
-						_camera.move(CameraDirection::LEFT, _deltaTime.count());
-						break;
-					case SDLK_d:
-						_camera.move(CameraDirection::RIGHT, _deltaTime.count());
-						break;
+					_keyCodes.push_back(event.key.keysym.sym);
+				}
+				break;
+			case SDL_KEYUP:
+				auto keyIter = find(event.key.keysym.sym, _keyCodes);
+				if (keyIter != _keyCodes.end())
+				{
+					_keyCodes.erase(keyIter);
 				}
 				break;
 		}
@@ -277,3 +275,39 @@ SDL_Surface* MainGame::LoadImage(const char* filePath)
 
 	return targetSurface;
 }
+
+void MainGame::handleKeys()
+{
+	for (auto key : _keyCodes)
+	{
+		switch (key)
+		{
+			case SDLK_w:
+				_camera.move(CameraDirection::FORWARD, _deltaTime.count());
+				break;
+			case SDLK_s:
+				_camera.move(CameraDirection::BACKWARD, _deltaTime.count());
+				break;
+			case SDLK_a:
+				_camera.move(CameraDirection::LEFT, _deltaTime.count());
+				break;
+			case SDLK_d:
+				_camera.move(CameraDirection::RIGHT, _deltaTime.count());
+				break;
+		}
+	}
+}
+
+std::list<SDL_Keycode>::iterator MainGame::find(SDL_Keycode key, std::list<SDL_Keycode>& keys)
+{
+	for (std::list<SDL_Keycode>::iterator keyIter = keys.begin(); keyIter != keys.end(); keyIter++)
+	{
+		if (*keyIter == key)
+		{
+			return keyIter;
+		}
+	}
+
+	return keys.end();
+}
+

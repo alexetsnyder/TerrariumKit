@@ -8,6 +8,7 @@
 
 #include <SDL/SDL.h>
 #include <chrono>
+#include <list>
 
 enum GameState
 {
@@ -43,6 +44,9 @@ class MainGame
 
 		SDL_Surface* LoadImage(const char* filePath);
 
+		void handleKeys();
+		std::list<SDL_Keycode>::iterator find(SDL_Keycode key, std::list<SDL_Keycode>& keys);
+
 		SDL_Window* _window;
 		int _screenWidth;
 		int _screenHeight;
@@ -58,7 +62,9 @@ class MainGame
 		GLuint _texture;
 
 		Camera _camera;
-		std::chrono::duration<float, std::milli> _deltaTime;
+		std::chrono::duration<double> _deltaTime;
 		std::chrono::high_resolution_clock::time_point _lastFrame;
+
+		std::list<SDL_Keycode> _keyCodes;
 };
 
