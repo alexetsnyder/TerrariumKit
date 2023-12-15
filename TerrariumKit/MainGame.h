@@ -7,6 +7,7 @@
 #include "Camera.h"
 
 #include <SDL/SDL.h>
+#include <chrono>
 
 enum GameState
 {
@@ -57,7 +58,7 @@ class MainGame
 		GLuint _texture;
 
 		Camera _camera;
-		double _deltaTime;
-		Uint64 _lastFrame;
+		std::chrono::duration<float, std::milli> _deltaTime;
+		std::chrono::high_resolution_clock::time_point _lastFrame;
 };
 

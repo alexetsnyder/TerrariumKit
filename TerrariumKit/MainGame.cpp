@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <chrono>
 
 MainGame::MainGame()
 	: _camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f))
@@ -19,8 +20,8 @@ MainGame::MainGame()
 	_gameState = GameState::RUNNING;
 	_drawWireFrame = false;
 	_texture = 0;
-	_deltaTime = 0.0f;
-	_lastFrame = 0.0f;
+	_deltaTime = std::chrono::duration<float, std::milli>(0);
+	_lastFrame = std::chrono::high_resolution_clock::now();
 }
 
 void MainGame::run()
@@ -166,8 +167,8 @@ void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
 	{
-		Uint64 currentFrame = SDL_GetPerformanceCounter();
-		_deltaTime = ((currentFrame - _lastFrame) * 1000 / (double)SDL_GetPerformanceFrequency());
+		std::chrono::high_resolution_clock::time_point currentFrame = std::chrono::high_resolution_clock::now();
+		_deltaTime = currentFrame - _lastFrame;
 		_lastFrame = currentFrame;
 
 		processInput();
@@ -190,16 +191,16 @@ void MainGame::processInput()
 				switch (event.key.keysym.sym)
 				{
 					case SDLK_w:
-						_camera.move(CameraDirection::FORWARD, _deltaTime);
+						_camera.move(CameraDirection::FORWARD, _deltaTime.count());
 						break;
 					case SDLK_s:
-						_camera.move(CameraDirection::BACKWARD, _deltaTime);
+						_camera.move(CameraDirection::BACKWARD, _deltaTime.count());
 						break;
 					case SDLK_a:
-						_camera.move(CameraDirection::LEFT, _deltaTime);
+						_camera.move(CameraDirection::LEFT, _deltaTime.count());
 						break;
 					case SDLK_d:
-						_camera.move(CameraDirection::RIGHT, _deltaTime);
+						_camera.move(CameraDirection::RIGHT, _deltaTime.count());
 						break;
 				}
 				break;
