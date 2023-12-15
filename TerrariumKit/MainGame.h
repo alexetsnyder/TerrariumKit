@@ -4,6 +4,7 @@
 #include "Triangle.h"
 #include "Square.h"
 #include "Cube.h"
+#include "Camera.h"
 
 #include <SDL/SDL.h>
 
@@ -54,5 +55,9 @@ class MainGame
 		Cube _cube;
 
 		GLuint _texture;
+
+		Camera _camera;
+		double _deltaTime;
+		Uint64 _lastFrame;
 };
 

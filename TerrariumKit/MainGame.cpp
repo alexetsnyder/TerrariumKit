@@ -7,9 +7,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <iostream>
 #include <cstdlib>
 
 MainGame::MainGame()
+	: _camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f))
 {
 	_window = nullptr;
 	_screenWidth = 1024;
@@ -17,6 +19,8 @@ MainGame::MainGame()
 	_gameState = GameState::RUNNING;
 	_drawWireFrame = false;
 	_texture = 0;
+	_deltaTime = 0.0f;
+	_lastFrame = 0.0f;
 }
 
 void MainGame::run()
@@ -162,6 +166,10 @@ void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
 	{
+		Uint64 currentFrame = SDL_GetPerformanceCounter();
+		_deltaTime = ((currentFrame - _lastFrame) * 1000 / (double)SDL_GetPerformanceFrequency());
+		_lastFrame = currentFrame;
+
 		processInput();
 
 		drawGame();
@@ -178,6 +186,23 @@ void MainGame::processInput()
 			case SDL_QUIT:
 				_gameState = GameState::EXIT;
 				break;
+			case SDL_KEYDOWN:
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_w:
+						_camera.move(CameraDirection::FORWARD, _deltaTime);
+						break;
+					case SDLK_s:
+						_camera.move(CameraDirection::BACKWARD, _deltaTime);
+						break;
+					case SDLK_a:
+						_camera.move(CameraDirection::LEFT, _deltaTime);
+						break;
+					case SDLK_d:
+						_camera.move(CameraDirection::RIGHT, _deltaTime);
+						break;
+				}
+				break;
 		}
 	}
 }
@@ -189,11 +214,10 @@ void MainGame::drawGame()
 	_shaderProgram.use();
 
 	glm::mat4 model{ 1.0f };
-	glm::mat4 view{ 1.0f };
+	glm::mat4 view{ _camera.getViewMatrix() };
 	glm::mat4 projection{ 1.0f };
 	
 	model = glm::rotate(model, (SDL_GetTicks() / 1000.0f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 	projection = glm::perspective(glm::radians(45.0f), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
 	
 	_shaderProgram.setUniform("model", model);
