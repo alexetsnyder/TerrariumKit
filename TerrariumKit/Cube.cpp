@@ -2,17 +2,17 @@
 
 const float cubeVertices[] =
 {
-    //Back Face
-   -0.5f,  0.5f, -0.5f,  //0
-    0.5f,  0.5f, -0.5f,  //1
-   -0.5f, -0.5f, -0.5f,  //2
-    0.5f, -0.5f, -0.5f,  //3
-
     //Front Face
     0.5f,  0.5f,  0.5f,  //4
    -0.5f,  0.5f,  0.5f,  //5
     0.5f, -0.5f,  0.5f,  //6
    -0.5f, -0.5f,  0.5f,  //7
+
+    //Back Face
+   -0.5f,  0.5f, -0.5f,  //0
+    0.5f,  0.5f, -0.5f,  //1
+   -0.5f, -0.5f, -0.5f,  //2
+    0.5f, -0.5f, -0.5f,  //3
 
     //Left Face
    -0.5f,  0.5f, -0.5f,  //8
@@ -39,17 +39,22 @@ const float cubeVertices[] =
    -0.5f, -0.5f,  0.5f,  //23
 };
 
-const float textureCoordinates[] =
+std::vector<std::string> textureNames =
 {
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    0.0f, 1.0f,
-    1.0f, 1.0f,
+    "bedrock",
+    "stone",
+    "dirt",
+    "grassSide",
+    "grassTop",
+    "riverRock",
+    "cobblestone",
+    "sand",
 };
 
 Cube::Cube()
+    : _atlas(256, 16)
 {
-
+    _atlas.createAtlas(textureNames);
 }
 
 Cube::~Cube()
@@ -96,17 +101,21 @@ Mesh Cube::getCubeMesh()
     int vertexCount = 0;
     for (int face = 0; face < 6; face++)
     {
-        for (int v = 0; v < 4; v++)
+        std::vector<float> textureCoordinates{ _atlas.getTextureCoordinates(getFaceName(face))};
+        for (int vertex = 0; vertex < 4; vertex++)
         {
-            Vertex vertex{};
-            vertex.position.x = cubeVertices[12 * face + 3 * v];
-            vertex.position.y = cubeVertices[12 * face + 3 * v + 1];
-            vertex.position.z = cubeVertices[12 * face + 3 * v + 2];
+            Vertex newVertex{};
 
-            vertex.textureCoordinate.u = textureCoordinates[2 * v];
-            vertex.textureCoordinate.v = textureCoordinates[2 * v + 1];
+            //3 components in 1 vertex, and 4 vertex in a face: 3 * 4 = 12
+            newVertex.position.x = cubeVertices[12 * face + 3 * vertex];
+            newVertex.position.y = cubeVertices[12 * face + 3 * vertex + 1];
+            newVertex.position.z = cubeVertices[12 * face + 3 * vertex + 2];
 
-            cubeMesh.addVertex(vertex);
+            //2 texture coordinates for each vertex
+            newVertex.textureCoordinate.u = textureCoordinates[2 * vertex];
+            newVertex.textureCoordinate.v = textureCoordinates[2 * vertex + 1];
+
+            cubeMesh.addVertex(newVertex);
         }
 
         int indices[] = { 0, 1, 2, 2, 1, 3 };
@@ -119,4 +128,27 @@ Mesh Cube::getCubeMesh()
     }
 
     return cubeMesh;
+}
+
+std::string Cube::getFaceName(int face)
+{
+    std::string faceName{};
+
+    switch (face)
+    {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            faceName = "grassSide"; 
+            break;
+        case 4:
+            faceName = "grassTop";
+            break;
+        case 5:
+            faceName = "dirt";
+            break;
+    }
+
+    return faceName;
 }

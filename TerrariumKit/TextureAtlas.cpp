@@ -7,12 +7,7 @@ TextureAtlas::TextureAtlas(int width, int blockSize)
 	_blockSize = blockSize;
 	_atlasWidth = width;
 	_blockCount = _atlasWidth / _blockSize;
-}
-
-std::vector<float> TextureAtlas::getTextureCoordinates(std::string name)
-{
-	int index = _atlas[name];
-	return getTextureCoordinates(index);
+	_normalizedBlockSize = (float)_blockSize / (float)_atlasWidth;
 }
 
 void TextureAtlas::createAtlas(std::vector<std::string> blockNames)
@@ -23,6 +18,12 @@ void TextureAtlas::createAtlas(std::vector<std::string> blockNames)
 	}
 }
 
+std::vector<float> TextureAtlas::getTextureCoordinates(std::string name)
+{
+	int index = _atlas[name];
+	return getTextureCoordinates(index);
+}
+
 std::vector<float> TextureAtlas::getTextureCoordinates(int index)
 {
 	std::vector<float> textureCoordinates{};
@@ -30,22 +31,20 @@ std::vector<float> TextureAtlas::getTextureCoordinates(int index)
 	float y = index / _blockCount;
 	float x = index - _blockCount * y;
 
-	float normalizedBlockSize = _blockSize / _atlasWidth;
+	y *= _normalizedBlockSize;
+	x *= _normalizedBlockSize;
 
-	y *= normalizedBlockSize;
-	x *= normalizedBlockSize;
+	textureCoordinates.push_back(x);
+	textureCoordinates.push_back(y + _normalizedBlockSize);
+
+	textureCoordinates.push_back(x + _normalizedBlockSize);
+	textureCoordinates.push_back(y + _normalizedBlockSize);
 
 	textureCoordinates.push_back(x);
 	textureCoordinates.push_back(y);
 
-	textureCoordinates.push_back(x + normalizedBlockSize);
+	textureCoordinates.push_back(x + _normalizedBlockSize);
 	textureCoordinates.push_back(y);
-
-	textureCoordinates.push_back(x);
-	textureCoordinates.push_back(y + normalizedBlockSize);
-
-	textureCoordinates.push_back(x + normalizedBlockSize);
-	textureCoordinates.push_back(y + normalizedBlockSize);
 
 	return textureCoordinates;
 }

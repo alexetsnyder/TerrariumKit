@@ -19,6 +19,7 @@ class TextureAtlas
 		int _blockSize;
 		int _atlasWidth;
 		int _blockCount;
+		float _normalizedBlockSize;
 		std::map<std::string, int> _atlas;
 };
 

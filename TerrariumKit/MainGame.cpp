@@ -150,7 +150,7 @@ void MainGame::initTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	SDL_Surface* imageSurface = LoadImage("Assets/Textures/Stone.png");
+	SDL_Surface* imageSurface = LoadImage("Assets/Textures/Atlas.png");
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSurface->w, imageSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageSurface->pixels);
 	glGenerateMipmap(GL_TEXTURE_2D);

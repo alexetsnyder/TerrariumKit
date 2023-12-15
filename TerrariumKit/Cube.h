@@ -2,6 +2,9 @@
 
 #include "Shape.h"
 #include "Mesh.h"
+#include "TextureAtlas.h"
+
+#include <string>
 
 class Cube : public Shape
 {
@@ -15,5 +18,7 @@ class Cube : public Shape
 	private:
 		void sendBufferData() override;
         Mesh getCubeMesh();
-};
+		std::string getFaceName(int face);
 
+		TextureAtlas _atlas;
+};
