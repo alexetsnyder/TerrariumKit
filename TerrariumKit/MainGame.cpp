@@ -200,6 +200,9 @@ void MainGame::pollEvents()
 			case SDL_MOUSEMOTION:
 				processMouseMotion(event);
 				break;
+			case SDL_MOUSEWHEEL:
+				_camera.zoom(event.wheel.y);
+				break;
 		}
 	}
 }
@@ -237,7 +240,7 @@ void MainGame::drawGame()
 	glm::mat4 projection{ 1.0f };
 	
 	model = glm::rotate(model, (SDL_GetTicks() / 1000.0f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(_camera.getZoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
 	
 	_shaderProgram.setUniform("model", model);
 	_shaderProgram.setUniform("view", view);
