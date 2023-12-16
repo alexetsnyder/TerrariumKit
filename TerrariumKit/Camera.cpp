@@ -14,6 +14,11 @@ glm::mat4 Camera::getViewMatrix()
 	return glm::lookAt(_position, _position + _front, _up);
 }
 
+float Camera::getZoom()
+{
+	return _zoom;
+}
+
 void Camera::move(CameraDirection direction, double deltaTime)
 {
 	float velocity = _speed * deltaTime;
@@ -31,6 +36,39 @@ void Camera::move(CameraDirection direction, double deltaTime)
 		case CameraDirection::RIGHT:
 			_position += _right * velocity;
 			break;
+	}
+}
+
+void Camera::lookAt(float xOffset, float yOffset)
+{
+	xOffset *= _sensitivity;
+	yOffset *= _sensitivity;
+
+	_yaw += xOffset;
+	_pitch += yOffset;
+
+	if (_pitch > 89.0f)
+	{
+		_pitch = 89.0f;
+	}
+	else if (_pitch < -89.0f)
+	{
+		_pitch = -89.0f;
+	}
+
+	updateVectors();
+}
+
+void Camera::zoom(float yOffset)
+{
+	_zoom -= yOffset;
+	if (_zoom < 1.0f)
+	{
+		_zoom = 1.0f;
+	}
+	else if (_zoom > 45.0f)
+	{
+		_zoom = 45.0f;
 	}
 }
 

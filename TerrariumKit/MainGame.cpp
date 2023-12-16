@@ -62,6 +62,8 @@ void MainGame::initSDL()
 		fatalError();
 	}
 
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
 		logError("IMG_Init(IMG_INIT_PNG)", IMG_GetError());
@@ -171,7 +173,7 @@ void MainGame::gameLoop()
 		_deltaTime = currentFrame - _lastFrame;
 		_lastFrame = currentFrame;
 
-		processInput();
+		pollEvents();
 
 		handleKeys();
 
@@ -179,7 +181,7 @@ void MainGame::gameLoop()
 	}
 }
 
-void MainGame::processInput()
+void MainGame::pollEvents()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -190,20 +192,38 @@ void MainGame::processInput()
 				_gameState = GameState::EXIT;
 				break;
 			case SDL_KEYDOWN:
-				if (_keyCodes.empty() || find(event.key.keysym.sym, _keyCodes) == _keyCodes.end())
-				{
-					_keyCodes.push_back(event.key.keysym.sym);
-				}
+				addKey(event.key.keysym.sym);
 				break;
 			case SDL_KEYUP:
-				auto keyIter = find(event.key.keysym.sym, _keyCodes);
-				if (keyIter != _keyCodes.end())
-				{
-					_keyCodes.erase(keyIter);
-				}
+				removeKey(event.key.keysym.sym);
+				break;
+			case SDL_MOUSEMOTION:
+				processMouseMotion(event);
 				break;
 		}
 	}
+}
+
+void MainGame::addKey(SDL_Keycode key)
+{
+	if (_keyCodes.empty() || find(key, _keyCodes) == _keyCodes.end())
+	{
+		_keyCodes.push_back(key);
+	}
+}
+
+void MainGame::removeKey(SDL_Keycode key)
+{
+	auto keyIter = find(key, _keyCodes);
+	if (keyIter != _keyCodes.end())
+	{
+		_keyCodes.erase(keyIter);
+	}
+}
+
+void MainGame::processMouseMotion(SDL_Event event)
+{
+	_camera.lookAt(event.motion.xrel, -event.motion.yrel);
 }
 
 void MainGame::drawGame()
@@ -282,6 +302,9 @@ void MainGame::handleKeys()
 	{
 		switch (key)
 		{
+			case SDLK_ESCAPE:
+				_gameState = GameState::EXIT;
+				break;
 			case SDLK_w:
 				_camera.move(CameraDirection::FORWARD, _deltaTime.count());
 				break;

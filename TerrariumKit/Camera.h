@@ -17,7 +17,13 @@ class Camera
 
 		glm::mat4 getViewMatrix();
 
+		float getZoom();
+
 		void move(CameraDirection direction, double deltaTime);
+
+		void lookAt(float xOffset, float yOffset);
+
+		void zoom(float yOffset);
 
 	private:
 		void updateVectors();

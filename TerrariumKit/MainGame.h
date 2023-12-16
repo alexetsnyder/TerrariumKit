@@ -36,7 +36,10 @@ class MainGame
 		void initTextures();
 
 		void gameLoop();
-		void processInput();
+		void pollEvents();
+		void addKey(SDL_Keycode key);
+		void removeKey(SDL_Keycode key);
+		void processMouseMotion(SDL_Event event);
 		void drawGame();
 		void terminate();
 
