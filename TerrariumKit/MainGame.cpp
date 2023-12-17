@@ -50,7 +50,7 @@ void MainGame::initSystems()
 
 	initShapes();
 
-	_chunk.init();
+	_chunk.init(4, 4);
 
 	initTextures();
 }
@@ -227,7 +227,7 @@ void MainGame::drawGame()
 	glm::mat4 view{ _camera.getViewMatrix() };
 	glm::mat4 projection{ 1.0f };
 	
-	model = glm::rotate(model, (SDL_GetTicks() / 1000.0f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+	//model = glm::rotate(model, (SDL_GetTicks() / 1000.0f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 	projection = glm::perspective(glm::radians(_camera.getZoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
 	
 	_shaderProgram.setUniform("model", model);
@@ -256,37 +256,6 @@ void MainGame::fatalError()
 {
 	terminate();
 	exit(EXIT_FAILURE);
-}
-
-SDL_Surface* MainGame::LoadImage(const char* filePath)
-{
-	SDL_Surface* sourceSurface = IMG_Load(filePath);
-	SDL_Rect imageFrame{ 0, 0, sourceSurface->w, sourceSurface->h };
-
-	uint32_t redMask;
-	uint32_t greenMask;
-	uint32_t blueMask;
-	uint32_t alphaMask;
-
-#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-	redMask = 0xff000000;
-	greenMask = 0x00ff0000;
-	blueMask = 0x0000ff00;
-	alphaMask = 0x000000ff;
-#else
-	redMask = 0x000000ff;
-	greenMask = 0x0000ff00;
-	blueMask = 0x00ff0000;
-	alphaMask = 0xff000000;
-#endif
-
-	SDL_Surface* targetSurface = SDL_CreateRGBSurface(0, imageFrame.w, imageFrame.h, 32, redMask, greenMask, blueMask, alphaMask);
-
-	SDL_BlitSurface(sourceSurface, &imageFrame, targetSurface, &imageFrame);
-
-	SDL_FreeSurface(sourceSurface);
-
-	return targetSurface;
 }
 
 void MainGame::handleKeys()

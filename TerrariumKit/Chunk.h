@@ -11,9 +11,8 @@ class Chunk
 {
 	public:
 		Chunk();
-		Chunk(int width, int height);
 
-		void init();
+		void init(int width, int height);
 
 		glm::mat4 getModelMatrix();
 
@@ -22,6 +21,7 @@ class Chunk
 	private:
 		void createTextureAtlas();
 		Mesh getChunkMesh();
+		void createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount);
 		void setChunkMesh(Mesh& chunkMesh);
 
 		void genAll();

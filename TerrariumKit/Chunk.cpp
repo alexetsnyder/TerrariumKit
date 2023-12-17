@@ -71,16 +71,11 @@ Chunk::Chunk()
     _indicesCount = 0;
 }
 
-Chunk::Chunk(int width, int height)
-	: _atlas(256, 16)
+void Chunk::init(int width, int height)
 {
-	_width = width;
-	_height = height;
-    init();
-}
+    _width = width;
+    _height = height;
 
-void Chunk::init()
-{
     createTextureAtlas();
 
     genAll();
@@ -112,17 +107,34 @@ Mesh Chunk::getChunkMesh()
     Mesh chunkMesh{};
 
     int vertexCount = 0;
+    for (int y = 0; y < _height; y++)
+    {
+        for (int x = -_width / 2; x < _width / 2; x++)
+        {
+            for (int z = -_width / 2; z < _width / 2; z++)
+            {
+                glm::vec3 position{ x, y, z };
+                createVoxel(position, chunkMesh, vertexCount);
+            }
+        }
+    }
+
+    return chunkMesh;
+}
+
+void Chunk::createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
+{
     for (int face = 0; face < 6; face++)
     {
-        std::vector<float> textureCoordinates{ _atlas.getTextureCoordinates("stone")};
+        std::vector<float> textureCoordinates{ _atlas.getTextureCoordinates("stone") };
         for (int vertex = 0; vertex < 4; vertex++)
         {
             Vertex newVertex{};
 
             //3 components in 1 vertex, and 4 vertex in a face: 3 * 4 = 12
-            newVertex.position.x = voxelVertices[12 * face + 3 * vertex];
-            newVertex.position.y = voxelVertices[12 * face + 3 * vertex + 1];
-            newVertex.position.z = voxelVertices[12 * face + 3 * vertex + 2];
+            newVertex.position.x = position.x + voxelVertices[12 * face + 3 * vertex];
+            newVertex.position.y = position.y + voxelVertices[12 * face + 3 * vertex + 1];
+            newVertex.position.z = position.z + voxelVertices[12 * face + 3 * vertex + 2];
 
             //2 texture coordinates for each vertex
             newVertex.textureCoordinate.u = textureCoordinates[2 * vertex];
@@ -139,8 +151,6 @@ Mesh Chunk::getChunkMesh()
 
         vertexCount += 4;
     }
-
-    return chunkMesh;
 }
 
 void Chunk::setChunkMesh(Mesh& chunkMesh)

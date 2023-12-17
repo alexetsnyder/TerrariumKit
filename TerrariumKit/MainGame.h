@@ -47,8 +47,6 @@ class MainGame
 
 		void fatalError();
 
-		SDL_Surface* LoadImage(const char* filePath);
-
 		void handleKeys();
 		std::list<SDL_Keycode>::iterator find(SDL_Keycode key, std::list<SDL_Keycode>& keys);
 
