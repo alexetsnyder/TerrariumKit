@@ -142,6 +142,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureAtlas.cpp" />
+    <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldGen.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureAtlas.h" />
+    <ClInclude Include="World.h" />
     <ClInclude Include="WorldGen.h" />
   </ItemGroup>
   <ItemGroup>

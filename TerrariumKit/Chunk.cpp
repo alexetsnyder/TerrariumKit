@@ -60,11 +60,8 @@ const float voxelVertices[] =
 };
 
 Chunk::Chunk()
-	: _atlas(256, 16)
+    : _atlas{ 256, 16 }, _size{}
 {
-	_xWidth = 0;
-    _zWidth = 0;
-	_height = 0;
 	_vao = 0;
 	_vbo = 0;
 	_ebo = 0;
@@ -72,19 +69,51 @@ Chunk::Chunk()
     _indicesCount = 0;
 }
 
-void Chunk::init(int xWidth, int zWidth, int height)
+void Chunk::init(ChunkSize chunkSize)
 {
-    _xWidth = xWidth;
-    _zWidth = zWidth;
-    _height = height;
+    _size = chunkSize;
 
     createTextureAtlas();
 
+    Mesh chunkMesh = getChunkMesh();
+    setChunkMesh(chunkMesh); 
+}
+
+Mesh Chunk::getChunkMesh()
+{
+    Mesh chunkMesh{};
+
+    int vertexCount = 0;
+    for (int y = 0; y < _size.height; y++)
+    {
+        for (int x = -_size.xWidth / 2; x < _size.xWidth / 2; x++)
+        {
+            for (int z = -_size.zWidth / 2; z < _size.zWidth / 2; z++)
+            {
+                glm::vec3 position{ x, y, z };
+                createVoxel(position, chunkMesh, vertexCount);
+            }
+        }
+    }
+
+    return chunkMesh;
+}
+
+void Chunk::setChunkMesh(Mesh& chunkMesh)
+{
     genAll();
     bindAll();
 
-    Mesh chunkMesh = getChunkMesh();
-    setChunkMesh(chunkMesh);
+    _indicesCount = chunkMesh.getIndices().size();
+
+    glBufferData(GL_ARRAY_BUFFER, chunkMesh.getVertices().size() * sizeof(Vertex), &chunkMesh.getVertices().front(), GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoordinate));
+    glEnableVertexAttribArray(1);
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, chunkMesh.getIndices().size() * sizeof(float), &chunkMesh.getIndices().front(), GL_STATIC_DRAW);
 
     unbindAll();
 }
@@ -102,26 +131,6 @@ void Chunk::createTextureAtlas()
 {
 	_atlas.createAtlas(blockNames);
 	_texture.init("Assets/Textures/Atlas.png");
-}
-
-Mesh Chunk::getChunkMesh()
-{
-    Mesh chunkMesh{};
-
-    int vertexCount = 0;
-    for (int y = 0; y < _height; y++)
-    {
-        for (int x = -_xWidth / 2; x < _xWidth / 2; x++)
-        {
-            for (int z = -_zWidth / 2; z < _zWidth / 2; z++)
-            {
-                glm::vec3 position{ x, y, z };
-                createVoxel(position, chunkMesh, vertexCount);
-            }
-        }
-    }
-
-    return chunkMesh;
 }
 
 void Chunk::createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
@@ -153,20 +162,6 @@ void Chunk::createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
 
         vertexCount += 4;
     }
-}
-
-void Chunk::setChunkMesh(Mesh& chunkMesh)
-{
-    _indicesCount = chunkMesh.getIndices().size();
-
-    glBufferData(GL_ARRAY_BUFFER, chunkMesh.getVertices().size() * sizeof(Vertex), &chunkMesh.getVertices().front(), GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoordinate));
-    glEnableVertexAttribArray(1);
-
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, chunkMesh.getIndices().size() * sizeof(float), &chunkMesh.getIndices().front(), GL_STATIC_DRAW);
 }
 
 void Chunk::genAll()
