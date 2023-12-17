@@ -62,7 +62,8 @@ const float voxelVertices[] =
 Chunk::Chunk()
 	: _atlas(256, 16)
 {
-	_width = 0;
+	_xWidth = 0;
+    _zWidth = 0;
 	_height = 0;
 	_vao = 0;
 	_vbo = 0;
@@ -71,9 +72,10 @@ Chunk::Chunk()
     _indicesCount = 0;
 }
 
-void Chunk::init(int width, int height)
+void Chunk::init(int xWidth, int zWidth, int height)
 {
-    _width = width;
+    _xWidth = xWidth;
+    _zWidth = zWidth;
     _height = height;
 
     createTextureAtlas();
@@ -109,9 +111,9 @@ Mesh Chunk::getChunkMesh()
     int vertexCount = 0;
     for (int y = 0; y < _height; y++)
     {
-        for (int x = -_width / 2; x < _width / 2; x++)
+        for (int x = -_xWidth / 2; x < _xWidth / 2; x++)
         {
-            for (int z = -_width / 2; z < _width / 2; z++)
+            for (int z = -_zWidth / 2; z < _zWidth / 2; z++)
             {
                 glm::vec3 position{ x, y, z };
                 createVoxel(position, chunkMesh, vertexCount);

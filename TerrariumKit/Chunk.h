@@ -12,7 +12,7 @@ class Chunk
 	public:
 		Chunk();
 
-		void init(int width, int height);
+		void init(int xWidth, int zWidth, int height);
 
 		glm::mat4 getModelMatrix();
 
@@ -28,7 +28,8 @@ class Chunk
 		void bindAll();
 		void unbindAll();
 
-		int _width;
+		int _xWidth;
+		int _zWidth;
 		int _height;
 
 		glm::vec3 _position;

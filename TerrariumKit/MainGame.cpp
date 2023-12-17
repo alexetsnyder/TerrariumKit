@@ -48,7 +48,7 @@ void MainGame::initSystems()
 	
 	createShaderProgram();
 
-	_chunk.init(4, 4);
+	_chunk.init(4, 4, 4);
 }
 
 void MainGame::initSDL()
