@@ -19,7 +19,6 @@ MainGame::MainGame()
 	_screenHeight = 768;
 	_gameState = GameState::RUNNING;
 	_drawWireFrame = false;
-	_texture = 0;
 	_deltaTime = std::chrono::duration<double>(0.0);
 	_lastFrame = std::chrono::high_resolution_clock::now();
 }
@@ -50,6 +49,8 @@ void MainGame::initSystems()
 	createShaderProgram();
 
 	initShapes();
+
+	_chunk.init();
 
 	initTextures();
 }
@@ -149,21 +150,7 @@ void MainGame::initShapes()
 
 void MainGame::initTextures()
 {
-	glGenTextures(1, &_texture);
-	glBindTexture(GL_TEXTURE_2D, _texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	SDL_Surface* imageSurface = LoadImage("Assets/Textures/Atlas.png");
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSurface->w, imageSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageSurface->pixels);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	SDL_FreeSurface(imageSurface);
+	_texture.init("Assets/Textures/Atlas.png");
 }
 
 void MainGame::gameLoop()
@@ -236,7 +223,7 @@ void MainGame::drawGame()
 
 	_shaderProgram.use();
 
-	glm::mat4 model{ 1.0f };
+	glm::mat4 model{ _chunk.getModelMatrix() };
 	glm::mat4 view{ _camera.getViewMatrix() };
 	glm::mat4 projection{ 1.0f };
 	
@@ -246,12 +233,14 @@ void MainGame::drawGame()
 	_shaderProgram.setUniform("model", model);
 	_shaderProgram.setUniform("view", view);
 	_shaderProgram.setUniform("projection", projection);
-	
-	glBindTexture(GL_TEXTURE_2D, _texture);
+
+	_texture.bind();
 
 	//_triangle.draw();
 	//_square.draw();
-	_cube.draw();
+	//_cube.draw();
+
+	_chunk.draw();
 
 	SDL_GL_SwapWindow(_window);
 }

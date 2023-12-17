@@ -5,6 +5,8 @@
 #include "Square.h"
 #include "Cube.h"
 #include "Camera.h"
+#include "Texture.h"
+#include "Chunk.h"
 
 #include <SDL/SDL.h>
 #include <chrono>
@@ -61,8 +63,9 @@ class MainGame
 		Triangle _triangle;
 		Square _square;
 		Cube _cube;
+		Chunk _chunk;
 
-		GLuint _texture;
+		Texture _texture;
 
 		Camera _camera;
 		std::chrono::duration<double> _deltaTime;

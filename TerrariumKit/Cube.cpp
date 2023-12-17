@@ -39,7 +39,7 @@ const float cubeVertices[] =
     0.5f, -0.5f,  0.5f,  //23 
 };
 
-std::vector<std::string> textureNames =
+std::vector<std::string> textureNamesCube =
 {
     "bedrock",
     "stone",
@@ -54,7 +54,7 @@ std::vector<std::string> textureNames =
 Cube::Cube()
     : _atlas(256, 16)
 {
-    _atlas.createAtlas(textureNames);
+    _atlas.createAtlas(textureNamesCube);
 }
 
 Cube::~Cube()
