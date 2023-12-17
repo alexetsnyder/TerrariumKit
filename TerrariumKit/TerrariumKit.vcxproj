@@ -135,17 +135,13 @@
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
-    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="ErrorLog.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="Shape.cpp" />
-    <ClCompile Include="Square.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureAtlas.cpp" />
-    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="WorldGen.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -156,16 +152,12 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
-    <ClInclude Include="Cube.h" />
     <ClInclude Include="ErrorLog.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="Shape.h" />
-    <ClInclude Include="Square.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureAtlas.h" />
-    <ClInclude Include="Triangle.h" />
     <ClInclude Include="WorldGen.h" />
   </ItemGroup>
   <ItemGroup>

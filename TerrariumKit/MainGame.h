@@ -1,11 +1,7 @@
 #pragma once
 
 #include "ShaderProgram.h"
-#include "Triangle.h"
-#include "Square.h"
-#include "Cube.h"
 #include "Camera.h"
-#include "Texture.h"
 #include "Chunk.h"
 
 #include <SDL/SDL.h>
@@ -34,8 +30,6 @@ class MainGame
 		void initGlad();
 		void setGLSettings();
 		void createShaderProgram();
-		void initShapes();
-		void initTextures();
 
 		void gameLoop();
 		void pollEvents();
@@ -58,12 +52,7 @@ class MainGame
 		ShaderProgram _shaderProgram;
 
 		bool _drawWireFrame;
-		Triangle _triangle;
-		Square _square;
-		Cube _cube;
 		Chunk _chunk;
-
-		Texture _texture;
 
 		Camera _camera;
 		std::chrono::duration<double> _deltaTime;

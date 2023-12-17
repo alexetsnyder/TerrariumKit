@@ -48,11 +48,7 @@ void MainGame::initSystems()
 	
 	createShaderProgram();
 
-	initShapes();
-
 	_chunk.init(4, 4);
-
-	initTextures();
 }
 
 void MainGame::initSDL()
@@ -141,18 +137,6 @@ void MainGame::createShaderProgram()
 	}
 }
 
-void MainGame::initShapes()
-{
-	_triangle.init();
-	_square.init();
-	_cube.init();
-}
-
-void MainGame::initTextures()
-{
-	_texture.init("Assets/Textures/Atlas.png");
-}
-
 void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
@@ -227,18 +211,11 @@ void MainGame::drawGame()
 	glm::mat4 view{ _camera.getViewMatrix() };
 	glm::mat4 projection{ 1.0f };
 	
-	//model = glm::rotate(model, (SDL_GetTicks() / 1000.0f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 	projection = glm::perspective(glm::radians(_camera.getZoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
 	
 	_shaderProgram.setUniform("model", model);
 	_shaderProgram.setUniform("view", view);
 	_shaderProgram.setUniform("projection", projection);
-
-	_texture.bind();
-
-	//_triangle.draw();
-	//_square.draw();
-	//_cube.draw();
 
 	_chunk.draw();
 
