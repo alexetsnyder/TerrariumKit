@@ -1,5 +1,9 @@
 #include "BlockType.h"
 
+BlockType::BlockType()
+{
+}
+
 BlockType::BlockType(std::string name, bool isSolid, std::vector<std::string> blockSidesVct)
 {
 	setName(name);

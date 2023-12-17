@@ -16,6 +16,8 @@ struct BlockSides
 class BlockType
 {
 	public:
+		BlockType();
+
 		//Expects vector of size 6 with strings to be in order:
 		// Front, Back, Left, Right, Top, Bottom.
 		BlockType(std::string name, bool isSolid, std::vector<std::string> blockSidesVct);

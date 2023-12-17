@@ -124,9 +124,9 @@ bool Chunk::isOutsideBlock(glm::vec3 position)
     int yBound = _size.height - 1;
     int zBound = _size.zWidth / 2;
 
-    int x = floor(position.x);
-    int y = floor(position.y);
-    int z = floor(position.z);
+    int x = static_cast<int>(floor(position.x));
+    int y = static_cast<int>(floor(position.y));
+    int z = static_cast<int>(floor(position.z));
 
     if (x < -xBound || x > xBound - 1 ||
         y < 0 || y < yBound ||

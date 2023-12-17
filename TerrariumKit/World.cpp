@@ -10,6 +10,7 @@ void World::init(int worldSize, ChunkSize chunkSize)
 {
 	_worldSize = worldSize;
 	_chunkSize = chunkSize;
+	_worldGen.init(chunkSize);
 
 	createChunks();
 }
