@@ -14,7 +14,7 @@
 #include <chrono>
 
 MainGame::MainGame()
-	: _camera(glm::vec3(0.0f, 5.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f))
+	: _camera(glm::vec3(0.0f, 17.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f))
 {
 	_window = nullptr;
 	_screenWidth = 1024;
@@ -51,9 +51,9 @@ void MainGame::initSystems()
 	createShaderProgram();
 
 	ChunkSize size;
-	size.xWidth = 4;
-	size.zWidth = 4;
-	size.height = 4;
+	size.xWidth = 16;
+	size.zWidth = 16;
+	size.height = 16;
 	_world.init(1, size);
 }
 

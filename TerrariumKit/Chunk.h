@@ -3,6 +3,7 @@
 #include "Mesh.h"
 #include "TextureAtlas.h"
 #include "Texture.h"
+#include "BlockType.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -10,6 +11,7 @@
 #include "ShaderProgram.h"
 
 #include <vector>
+#include <string>
 
 struct ChunkSize
 {
@@ -27,11 +29,10 @@ class Chunk
 
 		void init(ChunkSize chunkSize);
 
-		Mesh getChunkMesh();
-		void createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount);
+		void createVoxel(BlockType blockType, glm::vec3 position, Mesh& chunkMesh, int& vertexCount);
 		void setChunkMesh(Mesh& chunkMesh);
 		
-		bool isOutsideBlock(glm::vec3 position);
+		bool isOutsideChunk(glm::vec3 position);
 		bool hasSolidBlock(glm::vec3 position);
 
 		void draw(ShaderProgram shader);
@@ -41,6 +42,7 @@ class Chunk
 		void genAll();
 		void bindAll();
 		void unbindAll();
+		std::string getFaceName(BlockSides blockSides, int face);
 
 		std::vector<GLubyte> _blocks;
 

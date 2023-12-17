@@ -51,6 +51,8 @@ void WorldGen::init(ChunkSize chunkSize)
 	blockSides.topTextureName = "grassTop";
 	blockSides.bottomTextureName = "dirt";
 	_blockTypeLookUp[4] = BlockType("grass", true, blockSides);
+
+	createBlockByteLookUp();
 }
 
 GLubyte WorldGen::getVoxel(glm::vec3 position)

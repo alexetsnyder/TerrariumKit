@@ -1,6 +1,7 @@
 #include "Chunk.h"
 
 #include "Mesh.h"
+#include "BlockType.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -74,29 +75,6 @@ void Chunk::init(ChunkSize chunkSize)
     _size = chunkSize;
 
     createTextureAtlas();
-
-    Mesh chunkMesh = getChunkMesh();
-    setChunkMesh(chunkMesh); 
-}
-
-Mesh Chunk::getChunkMesh()
-{
-    Mesh chunkMesh{};
-
-    int vertexCount = 0;
-    for (int y = 0; y < _size.height; y++)
-    {
-        for (int x = -_size.xWidth / 2; x < _size.xWidth / 2; x++)
-        {
-            for (int z = -_size.zWidth / 2; z < _size.zWidth / 2; z++)
-            {
-                glm::vec3 position{ x, y, z };
-                createVoxel(position, chunkMesh, vertexCount);
-            }
-        }
-    }
-
-    return chunkMesh;
 }
 
 void Chunk::setChunkMesh(Mesh& chunkMesh)
@@ -118,7 +96,7 @@ void Chunk::setChunkMesh(Mesh& chunkMesh)
     unbindAll();
 }
 
-bool Chunk::isOutsideBlock(glm::vec3 position)
+bool Chunk::isOutsideChunk(glm::vec3 position)
 {
     int xBound = _size.xWidth / 2;
     int yBound = _size.height - 1;
@@ -162,11 +140,13 @@ void Chunk::createTextureAtlas()
 	_texture.init("Assets/Textures/Atlas.png");
 }
 
-void Chunk::createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
+void Chunk::createVoxel(BlockType blockType, glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
 {
+    BlockSides blockSides = blockType.getBlockSides();
+
     for (int face = 0; face < 6; face++)
     {
-        std::vector<float> textureCoordinates{ _atlas.getTextureCoordinates("stone") };
+        std::vector<float> textureCoordinates{ _atlas.getTextureCoordinates(getFaceName(blockSides, face)) };
         for (int vertex = 0; vertex < 4; vertex++)
         {
             Vertex newVertex{};
@@ -212,6 +192,35 @@ void Chunk::unbindAll()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+std::string Chunk::getFaceName(BlockSides blockSides, int face)
+{
+    std::string faceName{};
+
+    switch (face)
+    {
+        case 0:
+            faceName = blockSides.frontTextureName;
+            break;
+        case 1:
+            faceName = blockSides.backTextureName;
+            break;
+        case 2:
+            faceName = blockSides.leftTextureName;
+            break;
+        case 3:
+            faceName = blockSides.rightTextureName;
+            break;
+        case 4:
+            faceName = blockSides.topTextureName;
+            break;
+        case 5:
+            faceName = blockSides.bottomTextureName;
+            break;
+    }
+
+    return faceName;
 }
 
 glm::mat4 Chunk::getModelMatrix()
