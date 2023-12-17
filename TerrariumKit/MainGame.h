@@ -2,7 +2,7 @@
 
 #include "ShaderProgram.h"
 #include "Camera.h"
-#include "Chunk.h"
+#include "World.h"
 
 #include <SDL/SDL.h>
 #include <chrono>
@@ -52,7 +52,7 @@ class MainGame
 		ShaderProgram _shaderProgram;
 
 		bool _drawWireFrame;
-		Chunk _chunk;
+		World _world;
 
 		Camera _camera;
 		std::chrono::duration<double> _deltaTime;

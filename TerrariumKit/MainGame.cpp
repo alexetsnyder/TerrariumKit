@@ -1,6 +1,8 @@
 #include "MainGame.h"
 #include "ShaderProgram.h"
 #include "ErrorLog.h"
+#include "Chunk.h"
+#include "World.h"
 
 #include <SDL/SDL_image.h>
 #include <glad/glad.h>
@@ -52,7 +54,7 @@ void MainGame::initSystems()
 	size.xWidth = 4;
 	size.zWidth = 4;
 	size.height = 4;
-	_chunk.init(size);
+	_world.init(1, size);
 }
 
 void MainGame::initSDL()
@@ -211,17 +213,17 @@ void MainGame::drawGame()
 
 	_shaderProgram.use();
 
-	glm::mat4 model{ _chunk.getModelMatrix() };
+	//glm::mat4 model{ _chunk.getModelMatrix() };
 	glm::mat4 view{ _camera.getViewMatrix() };
 	glm::mat4 projection{ 1.0f };
 	
 	projection = glm::perspective(glm::radians(_camera.getZoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
 	
-	_shaderProgram.setUniform("model", model);
+	//_shaderProgram.setUniform("model", model);
 	_shaderProgram.setUniform("view", view);
 	_shaderProgram.setUniform("projection", projection);
 
-	_chunk.draw();
+	_world.draw(_shaderProgram);
 
 	SDL_GL_SwapWindow(_window);
 }

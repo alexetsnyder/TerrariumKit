@@ -118,8 +118,37 @@ void Chunk::setChunkMesh(Mesh& chunkMesh)
     unbindAll();
 }
 
-void Chunk::draw()
+bool Chunk::isOutsideBlock(glm::vec3 position)
 {
+    int xBound = _size.xWidth / 2;
+    int yBound = _size.height - 1;
+    int zBound = _size.zWidth / 2;
+
+    int x = floor(position.x);
+    int y = floor(position.y);
+    int z = floor(position.z);
+
+    if (x < -xBound || x > xBound - 1 ||
+        y < 0 || y < yBound ||
+        z < -zBound || z > zBound - 1)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Chunk::hasSolidBlock(glm::vec3 position)
+{
+    return false;
+}
+
+void Chunk::draw(ShaderProgram shader)
+{
+    glm::mat4 model{ getModelMatrix() };
+
+    shader.setUniform("model", model);
+
 	_texture.bind();
 
 	glBindVertexArray(_vao);

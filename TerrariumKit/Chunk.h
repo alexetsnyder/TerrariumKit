@@ -7,6 +7,8 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
+#include "ShaderProgram.h"
+
 #include <vector>
 
 struct ChunkSize
@@ -28,8 +30,11 @@ class Chunk
 		Mesh getChunkMesh();
 		void createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount);
 		void setChunkMesh(Mesh& chunkMesh);
+		
+		bool isOutsideBlock(glm::vec3 position);
+		bool hasSolidBlock(glm::vec3 position);
 
-		void draw();
+		void draw(ShaderProgram shader);
 
 	private:
 		void createTextureAtlas();
