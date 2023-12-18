@@ -13,8 +13,6 @@
 #include <vector>
 #include <string>
 
-extern const float voxelVertices[72];
-
 struct ChunkSize
 {
 	int xWidth;

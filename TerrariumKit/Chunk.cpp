@@ -21,45 +21,6 @@ std::vector<std::string> blockNames =
 	"sand",
 };
 
-const float voxelVertices[] =
-{
-    //Front Face
-    0.5f,  0.5f,  0.5f,  //0
-   -0.5f,  0.5f,  0.5f,  //1
-    0.5f, -0.5f,  0.5f,  //2
-   -0.5f, -0.5f,  0.5f,  //3
-
-    //Back Face
-   -0.5f,  0.5f, -0.5f,  //4
-    0.5f,  0.5f, -0.5f,  //5
-   -0.5f, -0.5f, -0.5f,  //6
-    0.5f, -0.5f, -0.5f,  //7
-
-    //Left Face
-   -0.5f,  0.5f,  0.5f,  //8
-   -0.5f,  0.5f, -0.5f,  //9
-   -0.5f, -0.5f,  0.5f,  //10
-   -0.5f, -0.5f, -0.5f,  //11
-   
-    //Right Face
-    0.5f,  0.5f, -0.5f,  //12
-    0.5f,  0.5f,  0.5f,  //13
-    0.5f, -0.5f, -0.5f,  //14
-    0.5f, -0.5f,  0.5f,  //15
-
-    //Top Face
-    0.5f,  0.5f, -0.5f,  //16
-   -0.5f,  0.5f, -0.5f,  //17
-    0.5f,  0.5f,  0.5f,  //18
-   -0.5f,  0.5f,  0.5f,  //19
-    
-    //Bottom Face
-   -0.5f, -0.5f, -0.5f,  //20
-    0.5f, -0.5f, -0.5f,  //21
-   -0.5f, -0.5f,  0.5f,  //22
-    0.5f, -0.5f,  0.5f,  //23 
-};
-
 Chunk::Chunk()
     : _atlas{ 256, 16 }, _size{}
 {
@@ -112,8 +73,8 @@ bool Chunk::isOutsideChunk(glm::vec3 position)
     int z = static_cast<int>(floor(position.z));
 
     if (x < -xBound || x > xBound - 1 ||
-        y < 0 || y < yBound ||
-        z < -zBound || z > zBound - 1)
+        z < -zBound || z > zBound - 1 ||
+        y < 0 || y > yBound)
     {
         return true;
     }

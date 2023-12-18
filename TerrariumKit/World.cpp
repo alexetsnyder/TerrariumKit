@@ -5,14 +5,53 @@
 
 #include <glm/glm.hpp>
 
+const float voxelVertices[] =
+{
+    //Front Face
+    0.5f,  0.5f,  0.5f,  //0
+   -0.5f,  0.5f,  0.5f,  //1
+    0.5f, -0.5f,  0.5f,  //2
+   -0.5f, -0.5f,  0.5f,  //3
+
+    //Back Face
+   -0.5f,  0.5f, -0.5f,  //4
+    0.5f,  0.5f, -0.5f,  //5
+   -0.5f, -0.5f, -0.5f,  //6
+    0.5f, -0.5f, -0.5f,  //7
+
+    //Left Face
+   -0.5f,  0.5f,  0.5f,  //8
+   -0.5f,  0.5f, -0.5f,  //9
+   -0.5f, -0.5f,  0.5f,  //10
+   -0.5f, -0.5f, -0.5f,  //11
+   
+    //Right Face
+    0.5f,  0.5f, -0.5f,  //12
+    0.5f,  0.5f,  0.5f,  //13
+    0.5f, -0.5f, -0.5f,  //14
+    0.5f, -0.5f,  0.5f,  //15
+
+    //Top Face
+    0.5f,  0.5f, -0.5f,  //16
+   -0.5f,  0.5f, -0.5f,  //17
+    0.5f,  0.5f,  0.5f,  //18
+   -0.5f,  0.5f,  0.5f,  //19
+    
+    //Bottom Face
+   -0.5f, -0.5f, -0.5f,  //20
+    0.5f, -0.5f, -0.5f,  //21
+   -0.5f, -0.5f,  0.5f,  //22
+    0.5f, -0.5f,  0.5f,  //23 
+};
+
 const glm::vec3 neighbor[] =
 {
-    glm::vec3( 0.0f,  0.0f, -1.0f),
     glm::vec3( 0.0f,  0.0f,  1.0f),
+    glm::vec3( 0.0f,  0.0f, -1.0f),
     glm::vec3(-1.0f,  0.0f,  0.0f),
     glm::vec3( 1.0f,  0.0f,  0.0f),
     glm::vec3( 0.0f,  1.0f,  0.0f),
-    glm::vec3( 0.0f, -0.0f,  0.0f),
+    glm::vec3( 0.0f, -1.0f,  0.0f),
 };
 
 World::World()
@@ -37,12 +76,11 @@ void World::createChunks()
 
 void World::createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
 {
-    BlockType blockType{ _worldGen.getBlockType(_worldGen.getVoxel(position)) };
-
     for (int face = 0; face < 6; face++)
     {
         if (!hasSolidVoxel(position + neighbor[face]))
         {
+            BlockType blockType{ _worldGen.getBlockType(_worldGen.getVoxel(position)) };
             std::vector<float> textureCoordinates{ _chunk.getTextureCoordinates(blockType.getBlockSides(), face) };
             for (int vertex = 0; vertex < 4; vertex++)
             {
@@ -73,12 +111,12 @@ void World::createVoxel(glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
 
 bool World::hasSolidVoxel(glm::vec3 position)
 {
-    /*if (_chunk.isOutsideChunk(position))
+    if (_chunk.isOutsideChunk(position))
     {
         return false;
-    }*/
+    }
 
-    return false;
+    return true;
 }
 
 void World::draw(ShaderProgram shader)
