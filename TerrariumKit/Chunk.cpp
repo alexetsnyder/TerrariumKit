@@ -77,6 +77,11 @@ void Chunk::init(ChunkSize chunkSize)
     createTextureAtlas();
 }
 
+std::vector<float> Chunk::getTextureCoordinates(BlockSides blockSides, int face)
+{
+    return _atlas.getTextureCoordinates(getFaceName(blockSides, face));
+}
+
 void Chunk::setChunkMesh(Mesh& chunkMesh)
 {
     genAll();
@@ -116,11 +121,6 @@ bool Chunk::isOutsideChunk(glm::vec3 position)
     return false;
 }
 
-bool Chunk::hasSolidBlock(glm::vec3 position)
-{
-    return false;
-}
-
 void Chunk::draw(ShaderProgram shader)
 {
     glm::mat4 model{ getModelMatrix() };
@@ -138,39 +138,6 @@ void Chunk::createTextureAtlas()
 {
 	_atlas.createAtlas(blockNames);
 	_texture.init("Assets/Textures/Atlas.png");
-}
-
-void Chunk::createVoxel(BlockType blockType, glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
-{
-    BlockSides blockSides = blockType.getBlockSides();
-
-    for (int face = 0; face < 6; face++)
-    {
-        std::vector<float> textureCoordinates{ _atlas.getTextureCoordinates(getFaceName(blockSides, face)) };
-        for (int vertex = 0; vertex < 4; vertex++)
-        {
-            Vertex newVertex{};
-
-            //3 components in 1 vertex, and 4 vertex in a face: 3 * 4 = 12
-            newVertex.position.x = position.x + voxelVertices[12 * face + 3 * vertex];
-            newVertex.position.y = position.y + voxelVertices[12 * face + 3 * vertex + 1];
-            newVertex.position.z = position.z + voxelVertices[12 * face + 3 * vertex + 2];
-
-            //2 texture coordinates for each vertex
-            newVertex.textureCoordinate.u = textureCoordinates[2 * vertex];
-            newVertex.textureCoordinate.v = textureCoordinates[2 * vertex + 1];
-
-            chunkMesh.addVertex(newVertex);
-        }
-
-        int indices[] = { 0, 1, 2, 2, 1, 3 };
-        for (int i = 0; i < 6; i++)
-        {
-            chunkMesh.addIndex(vertexCount + indices[i]);
-        }
-
-        vertexCount += 4;
-    }
 }
 
 void Chunk::genAll()

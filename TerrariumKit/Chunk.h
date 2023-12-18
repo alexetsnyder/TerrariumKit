@@ -13,6 +13,8 @@
 #include <vector>
 #include <string>
 
+extern const float voxelVertices[72];
+
 struct ChunkSize
 {
 	int xWidth;
@@ -29,11 +31,11 @@ class Chunk
 
 		void init(ChunkSize chunkSize);
 
-		void createVoxel(BlockType blockType, glm::vec3 position, Mesh& chunkMesh, int& vertexCount);
+		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face);
+
 		void setChunkMesh(Mesh& chunkMesh);
 		
 		bool isOutsideChunk(glm::vec3 position);
-		bool hasSolidBlock(glm::vec3 position);
 
 		void draw(ShaderProgram shader);
 
