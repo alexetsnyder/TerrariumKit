@@ -34,7 +34,7 @@ class Chunk
 
 		void setChunkMesh(Mesh& chunkMesh);
 		
-		bool isOutsideChunk(glm::vec3 position);
+		bool isOutsideChunk(glm::vec3 position) const;
 
 		void draw(ShaderProgram shader);
 

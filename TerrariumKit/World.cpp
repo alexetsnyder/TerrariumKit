@@ -111,7 +111,7 @@ void World::createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& 
     }
 }
 
-bool World::hasSolidVoxel(Chunk& chunk, glm::vec3 position)
+bool World::hasSolidVoxel(const Chunk& chunk, glm::vec3 position) const
 {
     if (chunk.isOutsideChunk(position))
     {

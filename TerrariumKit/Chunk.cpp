@@ -69,7 +69,7 @@ void Chunk::setChunkMesh(Mesh& chunkMesh)
     unbindAll();
 }
 
-bool Chunk::isOutsideChunk(glm::vec3 position)
+bool Chunk::isOutsideChunk(glm::vec3 position) const
 {
     int xBound = _size.xWidth / 2;
     int yBound = _size.height - 1;
