@@ -6,8 +6,9 @@
 #include <glm/glm.hpp>
 
 #include <array>
+#include <stack>
 
-const float voxelVertices[] =
+const float voxelVertices[] 
 {
     //Front Face
     0.5f,  0.5f,  0.5f,  //0
@@ -46,7 +47,7 @@ const float voxelVertices[] =
     0.5f, -0.5f,  0.5f,  //23 
 };
 
-const glm::vec3 neighbor[] =
+const glm::vec3 voxelNeighbors[] 
 {
     glm::vec3( 0.0f,  0.0f,  1.0f),
     glm::vec3( 0.0f,  0.0f, -1.0f),
@@ -57,7 +58,7 @@ const glm::vec3 neighbor[] =
 };
 
 World::World()
-	: _chunkSize{}
+    : _chunkSize{}, _chunkNeighbors{}
 {
 	_worldSize = 0;
 }
@@ -68,19 +69,29 @@ void World::init(int worldSize, ChunkSize chunkSize)
 	_chunkSize = chunkSize;
 	_worldGen.init(chunkSize);
 
+    _chunkNeighbors[0] = glm::vec3(-_chunkSize.xWidth, 0.0f, -_chunkSize.zWidth);
+    _chunkNeighbors[1] = glm::vec3(              0.0f, 0.0f, -_chunkSize.zWidth);
+    _chunkNeighbors[2] = glm::vec3( _chunkSize.xWidth, 0.0f, -_chunkSize.zWidth);
+    _chunkNeighbors[3] = glm::vec3(-_chunkSize.xWidth, 0.0f,               0.0f);
+    _chunkNeighbors[4] = glm::vec3( _chunkSize.xWidth, 0.0f,               0.0f);
+    _chunkNeighbors[5] = glm::vec3(-_chunkSize.xWidth, 0.0f,  _chunkSize.zWidth);
+    _chunkNeighbors[6] = glm::vec3(              0.0f, 0.0f,  _chunkSize.zWidth);
+    _chunkNeighbors[7] = glm::vec3( _chunkSize.xWidth, 0.0f,  _chunkSize.zWidth);
+
 	createChunks();
 }
 
 void World::createChunks()
 {
-	createChunk(glm::vec3(0.0f, 0.0f, 0.0f));
+    glm::vec3 position{ 0.0f, 0.0f, 0.0f };
+    createChunkRec(position, 0);
 }
 
 void World::createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
 {
     for (int face = 0; face < 6; face++)
     {
-        if (!hasSolidVoxel(chunk, position + neighbor[face]))
+        if (!hasSolidVoxel(chunk, position + voxelNeighbors[face]))
         {
             BlockType blockType{ _worldGen.getBlockType(_worldGen.getVoxel(position)) };
             std::vector<float> textureCoordinates{ chunk.getTextureCoordinates(blockType.getBlockSides(), face)};
@@ -132,22 +143,40 @@ void World::draw(ShaderProgram shader)
 void World::createChunk(glm::vec3 position)
 {
     std::array<float, 3> positionArray{ position.x, position.y, position.z };
-    _activeChunks[positionArray] = Chunk(position, _chunkSize);
 
-    Mesh chunkMesh;
-    int vertexCount = 0;
-
-    for (int y = 0; y < _chunkSize.height; y++)
+    if (_activeChunks.find(positionArray) == _activeChunks.end())
     {
-        for (int x = -_chunkSize.xWidth / 2; x < _chunkSize.xWidth / 2; x++)
+        _activeChunks[positionArray] = Chunk(position, _chunkSize);
+
+        Mesh chunkMesh;
+        int vertexCount = 0;
+
+        for (int y = 0; y < _chunkSize.height; y++)
         {
-            for (int z = -_chunkSize.zWidth / 2; z < _chunkSize.zWidth / 2; z++)
+            for (int x = -_chunkSize.xWidth / 2; x < _chunkSize.xWidth / 2; x++)
             {
-                glm::vec3 voxelPosition{ x, y, z };
-                createVoxel(_activeChunks[positionArray], voxelPosition, chunkMesh, vertexCount);
+                for (int z = -_chunkSize.zWidth / 2; z < _chunkSize.zWidth / 2; z++)
+                {
+                    glm::vec3 voxelPosition{ x, y, z };
+                    createVoxel(_activeChunks[positionArray], voxelPosition, chunkMesh, vertexCount);
+                }
             }
         }
-    }
 
-    _activeChunks[positionArray].setChunkMesh(chunkMesh);
+        _activeChunks[positionArray].setChunkMesh(chunkMesh);
+    }
 }
+
+void World::createChunkRec(glm::vec3 position, int recDepth)
+{
+    createChunk(position);
+
+    if (recDepth < _worldSize)
+    {
+        for (auto nPos : _chunkNeighbors)
+        {
+            createChunkRec(position + nPos, recDepth + 1);
+        }
+    }
+}
+

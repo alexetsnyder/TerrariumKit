@@ -26,7 +26,7 @@ class Chunk
 		Chunk();
 		Chunk(glm::vec3 position, ChunkSize chunkSize);
 
-		glm::mat4 getModelMatrix();
+		glm::mat4 getModelMatrix() const;
 
 		void init(glm::vec3 position, ChunkSize chunkSize);
 

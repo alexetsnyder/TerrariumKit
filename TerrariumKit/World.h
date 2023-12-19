@@ -26,10 +26,12 @@ class World
 
 	private:
 		void createChunk(glm::vec3 position);
+		void createChunkRec(glm::vec3 position, int recDepth);
 
 		int _worldSize;
 		ChunkSize _chunkSize;
 		WorldGen _worldGen;
 		std::map<std::array<float, 3>, Chunk> _activeChunks;
+		glm::vec3 _chunkNeighbors[8];
 };
 

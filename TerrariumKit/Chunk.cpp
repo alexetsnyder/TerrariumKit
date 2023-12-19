@@ -158,7 +158,7 @@ std::string Chunk::getFaceName(BlockSides blockSides, int face)
     return faceName;
 }
 
-glm::mat4 Chunk::getModelMatrix()
+glm::mat4 Chunk::getModelMatrix() const
 {
 	glm::mat4 model{ 1.0f };
 	model = glm::translate(model, _position);
