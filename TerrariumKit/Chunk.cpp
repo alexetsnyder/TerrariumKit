@@ -31,8 +31,15 @@ Chunk::Chunk()
     _indicesCount = 0;
 }
 
-void Chunk::init(ChunkSize chunkSize)
+Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
+    : _atlas{ 256, 16 }
 {
+    init(position, chunkSize);
+}
+
+void Chunk::init(glm::vec3 position, ChunkSize chunkSize)
+{
+    _position = position;
     _size = chunkSize;
 
     createTextureAtlas();

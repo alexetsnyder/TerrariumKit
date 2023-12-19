@@ -2,6 +2,7 @@
 
 BlockType::BlockType()
 {
+	_isSolid = false;
 }
 
 BlockType::BlockType(std::string name, bool isSolid, std::vector<std::string> blockSidesVct)

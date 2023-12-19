@@ -24,10 +24,11 @@ class Chunk
 {
 	public:
 		Chunk();
+		Chunk(glm::vec3 position, ChunkSize chunkSize);
 
 		glm::mat4 getModelMatrix();
 
-		void init(ChunkSize chunkSize);
+		void init(glm::vec3 position, ChunkSize chunkSize);
 
 		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face);
 
