@@ -41,8 +41,25 @@ void Chunk::init(glm::vec3 position, ChunkSize chunkSize)
 {
     _position = position;
     _size = chunkSize;
+    _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
 
     createTextureAtlas();
+}
+
+void Chunk::populateBlockMap(WorldGen worldGen)
+{
+    for (int y = 0; y < _size.height; y++)
+    {
+        for (int x = -_size.xWidth / 2; x < _size.xWidth / 2; x++)
+        {
+            for (int z = -_size.zWidth / 2; z < _size.zWidth / 2; z++)
+            {
+                glm::vec3 voxelPosition{ x, y, z };
+                int index = convertPositionToIndex(voxelPosition);
+                _blocks[index] = worldGen.getVoxel(_position + voxelPosition);
+            }
+        }
+    }
 }
 
 std::vector<float> Chunk::getTextureCoordinates(BlockSides blockSides, int face)
@@ -163,4 +180,19 @@ glm::mat4 Chunk::getModelMatrix() const
 	glm::mat4 model{ 1.0f };
 	model = glm::translate(model, _position);
 	return model;
+}
+
+GLubyte Chunk::getBlockByte(glm::vec3 position)
+{
+    int index = convertPositionToIndex(position);
+    return _blocks[index];
+}
+
+int Chunk::convertPositionToIndex(glm::vec3 position) const
+{
+    int x = static_cast<int>(floor(position.x)) + _size.xWidth / 2;
+    int y = static_cast<int>(floor(position.y));
+    int z = static_cast<int>(floor(position.z)) + _size.zWidth / 2;
+
+    return y * _size.xWidth * _size.zWidth + x * _size.zWidth + z;
 }

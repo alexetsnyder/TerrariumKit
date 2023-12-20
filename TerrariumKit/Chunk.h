@@ -4,6 +4,8 @@
 #include "TextureAtlas.h"
 #include "Texture.h"
 #include "BlockType.h"
+#include "Structs.h"
+#include "WorldGen.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -13,13 +15,6 @@
 #include <vector>
 #include <string>
 
-struct ChunkSize
-{
-	int xWidth;
-	int zWidth;
-	int height;
-};
-
 class Chunk
 {
 	public:
@@ -27,8 +22,13 @@ class Chunk
 		Chunk(glm::vec3 position, ChunkSize chunkSize);
 
 		glm::mat4 getModelMatrix() const;
+		GLubyte getBlockByte(glm::vec3 position);
+
+		int convertPositionToIndex(glm::vec3 position) const;
 
 		void init(glm::vec3 position, ChunkSize chunkSize);
+
+		void populateBlockMap(WorldGen worldGen);
 
 		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face);
 

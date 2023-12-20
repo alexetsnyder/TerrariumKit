@@ -6,7 +6,6 @@
 #include <glm/glm.hpp>
 
 #include <array>
-#include <stack>
 
 const float voxelVertices[] 
 {
@@ -93,7 +92,7 @@ void World::createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& 
     {
         if (!hasSolidVoxel(chunk, position + voxelNeighbors[face]))
         {
-            BlockType blockType{ _worldGen.getBlockType(_worldGen.getVoxel(position)) };
+            BlockType blockType{ _worldGen.getBlockType(chunk.getBlockByte(position)) };
             std::vector<float> textureCoordinates{ chunk.getTextureCoordinates(blockType.getBlockSides(), face)};
             for (int vertex = 0; vertex < 4; vertex++)
             {
@@ -147,6 +146,7 @@ void World::createChunk(glm::vec3 position)
     if (_activeChunks.find(positionArray) == _activeChunks.end())
     {
         _activeChunks[positionArray] = Chunk(position, _chunkSize);
+        _activeChunks[positionArray].populateBlockMap(_worldGen);
 
         Mesh chunkMesh;
         int vertexCount = 0;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BlockType.h"
-#include "Chunk.h"
+#include "Structs.h"
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>

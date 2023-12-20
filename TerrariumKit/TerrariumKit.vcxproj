@@ -160,6 +160,7 @@
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="Structs.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureAtlas.h" />
     <ClInclude Include="World.h" />
