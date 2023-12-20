@@ -23,6 +23,7 @@ class Chunk
 
 		glm::mat4 getModelMatrix() const;
 		GLubyte getBlockByte(glm::vec3 position);
+		glm::vec3 getPosition() const;
 
 		int convertPositionToIndex(glm::vec3 position) const;
 

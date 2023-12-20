@@ -188,6 +188,11 @@ GLubyte Chunk::getBlockByte(glm::vec3 position)
     return _blocks[index];
 }
 
+glm::vec3 Chunk::getPosition() const
+{
+    return _position;
+}
+
 int Chunk::convertPositionToIndex(glm::vec3 position) const
 {
     int x = static_cast<int>(floor(position.x)) + _size.xWidth / 2;

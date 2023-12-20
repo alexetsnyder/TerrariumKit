@@ -121,14 +121,56 @@ void World::createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& 
     }
 }
 
-bool World::hasSolidVoxel(const Chunk& chunk, glm::vec3 position) const
+bool World::hasSolidVoxel(Chunk& chunk, glm::vec3 position)
 {
     if (chunk.isOutsideChunk(position))
+    {
+        return hasSolidVoxel(chunk.getPosition() + position);
+    }
+
+    return _worldGen.getBlockType(chunk.getBlockByte(position)).isSolid();
+}
+
+bool World::hasSolidVoxel(const glm::vec3& worldPos)
+{
+    if (_worldSize > 0)
+    {
+        //# of chunks per side depending on the world size
+        int dim = _worldSize + _worldSize + 1;
+
+        int boundX = (dim * _chunkSize.xWidth) / 2;
+        int boundY = _chunkSize.height - 1;
+        int boundZ = (dim * _chunkSize.zWidth) / 2;
+
+        int x = static_cast<int>(floor(worldPos.x));
+        int y = static_cast<int>(floor(worldPos.y));
+        int z = static_cast<int>(floor(worldPos.z));
+
+        if (y < 0 || y > boundY ||
+            x < -boundX || x > boundX - 1 ||
+            z < -boundZ || z > boundZ - 1)
+        {
+            return false;
+        }
+
+        glm::vec3 chunkPos{ floor(x / _chunkSize.xWidth) , y, floor(z / _chunkSize.zWidth) };
+        std::array<float, 3> chunkPosArray{ chunkPos.x, y, chunkPos.z };
+        auto keyIter = _activeChunks.find(chunkPosArray);
+        if (keyIter != _activeChunks.end())
+        {
+            return _worldGen.getBlockType(keyIter->second.getBlockByte(chunkPos)).isSolid();
+        }
+        else
+        {
+            return _worldGen.getBlockType(_worldGen.getVoxel(worldPos)).isSolid();
+        }
+    }
+    else
     {
         return false;
     }
 
-    return true;
+    return false;
 }
 
 void World::draw(ShaderProgram shader)
