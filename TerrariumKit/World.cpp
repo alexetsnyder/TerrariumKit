@@ -66,7 +66,7 @@ void World::init(int worldSize, ChunkSize chunkSize)
 {
 	_worldSize = worldSize;
 	_chunkSize = chunkSize;
-	_worldGen.init(chunkSize);
+	_worldGen.init(chunkSize, 32, 16);
 
     _chunkNeighbors[0] = glm::vec3(-_chunkSize.xWidth, 0.0f, -_chunkSize.zWidth);
     _chunkNeighbors[1] = glm::vec3(              0.0f, 0.0f, -_chunkSize.zWidth);
@@ -200,7 +200,10 @@ void World::createChunk(glm::vec3 position)
                 for (int z = -_chunkSize.zWidth / 2; z < _chunkSize.zWidth / 2; z++)
                 {
                     glm::vec3 voxelPosition{ x, y, z };
-                    createVoxel(_activeChunks[positionArray], voxelPosition, chunkMesh, vertexCount);
+                    if (_worldGen.getBlockType(_activeChunks[positionArray].getBlockByte(voxelPosition)).isSolid())
+                    {
+                        createVoxel(_activeChunks[positionArray], voxelPosition, chunkMesh, vertexCount);
+                    }
                 }
             }
         }

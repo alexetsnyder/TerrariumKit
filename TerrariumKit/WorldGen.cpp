@@ -2,20 +2,29 @@
 
 #include "BlockType.h"
 
+#include <iostream>
+
 WorldGen::WorldGen()
-	: _chunkSize{}
+	: _chunkSize{}, _noise{}
 {
-	
+	_minHeight = 0;
+	_varyHeight = 0;
 }
 
-WorldGen::WorldGen(ChunkSize chunkSize)
+WorldGen::WorldGen(ChunkSize chunkSize, int minHeight, int varyHeight)
 {
-	init(chunkSize);
+	init(chunkSize, minHeight, varyHeight);
 }
 
-void WorldGen::init(ChunkSize chunkSize)
+void WorldGen::init(ChunkSize chunkSize, int minHeight, int varyHeight)
 {
 	_chunkSize = chunkSize;
+
+	_noise.SetSeed(0);
+	_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	_noise.SetFractalType(FastNoiseLite::FractalType_FBm);
+	_minHeight = minHeight;
+	_varyHeight = varyHeight;
 
 	BlockSides blockSides{};
 	_blockTypeLookUp[0] = BlockType("Air", false, blockSides);
@@ -63,15 +72,20 @@ GLubyte WorldGen::getVoxel(glm::vec3 position)
 	{
 		return _blockByteLookUp["bedrock"];
 	}
-	else if (y > _chunkSize.height)
+
+	/* TERRAIN GENERATION */
+
+	int height = static_cast<int>(floor(_noise.GetNoise(position.x, position.z) * _varyHeight + _minHeight));
+
+	if (y > height)
 	{
 		return _blockByteLookUp["air"];
 	}
-	else if (y >= _chunkSize.height - 1)
+	else if (y >= height)
 	{
 		return _blockByteLookUp["grass"];
 	}
-	else if (y >= _chunkSize.height - 2)
+	else if (y >= height - 6)
 	{
 		return _blockByteLookUp["dirt"];
 	}
