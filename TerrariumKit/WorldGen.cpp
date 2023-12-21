@@ -57,7 +57,7 @@ void WorldGen::init(ChunkSize chunkSize)
 
 GLubyte WorldGen::getVoxel(glm::vec3 position)
 {
-	int y = floor(position.y);
+	int y = static_cast<int>(floor(position.y));
 
 	if (y == 0)
 	{

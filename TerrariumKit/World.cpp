@@ -154,7 +154,7 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos)
         }
 
         glm::vec3 chunkPos{ floor(x / _chunkSize.xWidth) , y, floor(z / _chunkSize.zWidth) };
-        std::array<float, 3> chunkPosArray{ chunkPos.x, y, chunkPos.z };
+        std::array<float, 3> chunkPosArray{ chunkPos.x, chunkPos.y, chunkPos.z };
         auto keyIter = _activeChunks.find(chunkPosArray);
         if (keyIter != _activeChunks.end())
         {
