@@ -145,7 +145,7 @@ void MainGame::initWorld()
 	size.xWidth = 16;
 	size.zWidth = 16;
 	size.height = 128;
-	_world.init(1, size);
+	_world.init(_camera, 1, size);
 }
 
 void MainGame::gameLoop()

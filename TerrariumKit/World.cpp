@@ -58,13 +58,16 @@ const glm::vec3 voxelNeighbors[]
 };
 
 World::World()
-    : _chunkSize{}, _chunkNeighbors{}
+    : _chunkSize{}, _chunkNeighbors{}, _currentChunk{ -1.0f, 0.0f, 0.0f }
 {
 	_worldSize = 0;
+    _camera = nullptr;
 }
 
-void World::init(int worldSize, ChunkSize chunkSize)
+void World::init(const Camera& camera, int worldSize, ChunkSize chunkSize)
 {
+    _camera = &camera;
+
 	_worldSize = worldSize;
 	_chunkSize = chunkSize;
 	_worldGen.init(chunkSize, 32, 16);
@@ -79,6 +82,24 @@ void World::init(int worldSize, ChunkSize chunkSize)
     _chunkNeighbors[7] = glm::vec3( _chunkSize.xWidth, 0.0f,  _chunkSize.zWidth);
 
 	createChunks();
+}
+
+glm::vec3 World::getVoxelPosition(glm::vec3 worldPos) const
+{
+    float x = floor(worldPos.x);
+    float y = floor(worldPos.y);
+    float z = floor(worldPos.z);
+
+    float chunkX = floor(x / _chunkSize.xWidth);
+    float chunkZ = floor(z / _chunkSize.zWidth);
+
+    x -= chunkX * _chunkSize.xWidth;
+    z -= chunkZ * _chunkSize.zWidth;
+
+    x -= _chunkSize.xWidth / 2;
+    z -= _chunkSize.zWidth / 2;
+
+    return glm::vec3(x, y, z);
 }
 
 void World::createChunks()
@@ -154,12 +175,12 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos)
             return false;
         }
 
-        glm::vec3 chunkPos{ floor(x / _chunkSize.xWidth) , y, floor(z / _chunkSize.zWidth) };
-        std::array<float, 3> chunkPosArray{ chunkPos.x, chunkPos.y, chunkPos.z };
-        auto keyIter = _activeChunks.find(chunkPosArray);
+        glm::vec3 voxelPos{ getVoxelPosition(worldPos) };
+        std::array<float, 3> chunkPos{ floor((float)x / _chunkSize.xWidth), 0.0f, floor((float)z / _chunkSize.zWidth) };
+        auto keyIter = _activeChunks.find(chunkPos);
         if (keyIter != _activeChunks.end())
         {
-            return _worldGen.getBlockType(keyIter->second.getBlockByte(chunkPos)).isSolid();
+            return _worldGen.getBlockType(keyIter->second.getBlockByte(voxelPos)).isSolid();
         }
         else
         {
@@ -176,7 +197,7 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos)
 
 void World::update()
 {
-    
+    checkCurrentChunk();
 }
 
 void World::draw(ShaderProgram shader)
@@ -193,7 +214,8 @@ void World::createChunk(glm::vec3 position)
 
     if (_activeChunks.find(positionArray) == _activeChunks.end())
     {
-        _activeChunks[positionArray] = Chunk(position, _chunkSize);
+        glm::vec3 chunkPos{ position.x, position.y, position.z };
+        _activeChunks[positionArray] = Chunk(chunkPos, _chunkSize);
         _activeChunks[positionArray].populateBlockMap(_worldGen);
 
         Mesh chunkMesh;
@@ -228,6 +250,25 @@ void World::createChunkRec(glm::vec3 position, int recDepth)
         {
             createChunkRec(position + nPos, recDepth + 1);
         }
+    }
+}
+
+void World::checkCurrentChunk()
+{
+    glm::vec3 cameraPos = _camera->getPosition();
+
+    float x = floor(cameraPos.x / _chunkSize.xWidth);
+    float y = 0.0f;
+    float z = floor(cameraPos.z / _chunkSize.zWidth);
+
+    std::array<float, 3> chunkPos{ x, y, z };
+
+    if (_currentChunk[0] != chunkPos[0] ||
+        _currentChunk[1] != chunkPos[1] ||
+        _currentChunk[2] != chunkPos[2])
+    {
+        std::cout << chunkPos[0] << " " << chunkPos[1] << " " << chunkPos[2] << std::endl;
+        _currentChunk = chunkPos;
     }
 }
 

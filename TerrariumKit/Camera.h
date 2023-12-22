@@ -15,8 +15,8 @@ class Camera
 	public:
 		Camera(glm::vec3 position, glm::vec3 up);
 
+		glm::vec3 getPosition() const;
 		glm::mat4 getViewMatrix();
-
 		float getZoom();
 
 		void move(CameraDirection direction, double deltaTime);
