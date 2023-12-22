@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include <array>
+#include <iostream>
 
 const float voxelVertices[] 
 {
@@ -171,6 +172,11 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos)
     }
 
     return false;
+}
+
+void World::update()
+{
+    
 }
 
 void World::draw(ShaderProgram shader)

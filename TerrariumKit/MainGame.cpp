@@ -50,11 +50,7 @@ void MainGame::initSystems()
 	
 	createShaderProgram();
 
-	ChunkSize size;
-	size.xWidth = 16;
-	size.zWidth = 16;
-	size.height = 128;
-	_world.init(1, size);
+	initWorld();
 }
 
 void MainGame::initSDL()
@@ -143,6 +139,15 @@ void MainGame::createShaderProgram()
 	}
 }
 
+void MainGame::initWorld()
+{
+	ChunkSize size;
+	size.xWidth = 16;
+	size.zWidth = 16;
+	size.height = 128;
+	_world.init(1, size);
+}
+
 void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
@@ -153,7 +158,7 @@ void MainGame::gameLoop()
 
 		pollEvents();
 
-		handleKeys();
+		updateGame();
 
 		drawGame();
 	}
@@ -205,6 +210,13 @@ void MainGame::removeKey(SDL_Keycode key)
 void MainGame::processMouseMotion(SDL_Event event)
 {
 	_camera.lookAt(event.motion.xrel, -event.motion.yrel);
+}
+
+void MainGame::updateGame()
+{
+	handleKeys();
+
+	_world.update();
 }
 
 void MainGame::drawGame()

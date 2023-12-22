@@ -23,6 +23,7 @@ class World
 		bool hasSolidVoxel(Chunk& chunk, glm::vec3 position);
 		bool hasSolidVoxel(const glm::vec3& worldPos);
 
+		void update();
 		void draw(ShaderProgram shader);
 
 	private:

@@ -30,15 +30,17 @@ class MainGame
 		void initGlad();
 		void setGLSettings();
 		void createShaderProgram();
+		void initWorld();
 
 		void gameLoop();
 		void pollEvents();
 		void addKey(SDL_Keycode key);
 		void removeKey(SDL_Keycode key);
 		void processMouseMotion(SDL_Event event);
+		void updateGame();
 		void drawGame();
-		void terminate();
 
+		void terminate();
 		void fatalError();
 
 		void handleKeys();
