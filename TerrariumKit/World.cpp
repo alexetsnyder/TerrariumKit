@@ -96,9 +96,6 @@ glm::vec3 World::getVoxelPosition(glm::vec3 worldPos) const
     x -= chunkX * _chunkSize.xWidth;
     z -= chunkZ * _chunkSize.zWidth;
 
-    x -= _chunkSize.xWidth / 2;
-    z -= _chunkSize.zWidth / 2;
-
     return glm::vec3(x, y, z);
 }
 
@@ -121,9 +118,9 @@ void World::createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& 
                 Vertex newVertex{};
 
                 //3 components in 1 vertex, and 4 vertex in a face: 3 * 4 = 12
-                newVertex.position.x = position.x + voxelVertices[12 * face + 3 * vertex];
-                newVertex.position.y = position.y + voxelVertices[12 * face + 3 * vertex + 1];
-                newVertex.position.z = position.z + voxelVertices[12 * face + 3 * vertex + 2];
+                newVertex.position.x = position.x + voxelVertices[12 * face + 3 * vertex] + 0.5f;
+                newVertex.position.y = position.y + voxelVertices[12 * face + 3 * vertex + 1] + 0.5f;
+                newVertex.position.z = position.z + voxelVertices[12 * face + 3 * vertex + 2] + 0.5f;
 
                 //2 texture coordinates for each vertex
                 newVertex.textureCoordinate.u = textureCoordinates[2 * vertex];
@@ -160,17 +157,20 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos) const
         //# of chunks per side depending on the world size
         int dim = _worldSize + _worldSize + 1;
 
-        int boundX = (dim * _chunkSize.xWidth) / 2;
         int boundY = _chunkSize.height - 1;
-        int boundZ = (dim * _chunkSize.zWidth) / 2;
+
+        int lowerBoundX = -(dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;
+        int lowerBoundZ = -(dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
+        int upperBoundX = (dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;    
+        int upperBoundZ = (dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
 
         int x = static_cast<int>(floor(worldPos.x));
         int y = static_cast<int>(floor(worldPos.y));
         int z = static_cast<int>(floor(worldPos.z));
 
         if (y < 0 || y > boundY ||
-            x < -boundX || x > boundX - 1 ||
-            z < -boundZ || z > boundZ - 1)
+            x < lowerBoundX || x > upperBoundX - 1 ||
+            z < lowerBoundZ || z > upperBoundZ - 1)
         {
             return false;
         }
@@ -223,9 +223,9 @@ void World::createChunk(glm::vec3 position)
 
         for (int y = 0; y < _chunkSize.height; y++)
         {
-            for (int x = -_chunkSize.xWidth / 2; x < _chunkSize.xWidth / 2; x++)
+            for (int x = 0; x < _chunkSize.xWidth; x++)
             {
-                for (int z = -_chunkSize.zWidth / 2; z < _chunkSize.zWidth / 2; z++)
+                for (int z = 0; z < _chunkSize.zWidth; z++)
                 {
                     glm::vec3 voxelPosition{ x, y, z };
                     if (_worldGen.getBlockType(_activeChunks[positionArray].getBlockByte(voxelPosition)).isSolid())

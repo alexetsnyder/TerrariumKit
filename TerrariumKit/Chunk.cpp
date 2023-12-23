@@ -50,9 +50,9 @@ void Chunk::populateBlockMap(WorldGen worldGen)
 {
     for (int y = 0; y < _size.height; y++)
     {
-        for (int x = -_size.xWidth / 2; x < _size.xWidth / 2; x++)
+        for (int x = 0; x < _size.xWidth; x++)
         {
-            for (int z = -_size.zWidth / 2; z < _size.zWidth / 2; z++)
+            for (int z = 0; z < _size.zWidth; z++)
             {
                 glm::vec3 voxelPosition{ x, y, z };
                 int index = convertPositionToIndex(voxelPosition);
@@ -88,16 +88,16 @@ void Chunk::setChunkMesh(Mesh& chunkMesh)
 
 bool Chunk::isOutsideChunk(glm::vec3 position) const
 {
-    int xBound = _size.xWidth / 2;
+    int xBound = _size.xWidth - 1;
     int yBound = _size.height - 1;
-    int zBound = _size.zWidth / 2;
+    int zBound = _size.zWidth - 1;
 
     int x = static_cast<int>(floor(position.x));
     int y = static_cast<int>(floor(position.y));
     int z = static_cast<int>(floor(position.z));
 
-    if (x < -xBound || x > xBound - 1 ||
-        z < -zBound || z > zBound - 1 ||
+    if (x < 0 || x > xBound ||
+        z < 0 || z > zBound ||
         y < 0 || y > yBound)
     {
         return true;
@@ -195,9 +195,9 @@ glm::vec3 Chunk::getPosition() const
 
 int Chunk::convertPositionToIndex(const glm::vec3& position) const
 {
-    int x = static_cast<int>(floor(position.x)) + _size.xWidth / 2;
+    int x = static_cast<int>(floor(position.x));
     int y = static_cast<int>(floor(position.y));
-    int z = static_cast<int>(floor(position.z)) + _size.zWidth / 2;
+    int z = static_cast<int>(floor(position.z));
 
     return y * _size.xWidth * _size.zWidth + x * _size.zWidth + z;
 }
