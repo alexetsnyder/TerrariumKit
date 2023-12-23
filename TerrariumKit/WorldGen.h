@@ -17,8 +17,8 @@ class WorldGen
 
 		void init(ChunkSize chunkSize, int minHeight, int varyHeight);
 
-		GLubyte getVoxel(glm::vec3 position);
-		BlockType getBlockType(GLubyte byte);
+		GLubyte getVoxel(const glm::vec3& position) const;
+		BlockType getBlockType(GLubyte byte) const;
 
 	private:
 		void createBlockByteLookUp();

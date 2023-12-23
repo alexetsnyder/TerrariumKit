@@ -22,10 +22,10 @@ class Chunk
 		Chunk(glm::vec3 position, ChunkSize chunkSize);
 
 		glm::mat4 getModelMatrix() const;
-		GLubyte getBlockByte(glm::vec3 position);
+		GLubyte getBlockByte(const glm::vec3& position) const;
 		glm::vec3 getPosition() const;
 
-		int convertPositionToIndex(glm::vec3 position) const;
+		int convertPositionToIndex(const glm::vec3& position) const;
 
 		void init(glm::vec3 position, ChunkSize chunkSize);
 

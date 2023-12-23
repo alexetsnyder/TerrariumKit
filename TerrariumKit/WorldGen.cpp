@@ -27,7 +27,7 @@ void WorldGen::init(ChunkSize chunkSize, int minHeight, int varyHeight)
 	_varyHeight = varyHeight;
 
 	BlockSides blockSides{};
-	_blockTypeLookUp[0] = BlockType("Air", false, blockSides);
+	_blockTypeLookUp[0] = BlockType("air", false, blockSides);
 
 	blockSides.frontTextureName = "bedrock";
 	blockSides.backTextureName = "bedrock";
@@ -64,13 +64,13 @@ void WorldGen::init(ChunkSize chunkSize, int minHeight, int varyHeight)
 	createBlockByteLookUp();
 }
 
-GLubyte WorldGen::getVoxel(glm::vec3 position)
+GLubyte WorldGen::getVoxel(const glm::vec3& position) const
 {
 	int y = static_cast<int>(floor(position.y));
 
 	if (y == 0)
 	{
-		return _blockByteLookUp["bedrock"];
+		return _blockByteLookUp.at("bedrock");
 	}
 
 	/* TERRAIN GENERATION */
@@ -79,27 +79,27 @@ GLubyte WorldGen::getVoxel(glm::vec3 position)
 
 	if (y > height)
 	{
-		return _blockByteLookUp["air"];
+		return _blockByteLookUp.at("air");
 	}
 	else if (y >= height)
 	{
-		return _blockByteLookUp["grass"];
+		return _blockByteLookUp.at("grass");
 	}
 	else if (y >= height - 6)
 	{
-		return _blockByteLookUp["dirt"];
+		return _blockByteLookUp.at("dirt");
 	}
 	else
 	{
-		return _blockByteLookUp["stone"];
+		return _blockByteLookUp.at("stone");
 	}
 
 	return 0;
 }
 
-BlockType WorldGen::getBlockType(GLubyte byte)
+BlockType WorldGen::getBlockType(GLubyte byte) const
 {
-	return _blockTypeLookUp[byte];
+	return _blockTypeLookUp.at(byte);
 }
 
 void WorldGen::createBlockByteLookUp()

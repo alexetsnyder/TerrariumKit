@@ -143,7 +143,7 @@ void World::createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& 
     }
 }
 
-bool World::hasSolidVoxel(Chunk& chunk, glm::vec3 position)
+bool World::hasSolidVoxel(const Chunk& chunk, const glm::vec3& position) const
 {
     if (chunk.isOutsideChunk(position))
     {
@@ -153,7 +153,7 @@ bool World::hasSolidVoxel(Chunk& chunk, glm::vec3 position)
     return _worldGen.getBlockType(chunk.getBlockByte(position)).isSolid();
 }
 
-bool World::hasSolidVoxel(const glm::vec3& worldPos)
+bool World::hasSolidVoxel(const glm::vec3& worldPos) const
 {
     if (_worldSize > 0)
     {

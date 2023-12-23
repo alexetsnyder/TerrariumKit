@@ -182,7 +182,7 @@ glm::mat4 Chunk::getModelMatrix() const
 	return model;
 }
 
-GLubyte Chunk::getBlockByte(glm::vec3 position)
+GLubyte Chunk::getBlockByte(const glm::vec3& position) const 
 {
     int index = convertPositionToIndex(position);
     return _blocks[index];
@@ -193,7 +193,7 @@ glm::vec3 Chunk::getPosition() const
     return _position;
 }
 
-int Chunk::convertPositionToIndex(glm::vec3 position) const
+int Chunk::convertPositionToIndex(const glm::vec3& position) const
 {
     int x = static_cast<int>(floor(position.x)) + _size.xWidth / 2;
     int y = static_cast<int>(floor(position.y));
