@@ -11,10 +11,10 @@ class TextureAtlas
 
 		void createAtlas(std::vector<std::string> blockNames);
 
-		std::vector<float> getTextureCoordinates(std::string name);
+		std::vector<float> getTextureCoordinates(std::string name) const;
 
 	private:
-		std::vector<float> getTextureCoordinates(int index);
+		std::vector<float> getTextureCoordinates(int index) const;
 
 		int _blockSize;
 		int _atlasWidth;

@@ -62,7 +62,7 @@ void Chunk::populateBlockMap(WorldGen worldGen)
     }
 }
 
-std::vector<float> Chunk::getTextureCoordinates(BlockSides blockSides, int face)
+std::vector<float> Chunk::getTextureCoordinates(BlockSides blockSides, int face) const
 {
     return _atlas.getTextureCoordinates(getFaceName(blockSides, face));
 }
@@ -72,7 +72,7 @@ void Chunk::setChunkMesh(Mesh& chunkMesh)
     genAll();
     bindAll();
 
-    _indicesCount = chunkMesh.getIndices().size();
+    _indicesCount = static_cast<GLuint>(chunkMesh.getIndices().size());
 
     glBufferData(GL_ARRAY_BUFFER, chunkMesh.getVertices().size() * sizeof(Vertex), &chunkMesh.getVertices().front(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
@@ -146,7 +146,7 @@ void Chunk::unbindAll()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-std::string Chunk::getFaceName(BlockSides blockSides, int face)
+std::string Chunk::getFaceName(BlockSides blockSides, int face) const
 {
     std::string faceName{};
 

@@ -184,7 +184,7 @@ void MainGame::pollEvents()
 				processMouseMotion(event);
 				break;
 			case SDL_MOUSEWHEEL:
-				_camera.zoom(event.wheel.y);
+				_camera.zoom(static_cast<float>(event.wheel.y));
 				break;
 		}
 	}
@@ -209,7 +209,9 @@ void MainGame::removeKey(SDL_Keycode key)
 
 void MainGame::processMouseMotion(SDL_Event event)
 {
-	_camera.lookAt(event.motion.xrel, -event.motion.yrel);
+	float xRel = static_cast<float>(event.motion.xrel);
+	float yRel = static_cast<float>(event.motion.yrel);
+	_camera.lookAt(xRel, -yRel);
 }
 
 void MainGame::updateGame()

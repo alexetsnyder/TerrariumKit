@@ -11,18 +11,19 @@ WorldGen::WorldGen()
 	_varyHeight = 0;
 }
 
-WorldGen::WorldGen(ChunkSize chunkSize, int minHeight, int varyHeight)
+WorldGen::WorldGen(ChunkSize chunkSize, float minHeight, float varyHeight)
 {
 	init(chunkSize, minHeight, varyHeight);
 }
 
-void WorldGen::init(ChunkSize chunkSize, int minHeight, int varyHeight)
+void WorldGen::init(ChunkSize chunkSize, float minHeight, float varyHeight)
 {
 	_chunkSize = chunkSize;
 
-	_noise.SetSeed(0);
+	_noise.SetSeed(42);
 	_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
 	_noise.SetFractalType(FastNoiseLite::FractalType_FBm);
+
 	_minHeight = minHeight;
 	_varyHeight = varyHeight;
 

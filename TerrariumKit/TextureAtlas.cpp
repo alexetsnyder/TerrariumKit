@@ -18,17 +18,17 @@ void TextureAtlas::createAtlas(std::vector<std::string> blockNames)
 	}
 }
 
-std::vector<float> TextureAtlas::getTextureCoordinates(std::string name)
+std::vector<float> TextureAtlas::getTextureCoordinates(std::string name) const
 {
-	int index = _atlas[name];
+	int index = _atlas.at(name);
 	return getTextureCoordinates(index);
 }
 
-std::vector<float> TextureAtlas::getTextureCoordinates(int index)
+std::vector<float> TextureAtlas::getTextureCoordinates(int index) const
 {
 	std::vector<float> textureCoordinates{};
 
-	float y = index / _blockCount;
+	float y = static_cast<float>(floor(static_cast<float>(index) / _blockCount));
 	float x = index - _blockCount * y;
 
 	y *= _normalizedBlockSize;

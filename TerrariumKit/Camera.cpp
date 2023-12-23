@@ -26,7 +26,7 @@ float Camera::getZoom()
 
 void Camera::move(CameraDirection direction, double deltaTime)
 {
-	float velocity = _speed * deltaTime;
+	float velocity = static_cast<float>(_speed * deltaTime);
 	switch (direction)
 	{
 		case CameraDirection::FORWARD:

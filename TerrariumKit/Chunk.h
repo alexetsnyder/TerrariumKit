@@ -24,14 +24,11 @@ class Chunk
 		glm::mat4 getModelMatrix() const;
 		GLubyte getBlockByte(const glm::vec3& position) const;
 		glm::vec3 getPosition() const;
-
-		int convertPositionToIndex(const glm::vec3& position) const;
+		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
 
 		void init(glm::vec3 position, ChunkSize chunkSize);
 
 		void populateBlockMap(WorldGen worldGen);
-
-		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face);
 
 		void setChunkMesh(Mesh& chunkMesh);
 		
@@ -44,7 +41,8 @@ class Chunk
 		void genAll();
 		void bindAll();
 		void unbindAll();
-		std::string getFaceName(BlockSides blockSides, int face);
+		std::string getFaceName(BlockSides blockSides, int face) const;
+		int convertPositionToIndex(const glm::vec3& position) const;
 
 		std::vector<GLubyte> _blocks;
 

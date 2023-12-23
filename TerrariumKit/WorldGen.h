@@ -13,9 +13,9 @@ class WorldGen
 {
 	public:
 		WorldGen();
-		WorldGen(ChunkSize chunkSize, int minHeight, int varyHeight);
+		WorldGen(ChunkSize chunkSize, float minHeight, float varyHeight);
 
-		void init(ChunkSize chunkSize, int minHeight, int varyHeight);
+		void init(ChunkSize chunkSize, float minHeight, float varyHeight);
 
 		GLubyte getVoxel(const glm::vec3& position) const;
 		BlockType getBlockType(GLubyte byte) const;
