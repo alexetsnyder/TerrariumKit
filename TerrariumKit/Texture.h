@@ -12,7 +12,7 @@ class Texture
 
 		void init(const char* filePath);
 
-		void bind();
+		void bind() const;
 
 	private:
 		SDL_Surface* loadImage(const char* filePath);

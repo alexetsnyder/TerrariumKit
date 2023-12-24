@@ -19,9 +19,9 @@ class ShaderProgram
 		
 		bool link();
 
-		void use();
+		void use() const;
 
-		void setUniform(const std::string name, glm::mat4 matrix);
+		void setUniform(const std::string& name, const glm::mat4& matrix) const;
 
 	private:
 		bool setShader(const std::string shaderPath, int glShader);

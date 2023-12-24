@@ -106,7 +106,7 @@ bool Chunk::isOutsideChunk(glm::vec3 position) const
     return false;
 }
 
-void Chunk::draw(ShaderProgram& shader)
+void Chunk::draw(const ShaderProgram& shader) const
 {
     glm::mat4 model{ getModelMatrix() };
 

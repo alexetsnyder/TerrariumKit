@@ -28,7 +28,7 @@ class World
 		void createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
 
 		void update();
-		void draw(ShaderProgram& shader);
+		void draw(const ShaderProgram& shader) const;
 
 	private:
 		void createChunk(glm::vec3 position);

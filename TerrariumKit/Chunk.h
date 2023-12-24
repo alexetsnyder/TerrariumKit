@@ -22,8 +22,9 @@ class Chunk
 		Chunk(glm::vec3 position, ChunkSize chunkSize);
 
 		glm::mat4 getModelMatrix() const;
-		GLubyte getBlockByte(const glm::vec3& position) const;
 		glm::vec3 getPosition() const;
+
+		GLubyte getBlockByte(const glm::vec3& position) const;
 		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
 
 		void init(glm::vec3 position, ChunkSize chunkSize);
@@ -34,7 +35,7 @@ class Chunk
 		
 		bool isOutsideChunk(glm::vec3 position) const;
 
-		void draw(ShaderProgram& shader);
+		void draw(const ShaderProgram& shader) const;
 
 	private:
 		void createTextureAtlas();

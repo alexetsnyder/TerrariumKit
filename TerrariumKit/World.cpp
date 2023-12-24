@@ -212,7 +212,7 @@ void World::update()
     checkCurrentChunk();
 }
 
-void World::draw(ShaderProgram& shader)
+void World::draw(const ShaderProgram& shader) const 
 {
     for (auto& chunk : _activeChunks)
     {
