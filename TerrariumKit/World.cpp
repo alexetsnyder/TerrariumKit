@@ -117,14 +117,16 @@ void World::createChunks()
     createChunkRec(position, 0);
 }
 
-void World::createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& vertexCount)
+void World::createVoxel(const Chunk& chunk, Mesh& chunkMesh, int& vertexCount)
 {
     for (int face = 0; face < 6; face++)
     {
+        glm::vec3 position = chunk.getPosition();
+
         if (!hasSolidVoxel(chunk, position + voxelNeighbors[face]))
         {
             BlockType blockType{ _worldGen.getBlockType(chunk.getBlockByte(position)) };
-            std::vector<float> textureCoordinates{ chunk.getTextureCoordinates(blockType.getBlockSides(), face)};
+            std::vector<float> textureCoordinates{ chunk.getTextureCoordinates(blockType.getBlockSides(), face) };
             for (int vertex = 0; vertex < 4; vertex++)
             {
                 Vertex newVertex{};
@@ -212,7 +214,7 @@ void World::update()
     checkCurrentChunk();
 }
 
-void World::draw(ShaderProgram shader)
+void World::draw(ShaderProgram& shader)
 {
     for (auto& chunk : _activeChunks)
     {

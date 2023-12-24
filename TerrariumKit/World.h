@@ -21,14 +21,14 @@ class World
 		glm::vec3 getVoxelPosition(glm::vec3 worldPos) const;
 		std::array<float, 3> getChunkPosition(glm::vec3 worldPos) const;
 
-		void createChunks();
-		void createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& vertexCount);
-
 		bool hasSolidVoxel(const Chunk& chunk, const glm::vec3& position) const;
 		bool hasSolidVoxel(const glm::vec3& worldPos) const;
 
+		void createChunks();
+		void createVoxel(const Chunk& chunk, Mesh& chunkMesh, int& vertexCount);
+
 		void update();
-		void draw(ShaderProgram shader);
+		void draw(ShaderProgram& shader);
 
 	private:
 		void createChunk(glm::vec3 position);

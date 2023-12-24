@@ -34,7 +34,7 @@ class Chunk
 		
 		bool isOutsideChunk(glm::vec3 position) const;
 
-		void draw(ShaderProgram shader);
+		void draw(ShaderProgram& shader);
 
 	private:
 		void createTextureAtlas();
