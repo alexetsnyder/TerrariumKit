@@ -185,26 +185,21 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos) const
             z < lowerBoundZ || z > upperBoundZ - 1)
         {
             return false;
-        }
+        }      
+    }
 
-        glm::vec3 voxelPos{ getVoxelPosition(worldPos) };
-        std::array<float, 3> chunkPos{ getChunkPosition(worldPos) };
-        auto keyIter = _activeChunks.find(chunkPos);
-        if (keyIter != _activeChunks.end())
-        {
-            return _worldGen.getBlockType(keyIter->second.getBlockByte(voxelPos)).isSolid();
-        }
-        else
-        {
-            return _worldGen.getBlockType(_worldGen.getVoxel(worldPos)).isSolid();
-        }
+    glm::vec3 voxelPos{ getVoxelPosition(worldPos) };
+    std::array<float, 3> chunkPos{ getChunkPosition(worldPos) };
+
+    auto keyIter = _activeChunks.find(chunkPos);
+    if (keyIter != _activeChunks.end())
+    {
+        return _worldGen.getBlockType(keyIter->second.getBlockByte(voxelPos)).isSolid();
     }
     else
     {
-        return false;
-    }
-
-    return false;
+        return _worldGen.getBlockType(_worldGen.getVoxel(worldPos)).isSolid();
+    } 
 }
 
 void World::update()
