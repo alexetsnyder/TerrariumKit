@@ -99,6 +99,18 @@ glm::vec3 World::getVoxelPosition(glm::vec3 worldPos) const
     return glm::vec3(x, y, z);
 }
 
+std::array<float, 3> World::getChunkPosition(glm::vec3 worldPos) const
+{
+    float x = floor(worldPos.x);
+    float y = 0.0f;
+    float z = floor(worldPos.z);
+
+    float chunkX = floor(x / _chunkSize.xWidth);
+    float chunkZ = floor(z / _chunkSize.zWidth);
+
+    return std::array<float, 3>{ chunkX * _chunkSize.xWidth, y, chunkZ * _chunkSize.zWidth };
+}
+
 void World::createChunks()
 {
     glm::vec3 position{ 0.0f, 0.0f, 0.0f };
@@ -161,8 +173,8 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos) const
 
         int lowerBoundX = -(dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;
         int lowerBoundZ = -(dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
-        int upperBoundX = (dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;    
-        int upperBoundZ = (dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
+        int upperBoundX =  (dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;    
+        int upperBoundZ =  (dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
 
         int x = static_cast<int>(floor(worldPos.x));
         int y = static_cast<int>(floor(worldPos.y));
@@ -176,7 +188,7 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos) const
         }
 
         glm::vec3 voxelPos{ getVoxelPosition(worldPos) };
-        std::array<float, 3> chunkPos{ floor((float)x / _chunkSize.xWidth), 0.0f, floor((float)z / _chunkSize.zWidth) };
+        std::array<float, 3> chunkPos{ getChunkPosition(worldPos) };
         auto keyIter = _activeChunks.find(chunkPos);
         if (keyIter != _activeChunks.end())
         {

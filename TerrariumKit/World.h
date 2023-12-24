@@ -19,6 +19,7 @@ class World
 		void init(const Camera& camera, int worldSize, ChunkSize chunkSize);
 
 		glm::vec3 getVoxelPosition(glm::vec3 worldPos) const;
+		std::array<float, 3> getChunkPosition(glm::vec3 worldPos) const;
 
 		void createChunks();
 		void createVoxel(Chunk& chunk, glm::vec3 position, Mesh& chunkMesh, int& vertexCount);
