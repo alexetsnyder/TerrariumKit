@@ -117,24 +117,22 @@ void World::createChunks()
     createChunkRec(position, 0);
 }
 
-void World::createVoxel(const Chunk& chunk, Mesh& chunkMesh, int& vertexCount)
+void World::createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
 {
     for (int face = 0; face < 6; face++)
     {
-        glm::vec3 position = chunk.getPosition();
-
-        if (!hasSolidVoxel(chunk, position + voxelNeighbors[face]))
+        if (!hasSolidVoxel(chunk, voxelPosition + voxelNeighbors[face]))
         {
-            BlockType blockType{ _worldGen.getBlockType(chunk.getBlockByte(position)) };
+            BlockType blockType{ _worldGen.getBlockType(chunk.getBlockByte(voxelPosition)) };
             std::vector<float> textureCoordinates{ chunk.getTextureCoordinates(blockType.getBlockSides(), face) };
             for (int vertex = 0; vertex < 4; vertex++)
             {
                 Vertex newVertex{};
 
                 //3 components in 1 vertex, and 4 vertex in a face: 3 * 4 = 12
-                newVertex.position.x = position.x + voxelVertices[12 * face + 3 * vertex] + 0.5f;
-                newVertex.position.y = position.y + voxelVertices[12 * face + 3 * vertex + 1] + 0.5f;
-                newVertex.position.z = position.z + voxelVertices[12 * face + 3 * vertex + 2] + 0.5f;
+                newVertex.position.x = voxelPosition.x + voxelVertices[12 * face + 3 * vertex] + 0.5f;
+                newVertex.position.y = voxelPosition.y + voxelVertices[12 * face + 3 * vertex + 1] + 0.5f;
+                newVertex.position.z = voxelPosition.z + voxelVertices[12 * face + 3 * vertex + 2] + 0.5f;
 
                 //2 texture coordinates for each vertex
                 newVertex.textureCoordinate.u = textureCoordinates[2 * vertex];

@@ -25,7 +25,7 @@ class World
 		bool hasSolidVoxel(const glm::vec3& worldPos) const;
 
 		void createChunks();
-		void createVoxel(const Chunk& chunk, Mesh& chunkMesh, int& vertexCount);
+		void createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
 
 		void update();
 		void draw(ShaderProgram& shader);
