@@ -11,6 +11,16 @@ ChunkID::ChunkID(ChunkSize chunkSize, glm::vec3 worldPos)
 	init(chunkSize, worldPos);
 }
 
+float ChunkID::getX()
+{
+	return _id[0];
+}
+
+float ChunkID::getZ()
+{
+	return _id[1];
+}
+
 std::array<float, 2> ChunkID::getID() const
 {
 	return _id;
@@ -21,6 +31,18 @@ glm::vec3 ChunkID::getPosition() const
 	float x = _id[0] * _chunkSize.xWidth;
 	float y = 0.0f;
 	float z = _id[1] * _chunkSize.zWidth;
+
+	return glm::vec3{ x, y, z };
+}
+
+glm::vec3 ChunkID::getRelativeVoxelPosition(const glm::vec3& worldPos) const
+{
+	float x = floor(worldPos.x);
+	float y = floor(worldPos.y);
+	float z = floor(worldPos.z);
+
+	x -= _id[0] * _chunkSize.xWidth;
+	z -= _id[1] * _chunkSize.zWidth;
 
 	return glm::vec3{ x, y, z };
 }
@@ -41,4 +63,9 @@ void ChunkID::init(ChunkSize chunkSize, glm::vec3 worldPos)
 {
 	_chunkSize = chunkSize;
 	setPosition(worldPos);
+}
+
+bool ChunkID::Equals(const ChunkID& rhs)
+{
+	return _id[0] == rhs._id[0] && _id[1] == rhs._id[1];
 }

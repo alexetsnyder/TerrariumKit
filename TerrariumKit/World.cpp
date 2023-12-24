@@ -2,6 +2,7 @@
 
 #include "Mesh.h"
 #include "Chunk.h"
+#include "ChunkID.h"
 
 #include <glm/glm.hpp>
 
@@ -58,7 +59,7 @@ const glm::vec3 voxelNeighbors[]
 };
 
 World::World()
-    : _chunkSize{}, _chunkNeighbors{}, _currentChunk{ -1.0f, 0.0f, 0.0f }
+    : _chunkSize{}, _chunkNeighbors{}, _currentChunk{}
 {
 	_worldSize = 0;
     _camera = nullptr;
@@ -71,6 +72,7 @@ void World::init(const Camera& camera, int worldSize, ChunkSize chunkSize)
 	_worldSize = worldSize;
 	_chunkSize = chunkSize;
 	_worldGen.init(chunkSize, 32, 16);
+    _currentChunk.init(_chunkSize, glm::vec3(0.0f, 0.0f, 16.0f));
 
     _chunkNeighbors[0] = glm::vec3(-_chunkSize.xWidth, 0.0f, -_chunkSize.zWidth);
     _chunkNeighbors[1] = glm::vec3(              0.0f, 0.0f, -_chunkSize.zWidth);
@@ -82,33 +84,6 @@ void World::init(const Camera& camera, int worldSize, ChunkSize chunkSize)
     _chunkNeighbors[7] = glm::vec3( _chunkSize.xWidth, 0.0f,  _chunkSize.zWidth);
 
 	createChunks();
-}
-
-glm::vec3 World::getVoxelPosition(glm::vec3 worldPos) const
-{
-    float x = floor(worldPos.x);
-    float y = floor(worldPos.y);
-    float z = floor(worldPos.z);
-
-    float chunkX = floor(x / _chunkSize.xWidth);
-    float chunkZ = floor(z / _chunkSize.zWidth);
-
-    x -= chunkX * _chunkSize.xWidth;
-    z -= chunkZ * _chunkSize.zWidth;
-
-    return glm::vec3(x, y, z);
-}
-
-std::array<float, 3> World::getChunkPosition(glm::vec3 worldPos) const
-{
-    float x = floor(worldPos.x);
-    float y = 0.0f;
-    float z = floor(worldPos.z);
-
-    float chunkX = floor(x / _chunkSize.xWidth);
-    float chunkZ = floor(z / _chunkSize.zWidth);
-
-    return std::array<float, 3>{ chunkX * _chunkSize.xWidth, y, chunkZ * _chunkSize.zWidth };
 }
 
 void World::createChunks()
@@ -188,10 +163,10 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos) const
         }      
     }
 
-    glm::vec3 voxelPos{ getVoxelPosition(worldPos) };
-    std::array<float, 3> chunkPos{ getChunkPosition(worldPos) };
+    ChunkID chunkId{ _chunkSize, worldPos };
+    glm::vec3 voxelPos{ chunkId.getRelativeVoxelPosition(worldPos) };
 
-    auto keyIter = _activeChunks.find(chunkPos);
+    auto keyIter = _activeChunks.find(chunkId.getID());
     if (keyIter != _activeChunks.end())
     {
         return _worldGen.getBlockType(keyIter->second.getBlockByte(voxelPos)).isSolid();
@@ -217,13 +192,13 @@ void World::draw(const ShaderProgram& shader) const
 
 void World::createChunk(glm::vec3 position)
 {
-    std::array<float, 3> positionArray{ position.x, position.y, position.z };
+    ChunkID chunkId{ _chunkSize, position };
 
-    if (_activeChunks.find(positionArray) == _activeChunks.end())
+    if (_activeChunks.find(chunkId.getID()) == _activeChunks.end())
     {
         glm::vec3 chunkPos{ position.x, position.y, position.z };
-        _activeChunks[positionArray] = Chunk(chunkPos, _chunkSize);
-        _activeChunks[positionArray].populateBlockMap(_worldGen);
+        _activeChunks[chunkId.getID()] = Chunk(chunkPos, _chunkSize);
+        _activeChunks[chunkId.getID()].populateBlockMap(_worldGen);
 
         Mesh chunkMesh;
         int vertexCount = 0;
@@ -235,15 +210,15 @@ void World::createChunk(glm::vec3 position)
                 for (int z = 0; z < _chunkSize.zWidth; z++)
                 {
                     glm::vec3 voxelPosition{ x, y, z };
-                    if (_worldGen.getBlockType(_activeChunks[positionArray].getBlockByte(voxelPosition)).isSolid())
+                    if (_worldGen.getBlockType(_activeChunks[chunkId.getID()].getBlockByte(voxelPosition)).isSolid())
                     {
-                        createVoxel(_activeChunks[positionArray], voxelPosition, chunkMesh, vertexCount);
+                        createVoxel(_activeChunks[chunkId.getID()], voxelPosition, chunkMesh, vertexCount);
                     }
                 }
             }
         }
 
-        _activeChunks[positionArray].setChunkMesh(chunkMesh);
+        _activeChunks[chunkId.getID()].setChunkMesh(chunkMesh);
     }
 }
 
@@ -264,18 +239,12 @@ void World::checkCurrentChunk()
 {
     glm::vec3 cameraPos = _camera->getPosition();
 
-    float x = floor(cameraPos.x / _chunkSize.xWidth);
-    float y = 0.0f;
-    float z = floor(cameraPos.z / _chunkSize.zWidth);
+    ChunkID chunkId{ _chunkSize, cameraPos };
 
-    std::array<float, 3> chunkPos{ x, y, z };
-
-    if (_currentChunk[0] != chunkPos[0] ||
-        _currentChunk[1] != chunkPos[1] ||
-        _currentChunk[2] != chunkPos[2])
+    if (!chunkId.Equals(_currentChunk))
     {
-        std::cout << chunkPos[0] << " " << chunkPos[1] << " " << chunkPos[2] << std::endl;
-        _currentChunk = chunkPos;
+        std::cout <<"X: " << chunkId.getX() << " Z: " << chunkId.getZ() << std::endl;
+        _currentChunk = chunkId;
     }
 }
 
