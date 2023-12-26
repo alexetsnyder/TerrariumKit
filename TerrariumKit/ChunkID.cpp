@@ -6,6 +6,12 @@ ChunkID::ChunkID()
 
 }
 
+ChunkID::ChunkID(ChunkSize chunkSize, float x, float z)
+{
+	_chunkSize = chunkSize;
+	setID(x, z);
+}
+
 ChunkID::ChunkID(ChunkSize chunkSize, glm::vec3 worldPos)
 {
 	init(chunkSize, worldPos);
@@ -45,6 +51,12 @@ glm::vec3 ChunkID::getRelativeVoxelPosition(const glm::vec3& worldPos) const
 	z -= _id[1] * _chunkSize.zWidth;
 
 	return glm::vec3{ x, y, z };
+}
+
+void ChunkID::setID(float x, float z)
+{
+	_id[0] = x;
+	_id[1] = z;
 }
 
 void ChunkID::setPosition(const glm::vec3& worldPos)

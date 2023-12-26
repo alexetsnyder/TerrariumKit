@@ -59,7 +59,7 @@ const glm::vec3 voxelNeighbors[]
 };
 
 World::World()
-    : _chunkSize{}, _chunkNeighbors{}, _currentChunk{}
+    : _chunkSize{}, _currentChunk{}
 {
 	_worldSize = 0;
     _camera = nullptr;
@@ -74,22 +74,42 @@ void World::init(const Camera& camera, int worldSize, ChunkSize chunkSize)
 	_worldGen.init(chunkSize, 32, 16);
     _currentChunk.init(_chunkSize, glm::vec3(0.0f, 0.0f, 16.0f));
 
-    _chunkNeighbors[0] = glm::vec3(-_chunkSize.xWidth, 0.0f, -_chunkSize.zWidth);
-    _chunkNeighbors[1] = glm::vec3(              0.0f, 0.0f, -_chunkSize.zWidth);
-    _chunkNeighbors[2] = glm::vec3( _chunkSize.xWidth, 0.0f, -_chunkSize.zWidth);
-    _chunkNeighbors[3] = glm::vec3(-_chunkSize.xWidth, 0.0f,               0.0f);
-    _chunkNeighbors[4] = glm::vec3( _chunkSize.xWidth, 0.0f,               0.0f);
-    _chunkNeighbors[5] = glm::vec3(-_chunkSize.xWidth, 0.0f,  _chunkSize.zWidth);
-    _chunkNeighbors[6] = glm::vec3(              0.0f, 0.0f,  _chunkSize.zWidth);
-    _chunkNeighbors[7] = glm::vec3( _chunkSize.xWidth, 0.0f,  _chunkSize.zWidth);
-
 	createChunks();
 }
 
 void World::createChunks()
 {
-    glm::vec3 position{ 0.0f, 0.0f, 0.0f };
-    createChunkRec(position, 0);
+    if (!_activeChunks.empty())
+    {
+        for (const auto& pair : _activeChunks)
+        {
+            _inactiveChunks[pair.first] = pair.second;
+        }
+
+        for (const auto& pair : _inactiveChunks)
+        {
+            _activeChunks.erase(pair.first);
+        }
+    }
+
+    int viewDistanceInChunks = abs(_worldSize);
+
+    for (int x = -viewDistanceInChunks; x < viewDistanceInChunks + 1; x++)
+    {
+        for (int z = -viewDistanceInChunks; z < viewDistanceInChunks + 1; z++)
+        {
+            ChunkID chunkId{ _chunkSize, (float)x, (float)z };
+            auto mapIter = _inactiveChunks.find(chunkId.getID());
+            if (mapIter != _inactiveChunks.end())
+            {
+                _activeChunks[mapIter->first] = mapIter->second;
+            }
+            else
+            {
+                createChunk(chunkId);
+            }
+        }
+    }
 }
 
 void World::createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
@@ -166,10 +186,10 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos) const
     ChunkID chunkId{ _chunkSize, worldPos };
     glm::vec3 voxelPos{ chunkId.getRelativeVoxelPosition(worldPos) };
 
-    auto keyIter = _activeChunks.find(chunkId.getID());
-    if (keyIter != _activeChunks.end())
+    auto mapIter = _activeChunks.find(chunkId.getID());
+    if (mapIter != _activeChunks.end())
     {
-        return _worldGen.getBlockType(keyIter->second.getBlockByte(voxelPos)).isSolid();
+        return _worldGen.getBlockType(mapIter->second.getBlockByte(voxelPos)).isSolid();
     }
     else
     {
@@ -190,49 +210,30 @@ void World::draw(const ShaderProgram& shader) const
     }
 }
 
-void World::createChunk(glm::vec3 position)
+void World::createChunk(ChunkID chunkId)
 {
-    ChunkID chunkId{ _chunkSize, position };
+    _activeChunks[chunkId.getID()] = Chunk{ chunkId.getPosition(), _chunkSize };
+    _activeChunks[chunkId.getID()].populateBlockMap(_worldGen);
 
-    if (_activeChunks.find(chunkId.getID()) == _activeChunks.end())
+    Mesh chunkMesh;
+    int vertexCount = 0;
+
+    for (int y = 0; y < _chunkSize.height; y++)
     {
-        glm::vec3 chunkPos{ position.x, position.y, position.z };
-        _activeChunks[chunkId.getID()] = Chunk(chunkPos, _chunkSize);
-        _activeChunks[chunkId.getID()].populateBlockMap(_worldGen);
-
-        Mesh chunkMesh;
-        int vertexCount = 0;
-
-        for (int y = 0; y < _chunkSize.height; y++)
+        for (int x = 0; x < _chunkSize.xWidth; x++)
         {
-            for (int x = 0; x < _chunkSize.xWidth; x++)
+            for (int z = 0; z < _chunkSize.zWidth; z++)
             {
-                for (int z = 0; z < _chunkSize.zWidth; z++)
+                glm::vec3 voxelPosition{ x, y, z };
+                if (_worldGen.getBlockType(_activeChunks[chunkId.getID()].getBlockByte(voxelPosition)).isSolid())
                 {
-                    glm::vec3 voxelPosition{ x, y, z };
-                    if (_worldGen.getBlockType(_activeChunks[chunkId.getID()].getBlockByte(voxelPosition)).isSolid())
-                    {
-                        createVoxel(_activeChunks[chunkId.getID()], voxelPosition, chunkMesh, vertexCount);
-                    }
+                    createVoxel(_activeChunks[chunkId.getID()], voxelPosition, chunkMesh, vertexCount);
                 }
             }
         }
-
-        _activeChunks[chunkId.getID()].setChunkMesh(chunkMesh);
     }
-}
 
-void World::createChunkRec(glm::vec3 position, int recDepth)
-{
-    createChunk(position);
-
-    if (recDepth < _worldSize)
-    {
-        for (auto nPos : _chunkNeighbors)
-        {
-            createChunkRec(position + nPos, recDepth + 1);
-        }
-    }
+    _activeChunks[chunkId.getID()].setChunkMesh(chunkMesh);
 }
 
 void World::checkCurrentChunk()

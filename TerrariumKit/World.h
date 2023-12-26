@@ -29,15 +29,14 @@ class World
 		void draw(const ShaderProgram& shader) const;
 
 	private:
-		void createChunk(glm::vec3 position);
-		void createChunkRec(glm::vec3 position, int recDepth);
+		void createChunk(ChunkID chunkId);
 		void checkCurrentChunk();
 
 		int _worldSize;
 		ChunkSize _chunkSize;
 		WorldGen _worldGen;
 		std::map<std::array<float, 2>, Chunk> _activeChunks;
-		glm::vec3 _chunkNeighbors[8];
+		std::map<std::array<float, 2>, Chunk> _inactiveChunks;
 		const Camera* _camera;
 		ChunkID _currentChunk;
 };

@@ -10,6 +10,7 @@ class ChunkID
 {
 	public:
 		ChunkID();
+		ChunkID(ChunkSize chunkSize, float x, float z);
 		ChunkID(ChunkSize chunkSize, glm::vec3 worldPos);
 
 		float getX();
@@ -17,7 +18,8 @@ class ChunkID
 		std::array<float, 2> getID() const;
 		glm::vec3 getPosition() const;
 		glm::vec3 getRelativeVoxelPosition(const glm::vec3& worldPos) const;
-
+		
+		void setID(float x, float z);
 		void setPosition(const glm::vec3& worldPos);
 
 		void init(ChunkSize chunkSize, glm::vec3 worldPos);
