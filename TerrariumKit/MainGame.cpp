@@ -14,7 +14,7 @@
 #include <chrono>
 
 MainGame::MainGame()
-	: _camera(glm::vec3(8.0f, 50.0f, 8.0f), glm::vec3(0.0f, 1.0f, 0.0f))
+	: _camera(glm::vec3(8.0f, 70.0f, 8.0f), glm::vec3(0.0f, 1.0f, 0.0f))
 {
 	_window = nullptr;
 	_screenWidth = 1024;
@@ -145,7 +145,7 @@ void MainGame::initWorld()
 	size.xWidth = 16;
 	size.zWidth = 16;
 	size.height = 128;
-	_world.init(_camera, 1, size);
+	_world.init(_camera, -1, size);
 }
 
 void MainGame::gameLoop()

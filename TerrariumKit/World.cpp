@@ -107,6 +107,7 @@ void World::createChunks()
             if (mapIter != _inactiveChunks.end())
             {
                 _activeChunks[mapIter->first] = mapIter->second;
+                _inactiveChunks.erase(mapIter);
             }
             else
             {
@@ -187,6 +188,11 @@ bool World::hasSolidVoxel(const glm::vec3& worldPos) const
         }      
     }
 
+    if (worldPos.y < 0)
+    {
+        return false;
+    }
+
     ChunkID chunkId{ _chunkSize, worldPos };
     glm::vec3 voxelPos{ chunkId.getRelativeVoxelPosition(worldPos) };
 
@@ -250,6 +256,11 @@ void World::checkCurrentChunk()
     {
         std::cout <<"X: " << chunkId.getX() << " Z: " << chunkId.getZ() << std::endl;
         _currentChunk = chunkId;
+
+        if (_worldSize < 0)
+        {
+            createChunks();
+        }  
     }
 }
 
