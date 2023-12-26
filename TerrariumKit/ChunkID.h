@@ -22,7 +22,7 @@ class ChunkID
 		void setID(float x, float z);
 		void setPosition(const glm::vec3& worldPos);
 
-		void init(ChunkSize chunkSize, glm::vec3 worldPos);
+		void init(ChunkSize chunkSize, float x, float z);
 
 		bool Equals(const ChunkID& rhs);
 

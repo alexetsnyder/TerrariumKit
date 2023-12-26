@@ -8,13 +8,13 @@ ChunkID::ChunkID()
 
 ChunkID::ChunkID(ChunkSize chunkSize, float x, float z)
 {
-	_chunkSize = chunkSize;
-	setID(x, z);
+	init(chunkSize, x, z);
 }
 
 ChunkID::ChunkID(ChunkSize chunkSize, glm::vec3 worldPos)
 {
-	init(chunkSize, worldPos);
+	_chunkSize = chunkSize;
+	setPosition(worldPos);
 }
 
 float ChunkID::getX()
@@ -71,10 +71,10 @@ void ChunkID::setPosition(const glm::vec3& worldPos)
 	_id[1] = chunkZ;
 }
 
-void ChunkID::init(ChunkSize chunkSize, glm::vec3 worldPos)
+void ChunkID::init(ChunkSize chunkSize, float x, float z)
 {
 	_chunkSize = chunkSize;
-	setPosition(worldPos);
+	setID(x, z);
 }
 
 bool ChunkID::Equals(const ChunkID& rhs)

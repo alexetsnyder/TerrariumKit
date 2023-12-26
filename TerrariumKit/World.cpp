@@ -72,7 +72,7 @@ void World::init(const Camera& camera, int worldSize, ChunkSize chunkSize)
 	_worldSize = worldSize;
 	_chunkSize = chunkSize;
 	_worldGen.init(chunkSize, 32, 16);
-    _currentChunk.init(_chunkSize, glm::vec3(0.0f, 0.0f, 16.0f));
+    _currentChunk.init(_chunkSize, 0.0f, 0.0f);
 
 	createChunks();
 }
@@ -93,12 +93,16 @@ void World::createChunks()
     }
 
     int viewDistanceInChunks = abs(_worldSize);
+    float startX = _currentChunk.getX() - viewDistanceInChunks;
+    float endX = _currentChunk.getX() + viewDistanceInChunks;
+    float startZ = _currentChunk.getZ() - viewDistanceInChunks;
+    float endZ = _currentChunk.getZ() + viewDistanceInChunks;
 
-    for (int x = -viewDistanceInChunks; x < viewDistanceInChunks + 1; x++)
+    for (float x = startX; x < endX + 1; x++)
     {
-        for (int z = -viewDistanceInChunks; z < viewDistanceInChunks + 1; z++)
+        for (float z = startZ; z < endZ + 1; z++)
         {
-            ChunkID chunkId{ _chunkSize, (float)x, (float)z };
+            ChunkID chunkId{ _chunkSize, x, z };
             auto mapIter = _inactiveChunks.find(chunkId.getID());
             if (mapIter != _inactiveChunks.end())
             {
