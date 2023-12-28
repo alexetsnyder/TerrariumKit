@@ -3,6 +3,7 @@
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "World.h"
+#include "ChunkManager.h"
 
 #include <SDL/SDL.h>
 #include <chrono>
@@ -55,6 +56,7 @@ class MainGame
 
 		bool _drawWireFrame;
 		World _world;
+		ChunkManager _chunkManager;
 
 		Camera _camera;
 		std::chrono::duration<double> _deltaTime;

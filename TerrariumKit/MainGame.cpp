@@ -1,7 +1,6 @@
 #include "MainGame.h"
 #include "ShaderProgram.h"
 #include "ErrorLog.h"
-#include "Chunk.h"
 #include "World.h"
 
 #include <SDL/SDL_image.h>
@@ -146,6 +145,7 @@ void MainGame::initWorld()
 	size.zWidth = 16;
 	size.height = 128;
 	_world.init(_camera, -1, size);
+	_chunkManager.init(_world);
 }
 
 void MainGame::gameLoop()
@@ -219,6 +219,7 @@ void MainGame::updateGame()
 	handleKeys();
 
 	_world.update();
+	_chunkManager.update();
 }
 
 void MainGame::drawGame()
@@ -237,7 +238,7 @@ void MainGame::drawGame()
 	_shaderProgram.setUniform("view", view);
 	_shaderProgram.setUniform("projection", projection);
 
-	_world.draw(_shaderProgram);
+	_chunkManager.draw(_shaderProgram);
 
 	SDL_GL_SwapWindow(_window);
 }
