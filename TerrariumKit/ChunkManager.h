@@ -29,12 +29,13 @@ class ChunkManager
 	private:
 		bool hasSolidVoxel(const Chunk& chunk, const glm::vec3& position) const;
 		bool hasSolidVoxel(const glm::vec3& worldPos) const;
+		void createChunk();
 		void createChunk(ChunkID chunkId);
 		void createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
 
 		const World* _world;
 		TerrainGen _terrainGen;
-		std::queue<Chunk> _chunkQueue;
+		std::queue<ChunkID> _chunkIdQueue;
 		std::map<std::array<float, 2>, Chunk> _activeChunkMap;
 		std::map<std::array<float, 2>, Chunk> _inactiveChunkMap;
 };

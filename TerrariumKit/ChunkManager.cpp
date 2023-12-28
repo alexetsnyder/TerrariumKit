@@ -64,12 +64,50 @@ void ChunkManager::init(const World& world)
 	_world = &world;
     _terrainGen.init(_world->getChunkSize(), 32, 16);
 
-    createChunks();
+    //createChunks();
+    queueChunks();
 }
 
 void ChunkManager::queueChunks()
 {
-   
+    if (!_activeChunkMap.empty())
+    {
+        for (const auto& pair : _activeChunkMap)
+        {
+            _inactiveChunkMap[pair.first] = pair.second;
+        }
+
+        for (const auto& pair : _inactiveChunkMap)
+        {
+            _activeChunkMap.erase(pair.first);
+        }
+    }
+
+    ChunkID currentChunkId = _world->getCurrentChunkID();
+    int viewDistanceInChunks = abs(_world->getWorldSize());
+    float startX = currentChunkId.getX() - viewDistanceInChunks;
+    float endX = currentChunkId.getX() + viewDistanceInChunks;
+    float startZ = currentChunkId.getZ() - viewDistanceInChunks;
+    float endZ = currentChunkId.getZ() + viewDistanceInChunks;
+
+    for (float x = startX; x < endX + 1; x++)
+    {
+        for (float z = startZ; z < endZ + 1; z++)
+        {
+            ChunkID chunkId{ _world->getChunkSize(), x, z };
+            auto mapIter = _inactiveChunkMap.find(chunkId.getID());
+            if (mapIter != _inactiveChunkMap.end())
+            {
+                _activeChunkMap[mapIter->first] = mapIter->second;
+                _inactiveChunkMap.erase(mapIter);
+            }
+            else
+            {
+                _activeChunkMap[chunkId.getID()] = Chunk{ chunkId.getPosition(), _world->getChunkSize() };
+                _chunkIdQueue.push(chunkId);
+            }
+        }
+    }
 }
 
 void ChunkManager::createChunks()
@@ -115,9 +153,15 @@ void ChunkManager::createChunks()
 
 void ChunkManager::update()
 {
+    if (!_chunkIdQueue.empty())
+    {
+        createChunk();
+    }
+
     if (_world->getWorldSize() < 0 && _world->hasCurrentChunkIdChanged())
     {
-        createChunks();
+        //createChunks();
+        queueChunks();
     }
 }
 
@@ -155,14 +199,46 @@ bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
     ChunkID chunkId{ _world->getChunkSize(), worldPos};
     glm::vec3 voxelPos{ chunkId.getRelativeVoxelPosition(worldPos) };
 
-    auto mapIter = _activeChunkMap.find(chunkId.getID());
-    if (mapIter != _activeChunkMap.end())
+    const auto mapIter = _activeChunkMap.find(chunkId.getID());
+    if (mapIter != _activeChunkMap.end() && mapIter->second.hasPopulatedBlockMap())
     {
         return _terrainGen.getBlockType(mapIter->second.getBlockByte(voxelPos)).isSolid();
     }
     else
     {
         return _terrainGen.getBlockType(_terrainGen.getVoxel(worldPos)).isSolid();
+    }
+}
+
+void ChunkManager::createChunk()
+{
+    if (!_chunkIdQueue.empty())
+    {
+        ChunkID chunkId{ _chunkIdQueue.front() };
+        _chunkIdQueue.pop();
+
+        _activeChunkMap[chunkId.getID()].populateBlockMap(_terrainGen);
+
+        Mesh chunkMesh;
+        int vertexCount = 0;
+        ChunkSize chunkSize{ _world->getChunkSize() };
+
+        for (int y = 0; y < chunkSize.height; y++)
+        {
+            for (int x = 0; x < chunkSize.xWidth; x++)
+            {
+                for (int z = 0; z < chunkSize.zWidth; z++)
+                {
+                    glm::vec3 voxelPosition{ x, y, z };
+                    if (_terrainGen.getBlockType(_activeChunkMap[chunkId.getID()].getBlockByte(voxelPosition)).isSolid())
+                    {
+                        createVoxel(_activeChunkMap[chunkId.getID()], voxelPosition, chunkMesh, vertexCount);
+                    }
+                }
+            }
+        }
+
+        _activeChunkMap[chunkId.getID()].setChunkMesh(chunkMesh);
     }
 }
 

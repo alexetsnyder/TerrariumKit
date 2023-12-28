@@ -23,6 +23,7 @@ class Chunk
 
 		glm::mat4 getModelMatrix() const;
 		glm::vec3 getPosition() const;
+		bool hasPopulatedBlockMap() const;
 
 		GLubyte getBlockByte(const glm::vec3& position) const;
 		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
@@ -46,6 +47,7 @@ class Chunk
 		int convertPositionToIndex(const glm::vec3& position) const;
 
 		std::vector<GLubyte> _blocks;
+		bool _hasPopulatedBlockMap;
 
 		ChunkSize _size;
 		glm::vec3 _position;

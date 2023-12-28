@@ -24,6 +24,7 @@ std::vector<std::string> blockNames =
 Chunk::Chunk()
     : _atlas{ 256, 16 }, _size{}
 {
+    _hasPopulatedBlockMap = false;
 	_vao = 0;
 	_vbo = 0;
 	_ebo = 0;
@@ -39,6 +40,7 @@ Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
 
 void Chunk::init(glm::vec3 position, ChunkSize chunkSize)
 {
+    _hasPopulatedBlockMap = false;
     _position = position;
     _size = chunkSize;
     _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
@@ -60,6 +62,8 @@ void Chunk::populateBlockMap(TerrainGen worldGen)
             }
         }
     }
+
+    _hasPopulatedBlockMap = true;
 }
 
 std::vector<float> Chunk::getTextureCoordinates(BlockSides blockSides, int face) const
@@ -191,6 +195,11 @@ GLubyte Chunk::getBlockByte(const glm::vec3& position) const
 glm::vec3 Chunk::getPosition() const
 {
     return _position;
+}
+
+bool Chunk::hasPopulatedBlockMap() const
+{
+    return _hasPopulatedBlockMap;
 }
 
 int Chunk::convertPositionToIndex(const glm::vec3& position) const
