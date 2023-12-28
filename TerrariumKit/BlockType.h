@@ -24,9 +24,9 @@ class BlockType
 
 		BlockType(std::string name, bool isSolid, BlockSides blockSides);
 
-		bool isSolid();
-		std::string getName();
-		BlockSides getBlockSides();
+		bool isSolid() const;
+		std::string getName() const;
+		BlockSides getBlockSides() const;
 
 		void setIsSolid(bool isSolid);
 		void setName(std::string name);

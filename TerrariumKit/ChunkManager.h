@@ -3,7 +3,7 @@
 #include "Chunk.h"
 #include "ChunkID.h"
 #include "World.h"
-#include "WorldGen.h"
+#include "TerrainGen.h"
 #include "ShaderProgram.h"
 
 #include <glm/glm.hpp>
@@ -33,7 +33,7 @@ class ChunkManager
 		void createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
 
 		const World* _world;
-		WorldGen _worldGen;
+		TerrainGen _terrainGen;
 		std::queue<Chunk> _chunkQueue;
 		std::map<std::array<float, 2>, Chunk> _activeChunkMap;
 		std::map<std::array<float, 2>, Chunk> _inactiveChunkMap;

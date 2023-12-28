@@ -46,7 +46,7 @@ void Chunk::init(glm::vec3 position, ChunkSize chunkSize)
     createTextureAtlas();
 }
 
-void Chunk::populateBlockMap(WorldGen worldGen)
+void Chunk::populateBlockMap(TerrainGen worldGen)
 {
     for (int y = 0; y < _size.height; y++)
     {

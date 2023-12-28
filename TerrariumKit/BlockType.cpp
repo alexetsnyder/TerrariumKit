@@ -19,17 +19,17 @@ BlockType::BlockType(std::string name, bool isSolid, BlockSides blockSides)
 	setBlockSides(blockSides);
 }
 
-bool BlockType::isSolid()
+bool BlockType::isSolid() const
 {
 	return _isSolid;
 }
 
-std::string BlockType::getName()
+std::string BlockType::getName() const
 {
 	return _name;
 }
 
-BlockSides BlockType::getBlockSides()
+BlockSides BlockType::getBlockSides() const
 {
 	return _blockSides;
 }

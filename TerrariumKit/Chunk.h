@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "BlockType.h"
 #include "Structs.h"
-#include "WorldGen.h"
+#include "TerrainGen.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -29,7 +29,7 @@ class Chunk
 
 		void init(glm::vec3 position, ChunkSize chunkSize);
 
-		void populateBlockMap(WorldGen worldGen);
+		void populateBlockMap(TerrainGen worldGen);
 
 		void setChunkMesh(Mesh& chunkMesh);
 		

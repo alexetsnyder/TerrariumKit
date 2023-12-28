@@ -62,7 +62,7 @@ ChunkManager::ChunkManager(const World& world)
 void ChunkManager::init(const World& world)
 {
 	_world = &world;
-    _worldGen.init(_world->getChunkSize(), 32, 16);
+    _terrainGen.init(_world->getChunkSize(), 32, 16);
 
     createChunks();
 }
@@ -136,17 +136,17 @@ bool ChunkManager::hasSolidVoxel(const Chunk& chunk, const glm::vec3& position) 
         return hasSolidVoxel(chunk.getPosition() + position);
     }
 
-    return _worldGen.getBlockType(chunk.getBlockByte(position)).isSolid();
+    return _terrainGen.getBlockType(chunk.getBlockByte(position)).isSolid();
 }
 
 bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
 {
+    //isOutsideWorld can only return true if no infinite terrain generation
     if (_world->isOutsideWorld(worldPos))
     {
         return false;
     }
 
-    //isOutsideWorld only return true if no infinite terrain generation
     if (worldPos.y < 0)
     {
         return false;
@@ -158,11 +158,11 @@ bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
     auto mapIter = _activeChunkMap.find(chunkId.getID());
     if (mapIter != _activeChunkMap.end())
     {
-        return _worldGen.getBlockType(mapIter->second.getBlockByte(voxelPos)).isSolid();
+        return _terrainGen.getBlockType(mapIter->second.getBlockByte(voxelPos)).isSolid();
     }
     else
     {
-        return _worldGen.getBlockType(_worldGen.getVoxel(worldPos)).isSolid();
+        return _terrainGen.getBlockType(_terrainGen.getVoxel(worldPos)).isSolid();
     }
 }
 
@@ -170,7 +170,7 @@ void ChunkManager::createChunk(ChunkID chunkId)
 {
     ChunkSize chunkSize{ _world->getChunkSize() };
     _activeChunkMap[chunkId.getID()] = Chunk{ chunkId.getPosition(), chunkSize };
-    _activeChunkMap[chunkId.getID()].populateBlockMap(_worldGen);
+    _activeChunkMap[chunkId.getID()].populateBlockMap(_terrainGen);
 
     Mesh chunkMesh;
     int vertexCount = 0;
@@ -182,7 +182,7 @@ void ChunkManager::createChunk(ChunkID chunkId)
             for (int z = 0; z < chunkSize.zWidth; z++)
             {
                 glm::vec3 voxelPosition{ x, y, z };
-                if (_worldGen.getBlockType(_activeChunkMap[chunkId.getID()].getBlockByte(voxelPosition)).isSolid())
+                if (_terrainGen.getBlockType(_activeChunkMap[chunkId.getID()].getBlockByte(voxelPosition)).isSolid())
                 {
                     createVoxel(_activeChunkMap[chunkId.getID()], voxelPosition, chunkMesh, vertexCount);
                 }
@@ -199,7 +199,7 @@ void ChunkManager::createVoxel(const Chunk& chunk, const glm::vec3& voxelPositio
     {
         if (!hasSolidVoxel(chunk, voxelPosition + voxelNeighbors[face]))
         {
-            BlockType blockType{ _worldGen.getBlockType(chunk.getBlockByte(voxelPosition)) };
+            BlockType blockType{ _terrainGen.getBlockType(chunk.getBlockByte(voxelPosition)) };
             std::vector<float> textureCoordinates{ chunk.getTextureCoordinates(blockType.getBlockSides(), face) };
             for (int vertex = 0; vertex < 4; vertex++)
             {
