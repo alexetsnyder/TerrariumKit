@@ -38,6 +38,6 @@ class World
 		std::map<std::array<float, 2>, Chunk> _activeChunks;
 		std::map<std::array<float, 2>, Chunk> _inactiveChunks;
 		const Camera* _camera;
-		ChunkID _currentChunk;
+		ChunkID _currentChunkId;
 };
 
