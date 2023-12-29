@@ -48,7 +48,7 @@ void Chunk::init(glm::vec3 position, ChunkSize chunkSize)
     createTextureAtlas();
 }
 
-void Chunk::populateBlockMap(TerrainGen worldGen)
+void Chunk::populateBlockMap(TerrainGen terrainGen)
 {
     for (int y = 0; y < _size.height; y++)
     {
@@ -58,7 +58,7 @@ void Chunk::populateBlockMap(TerrainGen worldGen)
             {
                 glm::vec3 voxelPosition{ x, y, z };
                 int index = convertPositionToIndex(voxelPosition);
-                _blocks[index] = worldGen.getVoxel(_position + voxelPosition);
+                _blocks[index] = terrainGen.getVoxel(_position + voxelPosition);
             }
         }
     }

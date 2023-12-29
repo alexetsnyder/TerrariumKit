@@ -200,7 +200,7 @@ bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
         return false;
     }
 
-    if (worldPos.y < 0)
+    if (worldPos.y < 0 || worldPos.y > _world->getChunkSize().height - 1)
     {
         return false;
     }
