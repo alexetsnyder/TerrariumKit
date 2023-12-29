@@ -10,14 +10,16 @@ World::World()
     : _chunkSize{}, _currentChunkId{}
 {
 	_worldSize = 0;
+    _isInfinite = false;
     _camera = nullptr;
     _hasCurrentChunkIdChanged = false;
 }
 
-void World::init(const Camera& camera, int worldSize, ChunkSize chunkSize)
+void World::init(const Camera& camera, int worldSize, ChunkSize chunkSize, bool isInfinite)
 {
     _camera = &camera;
 	_worldSize = worldSize;
+    _isInfinite = isInfinite;
 	_chunkSize = chunkSize;
     _currentChunkId.init(_chunkSize, 0.0f, 0.0f);
     _hasCurrentChunkIdChanged = false;
@@ -26,6 +28,11 @@ void World::init(const Camera& camera, int worldSize, ChunkSize chunkSize)
 int World::getWorldSize() const
 {
     return _worldSize;
+}
+
+bool World::isInfinite() const
+{
+    return _isInfinite;
 }
 
 ChunkSize World::getChunkSize() const
@@ -45,7 +52,7 @@ bool World::hasCurrentChunkIdChanged() const
 
 bool World::isOutsideWorld(const glm::vec3& worldPos) const
 {
-    if (_worldSize > 0)
+    if (!isInfinite())
     {
         //# of chunks per side depending on the world size
         int dim = _worldSize + _worldSize + 1;

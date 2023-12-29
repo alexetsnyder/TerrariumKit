@@ -84,7 +84,7 @@ void ChunkManager::queueChunks()
     }
 
     ChunkID currentChunkId = _world->getCurrentChunkID();
-    int viewDistanceInChunks = abs(_world->getWorldSize());
+    int viewDistanceInChunks = _world->getWorldSize();
     float startX = currentChunkId.getX() - viewDistanceInChunks;
     float endX = currentChunkId.getX() + viewDistanceInChunks;
     float startZ = currentChunkId.getZ() - viewDistanceInChunks;
@@ -126,7 +126,7 @@ void ChunkManager::createChunks()
     }
 
     ChunkID currentChunkId = _world->getCurrentChunkID();
-    int viewDistanceInChunks = abs(_world->getWorldSize());
+    int viewDistanceInChunks = _world->getWorldSize();
     float startX = currentChunkId.getX() - viewDistanceInChunks;
     float endX = currentChunkId.getX() + viewDistanceInChunks;
     float startZ = currentChunkId.getZ() - viewDistanceInChunks;
@@ -167,7 +167,7 @@ void ChunkManager::update()
         createChunks(1);
     }
 
-    if (_world->getWorldSize() < 0 && _world->hasCurrentChunkIdChanged())
+    if (_world->isInfinite() && _world->hasCurrentChunkIdChanged())
     {
         //createChunks();
         queueChunks();

@@ -144,7 +144,9 @@ void MainGame::initWorld()
 	size.xWidth = 16;
 	size.zWidth = 16;
 	size.height = 128;
-	_world.init(_camera, -1, size);
+	int worldSize = 1;
+
+	_world.init(_camera, worldSize, size, true);
 	_chunkManager.init(_world);
 }
 
