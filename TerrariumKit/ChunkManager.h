@@ -22,6 +22,7 @@ class ChunkManager
 
 		void queueChunks();
 		void createChunks();
+		void createChunks(int n);
 
 		void update();
 		void draw(const ShaderProgram& program);

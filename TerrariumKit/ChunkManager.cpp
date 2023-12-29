@@ -151,11 +151,20 @@ void ChunkManager::createChunks()
     }
 }
 
+void ChunkManager::createChunks(int n)
+{
+    int count = 0;
+    while (!_chunkIdQueue.empty() && count++ < n)
+    {
+        createChunk();
+    }
+}
+
 void ChunkManager::update()
 {
     if (!_chunkIdQueue.empty())
     {
-        createChunk();
+        createChunks(1);
     }
 
     if (_world->getWorldSize() < 0 && _world->hasCurrentChunkIdChanged())
