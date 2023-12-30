@@ -10,9 +10,10 @@ class World
 	public:
 		World();
 
-		void init(const Camera& camera, int worldSize, ChunkSize chunkSize, bool isInfinite);
+		void init(const Camera& camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite);
 
 		int getWorldSize() const;
+		int getWorldHeight() const;
 		bool isInfinite() const;
 		ChunkSize getChunkSize() const;
 		ChunkID getCurrentChunkID() const;
@@ -26,6 +27,7 @@ class World
 		void checkCurrentChunk();
 
 		int _worldSize;
+		int _worldHeight;
 		bool _isInfinite;
 		ChunkSize _chunkSize;
 		const Camera* _camera;

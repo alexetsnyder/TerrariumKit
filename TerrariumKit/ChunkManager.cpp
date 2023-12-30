@@ -59,12 +59,24 @@ ChunkManager::ChunkManager(const World& world)
 	init(world);
 }
 
+ChunkManager::~ChunkManager()
+{
+    for (auto& pair : _activeChunkMap)
+    {
+        pair.second.deleteAll();
+    }
+
+    for (auto& pair : _inactiveChunkMap)
+    {
+        pair.second.deleteAll();
+    }
+}
+
 void ChunkManager::init(const World& world)
 {
 	_world = &world;
     _terrainGen.init(_world->getChunkSize(), 32, 16);
 
-    //createChunks();
     queueChunks();
 }
 
@@ -84,30 +96,35 @@ void ChunkManager::queueChunks()
     }
 
     ChunkID currentChunkId = _world->getCurrentChunkID();
+    float startY = 0.0f;
+    float endY = static_cast<float>(_world->getWorldHeight() / _world->getChunkSize().height);
     int viewDistanceInChunks = _world->getWorldSize();
     float startX = currentChunkId.getX() - viewDistanceInChunks;
     float endX = currentChunkId.getX() + viewDistanceInChunks;
     float startZ = currentChunkId.getZ() - viewDistanceInChunks;
     float endZ = currentChunkId.getZ() + viewDistanceInChunks;
 
-    for (float x = startX; x < endX + 1; x++)
+    for (float y = startY; y < endY; y++)
     {
-        for (float z = startZ; z < endZ + 1; z++)
+        for (float x = startX; x < endX + 1; x++)
         {
-            ChunkID chunkId{ _world->getChunkSize(), x, z };
-            auto mapIter = _inactiveChunkMap.find(chunkId.getID());
-            if (mapIter != _inactiveChunkMap.end())
+            for (float z = startZ; z < endZ + 1; z++)
             {
-                _activeChunkMap[mapIter->first] = mapIter->second;
-                _inactiveChunkMap.erase(mapIter);
-            }
-            else
-            {
-                _activeChunkMap[chunkId.getID()] = Chunk{ chunkId.getPosition(), _world->getChunkSize() };
-                _chunkIdQueue.push(chunkId);
+                ChunkID chunkId{ _world->getChunkSize(), x, y, z };
+                auto mapIter = _inactiveChunkMap.find(chunkId.getID());
+                if (mapIter != _inactiveChunkMap.end())
+                {
+                    _activeChunkMap[mapIter->first] = mapIter->second;
+                    _inactiveChunkMap.erase(mapIter);
+                }
+                else
+                {
+                    _activeChunkMap[chunkId.getID()] = Chunk{ chunkId.getPosition(), _world->getChunkSize() };
+                    _chunkIdQueue.push(chunkId);
+                }
             }
         }
-    }
+    }  
 }
 
 void ChunkManager::createChunks(int n)
@@ -123,12 +140,11 @@ void ChunkManager::update()
 {
     if (!_chunkIdQueue.empty())
     {
-        createChunks(1);
+        createChunks(16);
     }
 
     if (_world->isInfinite() && _world->hasCurrentChunkIdChanged())
     {
-        //createChunks();
         queueChunks();
     }
 }
@@ -159,7 +175,7 @@ bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
         return false;
     }
 
-    if (worldPos.y < 0 || worldPos.y > _world->getChunkSize().height - 1)
+    if (worldPos.y < 0 || worldPos.y > _world->getWorldHeight() - 1)
     {
         return false;
     }
@@ -206,7 +222,14 @@ void ChunkManager::createChunk()
             }
         }
 
-        _activeChunkMap[chunkId.getID()].setChunkMesh(chunkMesh);
+        if (chunkMesh.getIndices().empty())
+        {
+            _activeChunkMap[chunkId.getID()].setNoDraw(true);
+        }
+        else
+        {
+            _activeChunkMap[chunkId.getID()].setChunkMesh(chunkMesh);
+        } 
     }
 }
 

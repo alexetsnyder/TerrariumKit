@@ -140,13 +140,15 @@ void MainGame::createShaderProgram()
 
 void MainGame::initWorld()
 {
-	ChunkSize size;
-	size.xWidth = 16;
-	size.zWidth = 16;
-	size.height = 128;
+	ChunkSize chunkSize;
+	chunkSize.xWidth = 16;
+	chunkSize.zWidth = 16;
+	chunkSize.height = 16;
 	int worldSize = 1;
+	int worldHeight = 128;
+	bool isInfinite = true;
 
-	_world.init(_camera, worldSize, size, true);
+	_world.init(_camera, worldSize, worldHeight, chunkSize, isInfinite);
 	_chunkManager.init(_world);
 }
 

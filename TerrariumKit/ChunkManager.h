@@ -17,6 +17,7 @@ class ChunkManager
 	public:
 		ChunkManager();
 		ChunkManager(const World& world);
+		~ChunkManager();
 
 		void init(const World& world);
 
@@ -35,7 +36,7 @@ class ChunkManager
 		const World* _world;
 		TerrainGen _terrainGen;
 		std::queue<ChunkID> _chunkIdQueue;
-		std::map<std::array<float, 2>, Chunk> _activeChunkMap;
-		std::map<std::array<float, 2>, Chunk> _inactiveChunkMap;
+		std::map<std::array<float, 3>, Chunk> _activeChunkMap;
+		std::map<std::array<float, 3>, Chunk> _inactiveChunkMap;
 };
 

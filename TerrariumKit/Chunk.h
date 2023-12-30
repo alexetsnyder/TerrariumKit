@@ -28,6 +28,8 @@ class Chunk
 		GLubyte getBlockByte(const glm::vec3& position) const;
 		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
 
+		void setNoDraw(bool noDraw);
+
 		void init(glm::vec3 position, ChunkSize chunkSize);
 
 		void populateBlockMap(TerrainGen worldGen);
@@ -38,9 +40,11 @@ class Chunk
 
 		void draw(const ShaderProgram& shader) const;
 
+		void deleteAll();
+
 	private:
 		void createTextureAtlas();
-		void genAll();
+		void genAll();	
 		void bindAll();
 		void unbindAll();
 		std::string getFaceName(BlockSides blockSides, int face) const;
@@ -60,5 +64,7 @@ class Chunk
 		GLuint _ebo;
 
 		GLuint _indicesCount;
+
+		bool _noDraw;
 };
 

@@ -2,6 +2,7 @@
 
 #include "Mesh.h"
 #include "BlockType.h"
+#include "ErrorLog.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -30,6 +31,7 @@ Chunk::Chunk()
 	_ebo = 0;
 	_position = glm::vec3(0.0f, 0.0f, 0.0f);
     _indicesCount = 0;
+    _noDraw = false;
 }
 
 Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
@@ -41,9 +43,14 @@ Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
 void Chunk::init(glm::vec3 position, ChunkSize chunkSize)
 {
     _hasPopulatedBlockMap = false;
+    _vao = 0;
+    _vbo = 0;
+    _ebo = 0;
     _position = position;
     _size = chunkSize;
     _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
+    _indicesCount = 0;
+    _noDraw = false;
 
     createTextureAtlas();
 }
@@ -69,6 +76,11 @@ void Chunk::populateBlockMap(TerrainGen terrainGen)
 std::vector<float> Chunk::getTextureCoordinates(BlockSides blockSides, int face) const
 {
     return _atlas.getTextureCoordinates(getFaceName(blockSides, face));
+}
+
+void Chunk::setNoDraw(bool noDraw)
+{
+    _noDraw = noDraw;
 }
 
 void Chunk::setChunkMesh(Mesh& chunkMesh)
@@ -112,15 +124,18 @@ bool Chunk::isOutsideChunk(glm::vec3 position) const
 
 void Chunk::draw(const ShaderProgram& shader) const
 {
-    glm::mat4 model{ getModelMatrix() };
+    if (!_noDraw)
+    {
+        glm::mat4 model{ getModelMatrix() };
 
-    shader.setUniform("model", model);
+        shader.setUniform("model", model);
 
-	_texture.bind();
+        _texture.bind();
 
-	glBindVertexArray(_vao);
-	glDrawElements(GL_TRIANGLES, _indicesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+        glBindVertexArray(_vao);
+        glDrawElements(GL_TRIANGLES, _indicesCount, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }  
 }
 
 void Chunk::createTextureAtlas()
@@ -134,6 +149,24 @@ void Chunk::genAll()
 	glGenVertexArrays(1, &_vao);
 	glGenBuffers(1, &_vbo);
 	glGenBuffers(1, &_ebo);
+}
+
+void Chunk::deleteAll()
+{
+    if (_vao > 0)
+    {
+        glDeleteVertexArrays(1, &_vao);
+    }
+
+    if (_vbo > 0)
+    {
+        glDeleteBuffers(1, &_vbo);
+    }
+
+    if (_ebo > 0)
+    {
+        glDeleteBuffers(1, &_ebo);
+    }
 }
 
 void Chunk::bindAll()
@@ -208,5 +241,23 @@ int Chunk::convertPositionToIndex(const glm::vec3& position) const
     int y = static_cast<int>(floor(position.y));
     int z = static_cast<int>(floor(position.z));
 
-    return y * _size.xWidth * _size.zWidth + x * _size.zWidth + z;
+    int index = y * _size.xWidth * _size.zWidth + x * _size.zWidth + z;
+
+    if (index < 0 || index >= _blocks.size())
+    {
+        std::string errorMsg{ "" };
+        std::size_t blocksSize = _blocks.size();
+        if (blocksSize == 0)
+        {
+            errorMsg += "Blocks vector has size zero";
+        }
+        else
+        {
+            errorMsg += "Index " + index;
+            errorMsg += "is out of range 0 to " + blocksSize;
+        }
+        logError("Chunk::convertPositionToIndex", errorMsg);
+    }
+
+    return index;
 }
