@@ -21,7 +21,6 @@ class ChunkManager
 		void init(const World& world);
 
 		void queueChunks();
-		void createChunks();
 		void createChunks(int n);
 
 		void update();
@@ -31,7 +30,6 @@ class ChunkManager
 		bool hasSolidVoxel(const Chunk& chunk, const glm::vec3& position) const;
 		bool hasSolidVoxel(const glm::vec3& worldPos) const;
 		void createChunk();
-		void createChunk(ChunkID chunkId);
 		void createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
 
 		const World* _world;

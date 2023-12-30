@@ -110,47 +110,6 @@ void ChunkManager::queueChunks()
     }
 }
 
-void ChunkManager::createChunks()
-{
-    if (!_activeChunkMap.empty())
-    {
-        for (const auto& pair : _activeChunkMap)
-        {
-            _inactiveChunkMap[pair.first] = pair.second;
-        }
-
-        for (const auto& pair : _inactiveChunkMap)
-        {
-            _activeChunkMap.erase(pair.first);
-        }
-    }
-
-    ChunkID currentChunkId = _world->getCurrentChunkID();
-    int viewDistanceInChunks = _world->getWorldSize();
-    float startX = currentChunkId.getX() - viewDistanceInChunks;
-    float endX = currentChunkId.getX() + viewDistanceInChunks;
-    float startZ = currentChunkId.getZ() - viewDistanceInChunks;
-    float endZ = currentChunkId.getZ() + viewDistanceInChunks;
-
-    for (float x = startX; x < endX + 1; x++)
-    {
-        for (float z = startZ; z < endZ + 1; z++)
-        {
-            ChunkID chunkId{ _world->getChunkSize(), x, z};
-            auto mapIter = _inactiveChunkMap.find(chunkId.getID());
-            if (mapIter != _inactiveChunkMap.end())
-            {
-                _activeChunkMap[mapIter->first] = mapIter->second;
-                _inactiveChunkMap.erase(mapIter);
-            }
-            else
-            {
-                createChunk(chunkId);
-            }
-        }
-    }
-}
-
 void ChunkManager::createChunks(int n)
 {
     int count = 0;
@@ -249,33 +208,6 @@ void ChunkManager::createChunk()
 
         _activeChunkMap[chunkId.getID()].setChunkMesh(chunkMesh);
     }
-}
-
-void ChunkManager::createChunk(ChunkID chunkId)
-{
-    ChunkSize chunkSize{ _world->getChunkSize() };
-    _activeChunkMap[chunkId.getID()] = Chunk{ chunkId.getPosition(), chunkSize };
-    _activeChunkMap[chunkId.getID()].populateBlockMap(_terrainGen);
-
-    Mesh chunkMesh;
-    int vertexCount = 0;
-
-    for (int y = 0; y < chunkSize.height; y++)
-    {
-        for (int x = 0; x < chunkSize.xWidth; x++)
-        {
-            for (int z = 0; z < chunkSize.zWidth; z++)
-            {
-                glm::vec3 voxelPosition{ x, y, z };
-                if (_terrainGen.getBlockType(_activeChunkMap[chunkId.getID()].getBlockByte(voxelPosition)).isSolid())
-                {
-                    createVoxel(_activeChunkMap[chunkId.getID()], voxelPosition, chunkMesh, vertexCount);
-                }
-            }
-        }
-    }
-
-    _activeChunkMap[chunkId.getID()].setChunkMesh(chunkMesh);
 }
 
 void ChunkManager::createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
