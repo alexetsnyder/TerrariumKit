@@ -147,7 +147,7 @@ void MainGame::initWorld()
 	int worldSize = 1;
 	int worldHeight = 128;
 	bool isInfinite = true;
-	bool useThreading = true;
+	bool useThreading = false;
 
 	_world.init(_camera, worldSize, worldHeight, chunkSize, isInfinite);
 	_chunkManager.init(_world, useThreading);

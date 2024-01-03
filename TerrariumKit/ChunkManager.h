@@ -2,15 +2,16 @@
 
 #include "Chunk.h"
 #include "ChunkID.h"
-#include "World.h"
-#include "TerrainGen.h"
 #include "ShaderProgram.h"
+#include "TerrainGen.h"
+#include "World.h"
 
 #include <glm/glm.hpp>
 
-#include <queue>
 #include <array>
 #include <map>
+#include <mutex>
+#include <queue>
 #include <thread>
 
 struct ChunkMeshInfo
@@ -30,6 +31,8 @@ class ChunkManager
 
 		void queueChunks();
 		void createChunks(int n);
+		void createChunkThreads(int n);
+		void joinChunkThreads(int n);
 		void sendChunkData(int n);
 
 		void update();
@@ -41,6 +44,7 @@ class ChunkManager
 
 		void createChunk(Chunk& chunk);
 		void createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
+		void cleanUpChunkThreads();
 
 		const World* _world;
 		TerrainGen _terrainGen;
@@ -48,6 +52,7 @@ class ChunkManager
 
 		bool _useThreading;
 		std::queue<std::thread> _threadQueue;
+		std::mutex _chunkMeshInfoAccess;
 		std::queue<ChunkMeshInfo> _chunkMeshInfoQueue;
 
 		std::map<std::array<float, 3>, Chunk> _activeChunkMap;

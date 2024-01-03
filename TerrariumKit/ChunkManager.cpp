@@ -62,6 +62,8 @@ ChunkManager::ChunkManager(const World& world, bool useThreading)
 
 ChunkManager::~ChunkManager()
 {
+    cleanUpChunkThreads();
+
     for (auto& pair : _activeChunkMap)
     {
         pair.second.deleteAll();
@@ -141,11 +143,35 @@ void ChunkManager::createChunks(int n)
     }
 }
 
+void ChunkManager::createChunkThreads(int n)
+{
+    int count = 0;
+    while (!_chunkIdQueue.empty() && count++ < n)
+    {
+        ChunkID chunkId{ _chunkIdQueue.front() };
+        _chunkIdQueue.pop();
+
+        std::thread chunkThread{ &ChunkManager::createChunk, this, std::ref(_activeChunkMap[chunkId.getID()]) };
+        _threadQueue.push(std::move(chunkThread));
+    }
+}
+
+void ChunkManager::joinChunkThreads(int n)
+{
+    int count = 0;
+    while (!_threadQueue.empty() && count++ < n)
+    {
+        _threadQueue.front().join();
+        _threadQueue.pop();
+    }
+}
+
 void ChunkManager::sendChunkData(int n)
 {
     int count = 0;
     while (!_chunkMeshInfoQueue.empty() && count++ < n)
     {
+        std::lock_guard<std::mutex> lock(_chunkMeshInfoAccess);
         ChunkMeshInfo chunkMeshInfo{ _chunkMeshInfoQueue.front() };
         _chunkMeshInfoQueue.pop();
 
@@ -162,11 +188,16 @@ void ChunkManager::sendChunkData(int n)
 
 void ChunkManager::update()
 {
-    if (!_chunkIdQueue.empty())
+    if (_useThreading)
+    {
+        joinChunkThreads(16);
+        createChunkThreads(16);
+    }
+    else
     {
         createChunks(16);
-        sendChunkData(16);
     }
+    sendChunkData(16);
 
     if (_world->isInfinite() && _world->hasCurrentChunkIdChanged())
     {
@@ -244,6 +275,7 @@ void ChunkManager::createChunk(Chunk& chunk)
         }
     }
 
+    std::lock_guard<std::mutex> lock(_chunkMeshInfoAccess);
     _chunkMeshInfoQueue.push(chunkMeshInfo);
 }
 
@@ -279,5 +311,14 @@ void ChunkManager::createVoxel(const Chunk& chunk, const glm::vec3& voxelPositio
 
             vertexCount += 4;
         }
+    }
+}
+
+void ChunkManager::cleanUpChunkThreads()
+{
+    while (!_threadQueue.empty())
+    {
+        _threadQueue.front().join();
+        _threadQueue.pop();
     }
 }
