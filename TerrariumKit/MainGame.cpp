@@ -144,7 +144,7 @@ void MainGame::initWorld()
 	chunkSize.xWidth = 16;
 	chunkSize.zWidth = 16;
 	chunkSize.height = 16;
-	int worldSize = 1;
+	int worldSize = 2;
 	int worldHeight = 128;
 	bool isInfinite = true;
 	bool useThreading = false;
