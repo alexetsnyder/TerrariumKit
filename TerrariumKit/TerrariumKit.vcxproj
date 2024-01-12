@@ -162,6 +162,7 @@
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="ErrorLog.h" />
     <ClInclude Include="FastNoiseLite.h" />
+    <ClInclude Include="ICamera.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ShaderProgram.h" />

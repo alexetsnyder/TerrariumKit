@@ -1,14 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "ICamera.h"
 
-enum CameraDirection
-{
-	FORWARD,
-	BACKWARD,
-	RIGHT,
-	LEFT,
-};
+#include <glm/glm.hpp>
 
 class Camera
 {
