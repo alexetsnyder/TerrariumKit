@@ -197,7 +197,7 @@ void ChunkManager::update()
     {
         createChunks(16);
     }
-    sendChunkData(16);
+    sendChunkData(4);
 
     if (_world->isInfinite() && _world->hasCurrentChunkIdChanged())
     {

@@ -9,14 +9,12 @@ class Camera
 	public:
 		Camera(glm::vec3 position, glm::vec3 up);
 
-		glm::vec3 getPosition() const;
-		glm::mat4 getViewMatrix();
-		float getZoom();
+		glm::vec3 position() const;
+		glm::mat4 viewMatrix() const;
+		float zoom() const;
 
 		void move(CameraDirection direction, double deltaTime);
-
 		void lookAt(float xOffset, float yOffset);
-
 		void zoom(float yOffset);
 
 	private:

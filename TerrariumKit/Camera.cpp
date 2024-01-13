@@ -9,17 +9,17 @@ Camera::Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3 up = 
 	updateVectors();
 }
 
-glm::vec3 Camera::getPosition() const
+glm::vec3 Camera::position() const
 {
 	return _position;
 }
 
-glm::mat4 Camera::getViewMatrix()
+glm::mat4 Camera::viewMatrix() const
 {
 	return glm::lookAt(_position, _position + _front, _up);
 }
 
-float Camera::getZoom()
+float Camera::zoom() const
 {
 	return _zoom;
 }

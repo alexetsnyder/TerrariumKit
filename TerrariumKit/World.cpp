@@ -94,7 +94,7 @@ void World::update()
 void World::checkCurrentChunk()
 {
     _hasCurrentChunkIdChanged = false;
-    glm::vec3 cameraPos = _camera->getPosition();
+    glm::vec3 cameraPos = _camera->position();
 
     ChunkID chunkId{ _chunkSize, cameraPos };
 
