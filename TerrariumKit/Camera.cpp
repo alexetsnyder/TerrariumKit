@@ -44,7 +44,7 @@ void Camera::move(CameraDirection direction, double deltaTime)
 	}
 }
 
-void Camera::lookAt(float xOffset, float yOffset)
+void Camera::rotate(float xOffset, float yOffset)
 {
 	xOffset *= _sensitivity;
 	yOffset *= _sensitivity;

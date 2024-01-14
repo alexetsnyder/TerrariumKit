@@ -14,7 +14,7 @@ class Camera
 		float zoom() const;
 
 		void move(CameraDirection direction, double deltaTime);
-		void lookAt(float xOffset, float yOffset);
+		void rotate(float xOffset, float yOffset);
 		void zoom(float yOffset);
 
 	private:

@@ -216,7 +216,7 @@ void MainGame::processMouseMotion(SDL_Event event)
 {
 	float xRel = static_cast<float>(event.motion.xrel);
 	float yRel = static_cast<float>(event.motion.yrel);
-	_camera.lookAt(xRel, -yRel);
+	_camera.rotate(xRel, -yRel);
 }
 
 void MainGame::updateGame()
