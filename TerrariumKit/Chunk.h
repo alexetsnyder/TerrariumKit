@@ -18,7 +18,6 @@
 class Chunk
 {
 	public:
-		Chunk();
 		Chunk(glm::vec3 position, ChunkSize chunkSize);
 
 		glm::mat4 getModelMatrix() const;
@@ -29,8 +28,6 @@ class Chunk
 		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
 
 		void setNoDraw(bool noDraw);
-
-		void init(glm::vec3 position, ChunkSize chunkSize);
 
 		void populateBlockMap(TerrainGen worldGen);
 

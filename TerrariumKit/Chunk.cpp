@@ -22,18 +22,6 @@ std::vector<std::string> blockNames =
 	"sand",
 };
 
-Chunk::Chunk()
-    : _atlas{ 256, 16 }, _size{}
-{
-    _hasPopulatedBlockMap = false;
-	_vao = 0;
-	_vbo = 0;
-	_ebo = 0;
-	_position = glm::vec3(0.0f, 0.0f, 0.0f);
-    _indicesCount = 0;
-    _noDraw = false;
-}
-
 Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
     : _atlas{ 256, 16 }, _size{ chunkSize }
 {
@@ -42,21 +30,6 @@ Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
     _vbo = 0;
     _ebo = 0;
     _position = position;
-    _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
-    _indicesCount = 0;
-    _noDraw = false;
-
-    createTextureAtlas();
-}
-
-void Chunk::init(glm::vec3 position, ChunkSize chunkSize)
-{
-    _hasPopulatedBlockMap = false;
-    _vao = 0;
-    _vbo = 0;
-    _ebo = 0;
-    _position = position;
-    _size = chunkSize;
     _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
     _indicesCount = 0;
     _noDraw = false;
