@@ -88,13 +88,6 @@ void ChunkManager::init(const World& world, bool useThreading)
 
 void ChunkManager::queueChunks()
 {
-    /*if (!_chunkCreateQueue.empty())
-    {
-        int size = static_cast<int>(_chunkCreateQueue.size());
-        createChunks(size);
-        sendChunkData(size);
-    }*/
-
     if (!_activeChunkMap.empty())
     {
         for (const auto& pair : _activeChunkMap)
@@ -132,8 +125,9 @@ void ChunkManager::queueChunks()
                 }
                 else
                 {
-                    _activeChunkMap.emplace(chunkId.getID(), new Chunk{ chunkId.getPosition(), _world->getChunkSize() });
-                    _chunkCreateQueue.push(chunkId);
+                    Chunk* chunkPointer{ new Chunk{ chunkId.getPosition(), _world->getChunkSize() } };
+                    _activeChunkMap.emplace(chunkId.getID(), chunkPointer);
+                    _chunkCreateQueue.push(chunkPointer);
                 }
             }
         }
@@ -145,10 +139,10 @@ void ChunkManager::createChunks(int n)
     int count = 0;
     while (!_chunkCreateQueue.empty() && count++ < n)
     {
-        ChunkID chunkId{ _chunkCreateQueue.front() };
+        Chunk* chunkP{ _chunkCreateQueue.front() };
         _chunkCreateQueue.pop();
 
-        createChunk(_activeChunkMap.at(chunkId.getID()));
+        createChunk(chunkP);
     }
 }
 
@@ -157,10 +151,10 @@ void ChunkManager::createChunkThreads(int n)
     int count = 0;
     while (!_chunkCreateQueue.empty() && count++ < n)
     {
-        ChunkID chunkId{ _chunkCreateQueue.front() };
+        Chunk* chunkP{ _chunkCreateQueue.front() };
         _chunkCreateQueue.pop();
 
-        std::thread chunkThread{ &ChunkManager::createChunk, this, std::ref(_activeChunkMap[chunkId.getID()]) };
+        std::thread chunkThread{ &ChunkManager::createChunk, this, chunkP };
         _threadQueue.push(std::move(chunkThread));
     }
 }
