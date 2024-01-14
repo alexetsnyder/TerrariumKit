@@ -139,10 +139,10 @@ void ChunkManager::createChunks(int n)
     int count = 0;
     while (!_chunkCreateQueue.empty() && count++ < n)
     {
-        Chunk* chunkP{ _chunkCreateQueue.front() };
+        Chunk* chunk{ _chunkCreateQueue.front() };
         _chunkCreateQueue.pop();
 
-        createChunk(chunkP);
+        createChunk(chunk);
     }
 }
 
@@ -151,10 +151,10 @@ void ChunkManager::createChunkThreads(int n)
     int count = 0;
     while (!_chunkCreateQueue.empty() && count++ < n)
     {
-        Chunk* chunkP{ _chunkCreateQueue.front() };
+        Chunk* chunk{ _chunkCreateQueue.front() };
         _chunkCreateQueue.pop();
 
-        std::thread chunkThread{ &ChunkManager::createChunk, this, chunkP };
+        std::thread chunkThread{ &ChunkManager::createChunk, this, chunk };
         _threadQueue.push(std::move(chunkThread));
     }
 }
@@ -210,9 +210,9 @@ void ChunkManager::update()
 
 void ChunkManager::draw(const ShaderProgram& program)
 {
-    for (auto& chunk : _activeChunkMap)
+    for (auto& pair : _activeChunkMap)
     {
-        chunk.second->draw(program);
+        pair.second->draw(program);
     }
 }
 
