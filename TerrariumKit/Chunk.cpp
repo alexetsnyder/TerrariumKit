@@ -35,9 +35,18 @@ Chunk::Chunk()
 }
 
 Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
-    : _atlas{ 256, 16 }
+    : _atlas{ 256, 16 }, _size{ chunkSize }
 {
-    init(position, chunkSize);
+    _hasPopulatedBlockMap = false;
+    _vao = 0;
+    _vbo = 0;
+    _ebo = 0;
+    _position = position;
+    _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
+    _indicesCount = 0;
+    _noDraw = false;
+
+    createTextureAtlas();
 }
 
 void Chunk::init(glm::vec3 position, ChunkSize chunkSize)

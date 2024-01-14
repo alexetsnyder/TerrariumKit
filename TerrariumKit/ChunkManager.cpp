@@ -66,12 +66,14 @@ ChunkManager::~ChunkManager()
 
     for (auto& pair : _activeChunkMap)
     {
-        pair.second.deleteAll();
+        pair.second->deleteAll();
+        delete pair.second;
     }
 
     for (auto& pair : _inactiveChunkMap)
     {
-        pair.second.deleteAll();
+        pair.second->deleteAll();
+        delete pair.second;
     }
 }
 
@@ -86,11 +88,18 @@ void ChunkManager::init(const World& world, bool useThreading)
 
 void ChunkManager::queueChunks()
 {
+    /*if (!_chunkCreateQueue.empty())
+    {
+        int size = static_cast<int>(_chunkCreateQueue.size());
+        createChunks(size);
+        sendChunkData(size);
+    }*/
+
     if (!_activeChunkMap.empty())
     {
         for (const auto& pair : _activeChunkMap)
         {
-            _inactiveChunkMap[pair.first] = pair.second;
+            _inactiveChunkMap.emplace(pair.first, pair.second);
         }
 
         for (const auto& pair : _inactiveChunkMap)
@@ -118,13 +127,13 @@ void ChunkManager::queueChunks()
                 auto mapIter = _inactiveChunkMap.find(chunkId.getID());
                 if (mapIter != _inactiveChunkMap.end())
                 {
-                    _activeChunkMap[mapIter->first] = mapIter->second;
+                    _activeChunkMap.emplace(mapIter->first, mapIter->second);
                     _inactiveChunkMap.erase(mapIter);
                 }
                 else
                 {
-                    _activeChunkMap[chunkId.getID()] = Chunk{ chunkId.getPosition(), _world->getChunkSize() };
-                    _chunkIdQueue.push(chunkId);
+                    _activeChunkMap.emplace(chunkId.getID(), new Chunk{ chunkId.getPosition(), _world->getChunkSize() });
+                    _chunkCreateQueue.push(chunkId);
                 }
             }
         }
@@ -134,22 +143,22 @@ void ChunkManager::queueChunks()
 void ChunkManager::createChunks(int n)
 {
     int count = 0;
-    while (!_chunkIdQueue.empty() && count++ < n)
+    while (!_chunkCreateQueue.empty() && count++ < n)
     {
-        ChunkID chunkId{ _chunkIdQueue.front() };
-        _chunkIdQueue.pop();
+        ChunkID chunkId{ _chunkCreateQueue.front() };
+        _chunkCreateQueue.pop();
 
-        createChunk(_activeChunkMap[chunkId.getID()]);
+        createChunk(_activeChunkMap.at(chunkId.getID()));
     }
 }
 
 void ChunkManager::createChunkThreads(int n)
 {
     int count = 0;
-    while (!_chunkIdQueue.empty() && count++ < n)
+    while (!_chunkCreateQueue.empty() && count++ < n)
     {
-        ChunkID chunkId{ _chunkIdQueue.front() };
-        _chunkIdQueue.pop();
+        ChunkID chunkId{ _chunkCreateQueue.front() };
+        _chunkCreateQueue.pop();
 
         std::thread chunkThread{ &ChunkManager::createChunk, this, std::ref(_activeChunkMap[chunkId.getID()]) };
         _threadQueue.push(std::move(chunkThread));
@@ -209,18 +218,18 @@ void ChunkManager::draw(const ShaderProgram& program)
 {
     for (auto& chunk : _activeChunkMap)
     {
-        chunk.second.draw(program);
+        chunk.second->draw(program);
     }
 }
 
-bool ChunkManager::hasSolidVoxel(const Chunk& chunk, const glm::vec3& position) const
+bool ChunkManager::hasSolidVoxel(const Chunk* chunk, const glm::vec3& position) const
 {
-    if (chunk.isOutsideChunk(position))
+    if (chunk->isOutsideChunk(position))
     {
-        return hasSolidVoxel(chunk.getPosition() + position);
+        return hasSolidVoxel(chunk->getPosition() + position);
     }
 
-    return _terrainGen.getBlockType(chunk.getBlockByte(position)).isSolid();
+    return _terrainGen.getBlockType(chunk->getBlockByte(position)).isSolid();
 }
 
 bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
@@ -240,9 +249,9 @@ bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
     glm::vec3 voxelPos{ chunkId.getRelativeVoxelPosition(worldPos) };
 
     const auto mapIter = _activeChunkMap.find(chunkId.getID());
-    if (mapIter != _activeChunkMap.end() && mapIter->second.hasPopulatedBlockMap())
+    if (mapIter != _activeChunkMap.end() && mapIter->second->hasPopulatedBlockMap())
     {
-        return _terrainGen.getBlockType(mapIter->second.getBlockByte(voxelPos)).isSolid();
+        return _terrainGen.getBlockType(mapIter->second->getBlockByte(voxelPos)).isSolid();
     }
     else
     {
@@ -250,12 +259,12 @@ bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
     }
 }
 
-void ChunkManager::createChunk(Chunk& chunk)
+void ChunkManager::createChunk(Chunk* chunk)
 {
-    chunk.populateBlockMap(_terrainGen);
+    chunk->populateBlockMap(_terrainGen);
 
     ChunkMeshInfo chunkMeshInfo;
-    chunkMeshInfo.chunkPointer = &chunk;
+    chunkMeshInfo.chunkPointer = chunk;
  
     int vertexCount = 0;
     ChunkSize chunkSize{ _world->getChunkSize() };
@@ -267,7 +276,7 @@ void ChunkManager::createChunk(Chunk& chunk)
             for (int z = 0; z < chunkSize.zWidth; z++)
             {
                 glm::vec3 voxelPosition{ x, y, z };
-                if (_terrainGen.getBlockType(chunk.getBlockByte(voxelPosition)).isSolid())
+                if (_terrainGen.getBlockType(chunk->getBlockByte(voxelPosition)).isSolid())
                 {
                     createVoxel(chunk, voxelPosition, chunkMeshInfo.chunkMesh, vertexCount);
                 }
@@ -279,14 +288,14 @@ void ChunkManager::createChunk(Chunk& chunk)
     _chunkMeshInfoQueue.push(chunkMeshInfo);
 }
 
-void ChunkManager::createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
+void ChunkManager::createVoxel(const Chunk* chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
 {
     for (int face = 0; face < 6; face++)
     {
         if (!hasSolidVoxel(chunk, voxelPosition + voxelNeighbors[face]))
         {
-            BlockType blockType{ _terrainGen.getBlockType(chunk.getBlockByte(voxelPosition)) };
-            std::vector<float> textureCoordinates{ chunk.getTextureCoordinates(blockType.getBlockSides(), face) };
+            BlockType blockType{ _terrainGen.getBlockType(chunk->getBlockByte(voxelPosition)) };
+            std::vector<float> textureCoordinates{ chunk->getTextureCoordinates(blockType.getBlockSides(), face) };
             for (int vertex = 0; vertex < 4; vertex++)
             {
                 Vertex newVertex{};

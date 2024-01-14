@@ -39,23 +39,23 @@ class ChunkManager
 		void draw(const ShaderProgram& program);
 
 	private:
-		bool hasSolidVoxel(const Chunk& chunk, const glm::vec3& position) const;
+		bool hasSolidVoxel(const Chunk* chunk, const glm::vec3& position) const;
 		bool hasSolidVoxel(const glm::vec3& worldPos) const;
 
-		void createChunk(Chunk& chunk);
-		void createVoxel(const Chunk& chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
+		void createChunk(Chunk* chunk);
+		void createVoxel(const Chunk* chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
 		void cleanUpChunkThreads();
 
 		const World* _world;
 		TerrainGen _terrainGen;
-		std::queue<ChunkID> _chunkIdQueue;
+		std::queue<ChunkID> _chunkCreateQueue;
 
 		bool _useThreading;
 		std::queue<std::thread> _threadQueue;
 		std::mutex _chunkMeshInfoAccess;
 		std::queue<ChunkMeshInfo> _chunkMeshInfoQueue;
 
-		std::map<std::array<float, 3>, Chunk> _activeChunkMap;
-		std::map<std::array<float, 3>, Chunk> _inactiveChunkMap;
+		std::map<std::array<float, 3>, Chunk*> _activeChunkMap;
+		std::map<std::array<float, 3>, Chunk*> _inactiveChunkMap;
 };
 
