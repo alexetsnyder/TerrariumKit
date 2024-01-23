@@ -10,11 +10,12 @@ class World
 	public:
 		World(const ICamera* camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite);
 
-		int getWorldSize() const;
-		int getWorldHeight() const;
-		bool isInfinite() const;
-		ChunkSize getChunkSize() const;
-		ChunkID getCurrentChunkID() const;
+		int worldSize() const;
+		int worldHeight() const;
+		ChunkSize chunkSize() const;
+		ChunkID currentChunkID() const;
+
+		bool isInfinite() const;	
 		bool hasCurrentChunkIdChanged() const;
 
 		bool isOutsideWorld(const glm::vec3& worldPos) const;

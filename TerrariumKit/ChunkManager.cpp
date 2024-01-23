@@ -81,7 +81,7 @@ void ChunkManager::init(const World* world, bool useThreading)
 {
 	_world = world;
     _useThreading = useThreading;
-    _terrainGen.init(_world->getChunkSize(), 32, 16);
+    _terrainGen.init(_world->chunkSize(), 32, 16);
 
     queueChunks();
 }
@@ -101,10 +101,10 @@ void ChunkManager::queueChunks()
         }
     }
 
-    ChunkID currentChunkId = _world->getCurrentChunkID();
+    ChunkID currentChunkId = _world->currentChunkID();
     float startY = 0.0f;
-    float endY = static_cast<float>(_world->getWorldHeight() / _world->getChunkSize().height);
-    int viewDistanceInChunks = _world->getWorldSize();
+    float endY = static_cast<float>(_world->worldHeight() / _world->chunkSize().height);
+    int viewDistanceInChunks = _world->worldSize();
     float startX = currentChunkId.getX() - viewDistanceInChunks;
     float endX = currentChunkId.getX() + viewDistanceInChunks;
     float startZ = currentChunkId.getZ() - viewDistanceInChunks;
@@ -116,7 +116,7 @@ void ChunkManager::queueChunks()
         {
             for (float z = startZ; z < endZ + 1; z++)
             {
-                ChunkID chunkId{ _world->getChunkSize(), x, y, z };
+                ChunkID chunkId{ _world->chunkSize(), x, y, z };
                 auto mapIter = _inactiveChunkMap.find(chunkId.getID());
                 if (mapIter != _inactiveChunkMap.end())
                 {
@@ -125,7 +125,7 @@ void ChunkManager::queueChunks()
                 }
                 else
                 {
-                    Chunk* chunkPointer{ new Chunk{ chunkId.getPosition(), _world->getChunkSize() } };
+                    Chunk* chunkPointer{ new Chunk{ chunkId.getPosition(), _world->chunkSize() } };
                     _activeChunkMap.emplace(chunkId.getID(), chunkPointer);
                     _chunkCreateQueue.push(chunkPointer);
                 }
@@ -234,12 +234,12 @@ bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
         return false;
     }
 
-    if (worldPos.y < 0 || worldPos.y > _world->getWorldHeight() - 1)
+    if (worldPos.y < 0 || worldPos.y > _world->worldHeight() - 1)
     {
         return false;
     }
 
-    ChunkID chunkId{ _world->getChunkSize(), worldPos};
+    ChunkID chunkId{ _world->chunkSize(), worldPos};
     glm::vec3 voxelPos{ chunkId.getRelativeVoxelPosition(worldPos) };
 
     const auto mapIter = _activeChunkMap.find(chunkId.getID());
@@ -261,7 +261,7 @@ void ChunkManager::createChunk(Chunk* chunk)
     chunkMeshInfo.chunkPointer = chunk;
  
     int vertexCount = 0;
-    ChunkSize chunkSize{ _world->getChunkSize() };
+    ChunkSize chunkSize{ _world->chunkSize() };
 
     for (int y = 0; y < chunkSize.height; y++)
     {

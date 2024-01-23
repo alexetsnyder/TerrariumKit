@@ -17,29 +17,29 @@ World::World(const ICamera* camera, int worldSize, int worldHeight, ChunkSize ch
     _hasCurrentChunkIdChanged = false;
 }
 
-int World::getWorldSize() const
+int World::worldSize() const
 {
     return _worldSize;
 }
 
-int World::getWorldHeight() const
+int World::worldHeight() const
 {
     return _worldHeight;
+}
+
+ChunkSize World::chunkSize() const
+{
+    return _chunkSize;
+}
+
+ChunkID World::currentChunkID() const
+{
+    return _currentChunkId;
 }
 
 bool World::isInfinite() const
 {
     return _isInfinite;
-}
-
-ChunkSize World::getChunkSize() const
-{
-    return _chunkSize;
-}
-
-ChunkID World::getCurrentChunkID() const
-{
-    return _currentChunkId;
 }
 
 bool World::hasCurrentChunkIdChanged() const
