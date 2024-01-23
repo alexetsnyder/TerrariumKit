@@ -49,15 +49,13 @@ const glm::vec3 voxelNeighbors[]
     glm::vec3( 0.0f, -1.0f,  0.0f),
 };
 
-ChunkManager::ChunkManager()
-{
-	_world = nullptr;
-    _useThreading = false;
-}
-
 ChunkManager::ChunkManager(const World* world, bool useThreading)
 {
-	init(world, useThreading);
+    _world = world;
+    _useThreading = useThreading;
+    _terrainGen.init(_world->chunkSize(), 32, 16);
+
+    queueChunks();
 }
 
 ChunkManager::~ChunkManager()
@@ -75,15 +73,6 @@ ChunkManager::~ChunkManager()
         pair.second->deleteAll();
         delete pair.second;
     }
-}
-
-void ChunkManager::init(const World* world, bool useThreading)
-{
-	_world = world;
-    _useThreading = useThreading;
-    _terrainGen.init(_world->chunkSize(), 32, 16);
-
-    queueChunks();
 }
 
 void ChunkManager::queueChunks()

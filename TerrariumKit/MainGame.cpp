@@ -175,7 +175,7 @@ void MainGame::createChunkManager()
 {
 	bool useThreading = false;
 
-	_chunkManager.init(_world, useThreading);
+	_chunkManager = new ChunkManager(_world, useThreading);
 }
 
 void MainGame::gameLoop()
@@ -249,7 +249,7 @@ void MainGame::updateGame()
 	handleKeys();
 
 	_world->update();
-	_chunkManager.update();
+	_chunkManager->update();
 }
 
 void MainGame::drawGame()
@@ -266,7 +266,7 @@ void MainGame::drawGame()
 	_shaderProgram.setUniform("view", view);
 	_shaderProgram.setUniform("projection", projection);
 
-	_chunkManager.draw(_shaderProgram);
+	_chunkManager->draw(_shaderProgram);
 
 	SDL_GL_SwapWindow(_window);
 }
@@ -283,6 +283,12 @@ void MainGame::free()
 	{
 		delete _world;
 		_world = nullptr;
+	}
+
+	if (_chunkManager != nullptr)
+	{
+		delete _chunkManager;
+		_chunkManager = nullptr;
 	}
 }
 

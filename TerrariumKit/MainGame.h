@@ -61,7 +61,7 @@ class MainGame
 
 		bool _drawWireFrame;
 		World* _world;
-		ChunkManager _chunkManager;
+		ChunkManager* _chunkManager;
 
 		ICamera* _camera;
 		std::chrono::duration<double> _deltaTime;
