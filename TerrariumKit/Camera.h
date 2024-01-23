@@ -4,18 +4,19 @@
 
 #include <glm/glm.hpp>
 
-class Camera
+class FirstPersonCamera : public ICamera
 {
 	public:
-		Camera(glm::vec3 position, glm::vec3 up);
+		FirstPersonCamera(glm::vec3 position, glm::vec3 up);
+		~FirstPersonCamera() {};
 
-		glm::vec3 position() const;
-		glm::mat4 viewMatrix() const;
-		float zoom() const;
+		glm::vec3 position() const override;
+		glm::mat4 viewMatrix() const override;
+		float zoom() const override;
 
-		void move(CameraDirection direction, double deltaTime);
-		void rotate(float xOffset, float yOffset);
-		void zoom(float yOffset);
+		void move(CameraDirection direction, double deltaTime) override;
+		void rotate(float xOffset, float yOffset) override;
+		void zoom(float yOffset) override;
 
 	private:
 		void updateVectors();

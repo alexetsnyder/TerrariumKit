@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ChunkID.h"
-#include "Camera.h"
+#include "ICamera.h"
 
 #include <glm/glm.hpp>
 
@@ -10,7 +10,7 @@ class World
 	public:
 		World();
 
-		void init(const Camera& camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite);
+		void init(const ICamera& camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite);
 
 		int getWorldSize() const;
 		int getWorldHeight() const;
@@ -30,7 +30,7 @@ class World
 		int _worldHeight;
 		bool _isInfinite;
 		ChunkSize _chunkSize;
-		const Camera* _camera;
+		const ICamera* _camera;
 		ChunkID _currentChunkId;
 		bool _hasCurrentChunkIdChanged;
 };

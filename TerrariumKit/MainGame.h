@@ -58,7 +58,7 @@ class MainGame
 		World _world;
 		ChunkManager _chunkManager;
 
-		Camera _camera;
+		FirstPersonCamera _camera;
 		std::chrono::duration<double> _deltaTime;
 		std::chrono::high_resolution_clock::time_point _lastFrame;
 

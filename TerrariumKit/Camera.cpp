@@ -3,28 +3,28 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f))
+FirstPersonCamera::FirstPersonCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f))
 	: _position(position), _worldUp(up), _yaw(-90.0f), _pitch(0.0f), _speed(8.0f), _sensitivity(0.1f), _zoom(45.0f)
 {
 	updateVectors();
 }
 
-glm::vec3 Camera::position() const
+glm::vec3 FirstPersonCamera::position() const
 {
 	return _position;
 }
 
-glm::mat4 Camera::viewMatrix() const
+glm::mat4 FirstPersonCamera::viewMatrix() const
 {
 	return glm::lookAt(_position, _position + _front, _up);
 }
 
-float Camera::zoom() const
+float FirstPersonCamera::zoom() const
 {
 	return _zoom;
 }
 
-void Camera::move(CameraDirection direction, double deltaTime)
+void FirstPersonCamera::move(CameraDirection direction, double deltaTime)
 {
 	float velocity = static_cast<float>(_speed * deltaTime);
 	switch (direction)
@@ -44,7 +44,7 @@ void Camera::move(CameraDirection direction, double deltaTime)
 	}
 }
 
-void Camera::rotate(float xOffset, float yOffset)
+void FirstPersonCamera::rotate(float xOffset, float yOffset)
 {
 	xOffset *= _sensitivity;
 	yOffset *= _sensitivity;
@@ -64,7 +64,7 @@ void Camera::rotate(float xOffset, float yOffset)
 	updateVectors();
 }
 
-void Camera::zoom(float yOffset)
+void FirstPersonCamera::zoom(float yOffset)
 {
 	_zoom -= yOffset;
 	if (_zoom < 1.0f)
@@ -77,7 +77,7 @@ void Camera::zoom(float yOffset)
 	}
 }
 
-void Camera::updateVectors()
+void FirstPersonCamera::updateVectors()
 {
 	glm::vec3 front{};
 	front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));

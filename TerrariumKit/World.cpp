@@ -16,7 +16,7 @@ World::World()
     _hasCurrentChunkIdChanged = false;
 }
 
-void World::init(const Camera& camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite)
+void World::init(const ICamera& camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite)
 {
     _camera = &camera;
 	_worldSize = worldSize;
