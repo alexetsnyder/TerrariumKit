@@ -1,6 +1,8 @@
 #include "MainGame.h"
-#include "ShaderProgram.h"
+
 #include "ErrorLog.h"
+#include "FirstPersonCamera.h"
+#include "ShaderProgram.h"
 #include "World.h"
 
 #include <SDL/SDL_image.h>
@@ -13,7 +15,6 @@
 #include <chrono>
 
 MainGame::MainGame()
-	: _camera(glm::vec3(8.0f, 70.0f, 8.0f), glm::vec3(0.0f, 1.0f, 0.0f))
 {
 	_window = nullptr;
 	_screenWidth = 1024;
@@ -22,10 +23,13 @@ MainGame::MainGame()
 	_drawWireFrame = false;
 	_deltaTime = std::chrono::duration<double>(0.0);
 	_lastFrame = std::chrono::high_resolution_clock::now();
+
+	createCamera();
 }
 
 MainGame::~MainGame()
 {
+	free();
 	terminate();
 }
 
@@ -156,6 +160,19 @@ void MainGame::initWorld()
 	_chunkManager.init(_world, useThreading);
 }
 
+void MainGame::createCamera()
+{
+	glm::vec3 cameraPos = glm::vec3(8.0f, 70.0f, 8.0f);
+	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	float yaw = -90.0f;
+	float pitch = 0.0f;
+	float speed = 8.0f;
+	float sensititvity = 0.1f;
+	float zoom = 45.0f;
+	
+	_camera = new FirstPersonCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
+}
+
 void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
@@ -192,7 +209,7 @@ void MainGame::pollEvents()
 				processMouseMotion(event);
 				break;
 			case SDL_MOUSEWHEEL:
-				_camera.zoom(static_cast<float>(event.wheel.y));
+				_camera->zoom(static_cast<float>(event.wheel.y));
 				break;
 		}
 	}
@@ -219,7 +236,7 @@ void MainGame::processMouseMotion(SDL_Event event)
 {
 	float xRel = static_cast<float>(event.motion.xrel);
 	float yRel = static_cast<float>(event.motion.yrel);
-	_camera.rotate(xRel, -yRel);
+	_camera->rotate(xRel, -yRel);
 }
 
 void MainGame::updateGame()
@@ -236,10 +253,10 @@ void MainGame::drawGame()
 
 	_shaderProgram.use();
 
-	glm::mat4 view{ _camera.viewMatrix() };
+	glm::mat4 view{ _camera->viewMatrix() };
 	glm::mat4 projection{ 1.0f };
 	
-	projection = glm::perspective(glm::radians(_camera.zoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(_camera->zoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
 	
 	_shaderProgram.setUniform("view", view);
 	_shaderProgram.setUniform("projection", projection);
@@ -247,6 +264,15 @@ void MainGame::drawGame()
 	_chunkManager.draw(_shaderProgram);
 
 	SDL_GL_SwapWindow(_window);
+}
+
+void MainGame::free()
+{
+	if (_camera != nullptr)
+	{
+		delete _camera;
+		_camera = nullptr;
+	}
 }
 
 void MainGame::terminate()
@@ -258,6 +284,7 @@ void MainGame::terminate()
 
 void MainGame::fatalError()
 {
+	free();
 	terminate();
 	exit(EXIT_FAILURE);
 }
@@ -272,16 +299,16 @@ void MainGame::handleKeys()
 				_gameState = GameState::EXIT;
 				break;
 			case SDLK_w:
-				_camera.move(CameraDirection::FORWARD, _deltaTime.count());
+				_camera->move(CameraDirection::FORWARD, _deltaTime.count());
 				break;
 			case SDLK_s:
-				_camera.move(CameraDirection::BACKWARD, _deltaTime.count());
+				_camera->move(CameraDirection::BACKWARD, _deltaTime.count());
 				break;
 			case SDLK_a:
-				_camera.move(CameraDirection::LEFT, _deltaTime.count());
+				_camera->move(CameraDirection::LEFT, _deltaTime.count());
 				break;
 			case SDLK_d:
-				_camera.move(CameraDirection::RIGHT, _deltaTime.count());
+				_camera->move(CameraDirection::RIGHT, _deltaTime.count());
 				break;
 		}
 	}

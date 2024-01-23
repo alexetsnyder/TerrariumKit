@@ -10,7 +10,7 @@ class World
 	public:
 		World();
 
-		void init(const ICamera& camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite);
+		void init(const ICamera* camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite);
 
 		int getWorldSize() const;
 		int getWorldHeight() const;

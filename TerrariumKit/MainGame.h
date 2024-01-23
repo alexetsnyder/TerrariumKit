@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ChunkManager.h"
-#include "FirstPersonCamera.h"
+#include "ICamera.h"
 #include "ShaderProgram.h"
 #include "World.h"
 
@@ -33,6 +33,7 @@ class MainGame
 		void setGLSettings();
 		void createShaderProgram();
 		void initWorld();
+		void createCamera();
 
 		void gameLoop();
 		void pollEvents();
@@ -42,6 +43,7 @@ class MainGame
 		void updateGame();
 		void drawGame();
 
+		void free();
 		void terminate();
 		void fatalError();
 
@@ -59,7 +61,7 @@ class MainGame
 		World _world;
 		ChunkManager _chunkManager;
 
-		FirstPersonCamera _camera;
+		ICamera* _camera;
 		std::chrono::duration<double> _deltaTime;
 		std::chrono::high_resolution_clock::time_point _lastFrame;
 

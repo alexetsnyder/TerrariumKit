@@ -7,7 +7,6 @@
 class FirstPersonCamera : public ICamera
 {
 	public:
-		FirstPersonCamera(glm::vec3 position, glm::vec3 up);
 		FirstPersonCamera(glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch, 
 						  float speed, float sensitivity, float zoom);
 		~FirstPersonCamera() {};
