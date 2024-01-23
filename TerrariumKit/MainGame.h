@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ShaderProgram.h"
-#include "Camera.h"
-#include "World.h"
 #include "ChunkManager.h"
+#include "FirstPersonCamera.h"
+#include "ShaderProgram.h"
+#include "World.h"
 
 #include <SDL/SDL.h>
 #include <chrono>

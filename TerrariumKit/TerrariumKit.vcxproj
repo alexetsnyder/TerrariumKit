@@ -135,7 +135,7 @@
   <ItemGroup>
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
     <ClCompile Include="BlockType.cpp" />
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="ChunkID.cpp" />
     <ClCompile Include="ChunkManager.cpp" />
@@ -156,7 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockType.h" />
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="ChunkID.h" />
     <ClInclude Include="ChunkManager.h" />
