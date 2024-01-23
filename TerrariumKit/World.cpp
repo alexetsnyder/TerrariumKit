@@ -6,23 +6,13 @@
 
 #include <iostream>
 
-World::World()
-    : _chunkSize{}, _currentChunkId{}
-{
-	_worldSize = 0;
-    _worldHeight = 0;
-    _isInfinite = false;
-    _camera = nullptr;
-    _hasCurrentChunkIdChanged = false;
-}
-
-void World::init(const ICamera* camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite)
+World::World(const ICamera* camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite)
 {
     _camera = camera;
-	_worldSize = worldSize;
+    _worldSize = worldSize;
     _worldHeight = worldHeight;
     _isInfinite = isInfinite;
-	_chunkSize = chunkSize;
+    _chunkSize = chunkSize;
     _currentChunkId.init(_chunkSize, 0.0f, 4.0f, 0.0f);
     _hasCurrentChunkIdChanged = false;
 }

@@ -55,7 +55,7 @@ ChunkManager::ChunkManager()
     _useThreading = false;
 }
 
-ChunkManager::ChunkManager(const World& world, bool useThreading)
+ChunkManager::ChunkManager(const World* world, bool useThreading)
 {
 	init(world, useThreading);
 }
@@ -77,9 +77,9 @@ ChunkManager::~ChunkManager()
     }
 }
 
-void ChunkManager::init(const World& world, bool useThreading)
+void ChunkManager::init(const World* world, bool useThreading)
 {
-	_world = &world;
+	_world = world;
     _useThreading = useThreading;
     _terrainGen.init(_world->getChunkSize(), 32, 16);
 

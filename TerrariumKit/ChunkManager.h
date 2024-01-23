@@ -24,10 +24,10 @@ class ChunkManager
 {
 	public:
 		ChunkManager();
-		ChunkManager(const World& world, bool useThreading);
+		ChunkManager(const World* world, bool useThreading);
 		~ChunkManager();
 
-		void init(const World& world, bool useThreading);
+		void init(const World* world, bool useThreading);
 
 		void queueChunks();
 		void createChunks(int n);

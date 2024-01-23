@@ -168,7 +168,7 @@ void MainGame::createWorld()
 	int worldHeight = 128;
 	bool isInfinite = true;
 
-	_world.init(_camera, worldSize, worldHeight, chunkSize, isInfinite);
+	_world = new World(_camera, worldSize, worldHeight, chunkSize, isInfinite);
 }
 
 void MainGame::createChunkManager()
@@ -248,7 +248,7 @@ void MainGame::updateGame()
 {
 	handleKeys();
 
-	_world.update();
+	_world->update();
 	_chunkManager.update();
 }
 
@@ -277,6 +277,12 @@ void MainGame::free()
 	{
 		delete _camera;
 		_camera = nullptr;
+	}
+
+	if (_world != nullptr)
+	{
+		delete _world;
+		_world = nullptr;
 	}
 }
 

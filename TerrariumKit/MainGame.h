@@ -60,7 +60,7 @@ class MainGame
 		ShaderProgram _shaderProgram;
 
 		bool _drawWireFrame;
-		World _world;
+		World* _world;
 		ChunkManager _chunkManager;
 
 		ICamera* _camera;
