@@ -32,9 +32,11 @@ class MainGame
 		void initGlad();
 		void setGLSettings();
 		void createShaderProgram();
-		void initWorld();
-		void createCamera();
 
+		void createCamera();
+		void createWorld();
+		void createChunkManager();		
+		
 		void gameLoop();
 		void pollEvents();
 		void addKey(SDL_Keycode key);

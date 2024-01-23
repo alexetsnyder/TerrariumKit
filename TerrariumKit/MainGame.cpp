@@ -24,7 +24,11 @@ MainGame::MainGame()
 	_deltaTime = std::chrono::duration<double>(0.0);
 	_lastFrame = std::chrono::high_resolution_clock::now();
 
+	initSystems();
+
 	createCamera();
+	createWorld();
+	createChunkManager();
 }
 
 MainGame::~MainGame()
@@ -35,8 +39,6 @@ MainGame::~MainGame()
 
 void MainGame::run()
 {
-	initSystems();
-
 	gameLoop();
 }
 
@@ -55,8 +57,6 @@ void MainGame::initSystems()
 	setGLSettings();
 	
 	createShaderProgram();
-
-	initWorld();
 }
 
 void MainGame::initSDL()
@@ -145,21 +145,6 @@ void MainGame::createShaderProgram()
 	}
 }
 
-void MainGame::initWorld()
-{
-	ChunkSize chunkSize;
-	chunkSize.xWidth = 16;
-	chunkSize.zWidth = 16;
-	chunkSize.height = 16;
-	int worldSize = 2;
-	int worldHeight = 128;
-	bool isInfinite = true;
-	bool useThreading = false;
-
-	_world.init(_camera, worldSize, worldHeight, chunkSize, isInfinite);
-	_chunkManager.init(_world, useThreading);
-}
-
 void MainGame::createCamera()
 {
 	glm::vec3 cameraPos = glm::vec3(8.0f, 70.0f, 8.0f);
@@ -169,8 +154,28 @@ void MainGame::createCamera()
 	float speed = 8.0f;
 	float sensititvity = 0.1f;
 	float zoom = 45.0f;
-	
+
 	_camera = new FirstPersonCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
+}
+
+void MainGame::createWorld()
+{
+	ChunkSize chunkSize;
+	chunkSize.xWidth = 16;
+	chunkSize.zWidth = 16;
+	chunkSize.height = 16;
+	int worldSize = 2;
+	int worldHeight = 128;
+	bool isInfinite = true;
+
+	_world.init(_camera, worldSize, worldHeight, chunkSize, isInfinite);
+}
+
+void MainGame::createChunkManager()
+{
+	bool useThreading = false;
+
+	_chunkManager.init(_world, useThreading);
 }
 
 void MainGame::gameLoop()
