@@ -69,6 +69,9 @@
     <ClCompile Include="TerrainGen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TopDownCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -125,6 +128,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ICamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TopDownCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

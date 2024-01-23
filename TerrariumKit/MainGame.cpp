@@ -24,13 +24,16 @@ MainGame::MainGame()
 	_lastFrame = std::chrono::high_resolution_clock::now();
 }
 
+MainGame::~MainGame()
+{
+	terminate();
+}
+
 void MainGame::run()
 {
 	initSystems();
 
 	gameLoop();
-
-	terminate();
 }
 
 void MainGame::initSystems()

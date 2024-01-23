@@ -9,6 +9,14 @@ FirstPersonCamera::FirstPersonCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 
 	updateVectors();
 }
 
+FirstPersonCamera::FirstPersonCamera(glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch, 
+	                                 float speed, float sensitivity, float zoom)
+	: _position(position), _worldUp(worldUp), _yaw(yaw), _pitch(pitch),
+	  _speed(speed), _sensitivity(sensitivity), _zoom(zoom)
+{
+	updateVectors();
+}
+
 glm::vec3 FirstPersonCamera::position() const
 {
 	return _position;
