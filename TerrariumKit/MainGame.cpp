@@ -3,6 +3,7 @@
 #include "ErrorLog.h"
 #include "FirstPersonCamera.h"
 #include "ShaderProgram.h"
+#include "TopDownCamera.h"
 #include "World.h"
 
 #include <SDL/SDL_image.h>
@@ -147,7 +148,7 @@ void MainGame::createShaderProgram()
 
 void MainGame::createCamera()
 {
-	glm::vec3 cameraPos = glm::vec3(8.0f, 70.0f, 8.0f);
+	glm::vec3 cameraPos = glm::vec3(8.0f, 120.0f, 8.0f);
 	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	float yaw = -90.0f;
 	float pitch = 0.0f;
@@ -156,6 +157,7 @@ void MainGame::createCamera()
 	float zoom = 45.0f;
 
 	_camera = new FirstPersonCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
+	//_camera = new TopDownCamera{ cameraPos, worldUp, speed, zoom };
 }
 
 void MainGame::createWorld()
