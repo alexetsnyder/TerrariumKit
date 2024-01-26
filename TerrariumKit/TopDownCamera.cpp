@@ -30,10 +30,10 @@ void TopDownCamera::move(CameraDirection direction, double deltaTime)
 	switch (direction)
 	{
 		case CameraDirection::FORWARD:
-			_position += _up * velocity;
+			_position += glm::vec3(0.0f, 0.0f, -1.0f) * velocity;
 			break;
 		case CameraDirection::BACKWARD:
-			_position -= _up * velocity;
+			_position -= glm::vec3(0.0f, 0.0f, -1.0f) * velocity;
 			break;
 		case CameraDirection::LEFT:
 			_position -= _right * velocity;

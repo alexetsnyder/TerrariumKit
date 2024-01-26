@@ -263,7 +263,7 @@ void MainGame::drawGame()
 	glm::mat4 view{ _camera->viewMatrix() };
 	glm::mat4 projection{ 1.0f };
 	
-	projection = glm::perspective(glm::radians(_camera->zoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(_camera->zoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 1000.0f);
 	
 	_shaderProgram.setUniform("view", view);
 	_shaderProgram.setUniform("projection", projection);
