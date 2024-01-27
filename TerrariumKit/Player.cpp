@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <iostream>
+
 Player::Player(ICamera* camera)
 	: _camera{ camera }, _position{ camera->position() }
 {

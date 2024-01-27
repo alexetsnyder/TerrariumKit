@@ -256,6 +256,7 @@ void MainGame::updateGame()
 {
 	handleKeys();
 
+	_player->update();
 	_world->update();
 	_chunkManager->update();
 }
@@ -275,6 +276,7 @@ void MainGame::drawGame()
 	_shaderProgram.setUniform("projection", projection);
 
 	_chunkManager->draw(_shaderProgram);
+	_player->draw(_shaderProgram);
 
 	SDL_GL_SwapWindow(_window);
 }
@@ -330,16 +332,20 @@ void MainGame::handleKeys()
 				_gameState = GameState::EXIT;
 				break;
 			case SDLK_w:
-				_camera->move(CameraDirection::FORWARD, _deltaTime.count());
+				//_camera->move(CameraDirection::FORWARD, _deltaTime.count());
+				_player->move(PlayerDirection::FORWARD, _deltaTime.count());
 				break;
 			case SDLK_s:
-				_camera->move(CameraDirection::BACKWARD, _deltaTime.count());
+				//_camera->move(CameraDirection::BACKWARD, _deltaTime.count());
+				_player->move(PlayerDirection::BACKWARD, _deltaTime.count());
 				break;
 			case SDLK_a:
-				_camera->move(CameraDirection::LEFT, _deltaTime.count());
+				//_camera->move(CameraDirection::LEFT, _deltaTime.count());
+				_player->move(PlayerDirection::LEFT, _deltaTime.count());
 				break;
 			case SDLK_d:
-				_camera->move(CameraDirection::RIGHT, _deltaTime.count());
+				//_camera->move(CameraDirection::RIGHT, _deltaTime.count());
+				_player->move(PlayerDirection::RIGHT, _deltaTime.count());
 				break;
 		}
 	}
