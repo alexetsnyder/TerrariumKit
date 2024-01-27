@@ -28,6 +28,7 @@ MainGame::MainGame()
 	initSystems();
 
 	createCamera();
+	createPlayer();
 	createWorld();
 	createChunkManager();
 }
@@ -160,6 +161,11 @@ void MainGame::createCamera()
 	//_camera = new TopDownCamera{ cameraPos, worldUp, speed, zoom };
 }
 
+void MainGame::createPlayer()
+{
+	_player = new Player(_camera);
+}
+
 void MainGame::createWorld()
 {
 	ChunkSize chunkSize;
@@ -279,6 +285,12 @@ void MainGame::free()
 	{
 		delete _camera;
 		_camera = nullptr;
+	}
+
+	if (_player != nullptr)
+	{
+		delete _player;
+		_player = nullptr;
 	}
 
 	if (_world != nullptr)

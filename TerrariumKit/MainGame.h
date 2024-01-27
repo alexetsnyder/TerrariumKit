@@ -2,6 +2,7 @@
 
 #include "ChunkManager.h"
 #include "ICamera.h"
+#include "Player.h"
 #include "ShaderProgram.h"
 #include "World.h"
 
@@ -34,6 +35,7 @@ class MainGame
 		void createShaderProgram();
 
 		void createCamera();
+		void createPlayer();
 		void createWorld();
 		void createChunkManager();		
 		
@@ -64,6 +66,7 @@ class MainGame
 		ChunkManager* _chunkManager;
 
 		ICamera* _camera;
+		Player* _player;
 		std::chrono::duration<double> _deltaTime;
 		std::chrono::high_resolution_clock::time_point _lastFrame;
 

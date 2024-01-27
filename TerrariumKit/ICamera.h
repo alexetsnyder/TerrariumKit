@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-enum CameraDirection
+enum class CameraDirection
 {
 	FORWARD,
 	BACKWARD,

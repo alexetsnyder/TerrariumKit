@@ -5,17 +5,30 @@
 
 #include "glm/glm.hpp"
 
+enum class PlayerDirection
+{
+	FORWARD,
+	BACKWARD,
+	LEFT,
+	RIGHT,
+};
+
 class Player
 {
 	public:
-		Player(ICamera* camera, glm::vec3 position);
+		const float height{ 1.8f };
+
+		Player(ICamera* camera);
 		~Player();
+
+		void move(PlayerDirection direction, double deltaTime);
 
 		void update();
 		void draw(const ShaderProgram& program);
 
 	private:
-		const float _height{ 1.8f };
+		CameraDirection CameraDirectionFromPlayerDirection(PlayerDirection direction);
+
 		ICamera* _camera;
 		glm::vec3 _position;
 };
