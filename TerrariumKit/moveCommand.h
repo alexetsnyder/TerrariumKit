@@ -6,22 +6,24 @@
 
 namespace CmdTK
 {
-	class moveCommand : public ICommand<IGameActor>
+	class moveCommand : public ICommand
 	{
 		public:
-			moveCommand(InputDirection direction, double deltaTime)
+			moveCommand(IGameActor* gameActor, InputDirection direction, double deltaTime)
 			{
+				_gameActor = gameActor;
 				_inputDirection = direction;
 				_deltaTime = deltaTime;
 			}
 
-			void execute(IGameActor& gameActor) override
+			void execute() override
 			{
-				gameActor.move(_inputDirection, _deltaTime);
+				_gameActor->move(_inputDirection, _deltaTime);
 			}
 
 		private:
 			double _deltaTime;
+			IGameActor* _gameActor;
 			InputDirection _inputDirection;
 	};
 }
