@@ -14,7 +14,6 @@ Player::~Player()
 
 void Player::move(InputDirection direction, double deltaTime)
 {
-	//CameraDirection cameraDir = CameraDirectionFromPlayerDirection(direction);
 	_camera->move(direction, deltaTime);
 
 	glm::vec3 cameraPos = _camera->position();
@@ -28,26 +27,3 @@ void Player::update()
 void Player::draw(const ShaderProgram& program)
 {
 }
-
-//CameraDirection Player::CameraDirectionFromPlayerDirection(PlayerDirection direction)
-//{
-//	CameraDirection cameraDir;
-//
-//	switch (direction)
-//	{
-//		case PlayerDirection::FORWARD:
-//			cameraDir = CameraDirection::FORWARD;
-//			break;
-//		case PlayerDirection::BACKWARD:
-//			cameraDir = CameraDirection::BACKWARD;
-//			break;
-//		case PlayerDirection::LEFT:
-//			cameraDir = CameraDirection::LEFT;
-//			break;
-//		case PlayerDirection::RIGHT:
-//			cameraDir = CameraDirection::RIGHT;
-//			break;
-//	}
-//
-//	return cameraDir;
-//}

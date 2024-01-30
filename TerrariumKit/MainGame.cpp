@@ -3,6 +3,7 @@
 #include "Enums.h"
 #include "ErrorLog.h"
 #include "FirstPersonCamera.h"
+#include "moveCommand.h"
 #include "ShaderProgram.h"
 #include "TopDownCamera.h"
 #include "World.h"
@@ -333,20 +334,16 @@ void MainGame::handleKeys()
 				_gameState = GameState::EXIT;
 				break;
 			case SDLK_w:
-				//_camera->move(CameraDirection::FORWARD, _deltaTime.count());
-				_player->move(InputDirection::FORWARD, _deltaTime.count());
+				CmdTK::moveCommand(InputDirection::FORWARD, _deltaTime.count()).execute(*_player);
 				break;
 			case SDLK_s:
-				//_camera->move(CameraDirection::BACKWARD, _deltaTime.count());
-				_player->move(InputDirection::BACKWARD, _deltaTime.count());
+				CmdTK::moveCommand(InputDirection::BACKWARD, _deltaTime.count()).execute(*_player);
 				break;
 			case SDLK_a:
-				//_camera->move(CameraDirection::LEFT, _deltaTime.count());
-				_player->move(InputDirection::LEFT, _deltaTime.count());
+				CmdTK::moveCommand(InputDirection::LEFT, _deltaTime.count()).execute(*_player);
 				break;
 			case SDLK_d:
-				//_camera->move(CameraDirection::RIGHT, _deltaTime.count());
-				_player->move(InputDirection::RIGHT, _deltaTime.count());
+				CmdTK::moveCommand(InputDirection::RIGHT, _deltaTime.count()).execute(*_player);
 				break;
 		}
 	}

@@ -2,11 +2,12 @@
 
 #include "Enums.h"
 #include "ICamera.h"
+#include "IGameActor.h"
 #include "ShaderProgram.h"
 
 #include "glm/glm.hpp"
 
-class Player
+class Player : public IGameActor
 {
 	public:
 		const float height{ 1.8f };
@@ -14,10 +15,10 @@ class Player
 		Player(ICamera* camera);
 		~Player();
 
-		void move(InputDirection direction, double deltaTime);	
+		void move(InputDirection direction, double deltaTime) override;	
 
-		void update();
-		void draw(const ShaderProgram& program);
+		void update() override;
+		void draw(const ShaderProgram& program) override;
 
 	private:
 		ICamera* _camera;
