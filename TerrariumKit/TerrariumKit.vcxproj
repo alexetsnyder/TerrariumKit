@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockType.h" />
+    <ClInclude Include="Enums.h" />
     <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="ChunkID.h" />
@@ -165,8 +166,11 @@
     <ClInclude Include="ErrorLog.h" />
     <ClInclude Include="FastNoiseLite.h" />
     <ClInclude Include="ICamera.h" />
+    <ClInclude Include="ICommand.h" />
+    <ClInclude Include="IGameActor.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="moveCommand.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Structs.h" />

@@ -1,5 +1,6 @@
 #include "MainGame.h"
 
+#include "Enums.h"
 #include "ErrorLog.h"
 #include "FirstPersonCamera.h"
 #include "ShaderProgram.h"
@@ -333,19 +334,19 @@ void MainGame::handleKeys()
 				break;
 			case SDLK_w:
 				//_camera->move(CameraDirection::FORWARD, _deltaTime.count());
-				_player->move(PlayerDirection::FORWARD, _deltaTime.count());
+				_player->move(InputDirection::FORWARD, _deltaTime.count());
 				break;
 			case SDLK_s:
 				//_camera->move(CameraDirection::BACKWARD, _deltaTime.count());
-				_player->move(PlayerDirection::BACKWARD, _deltaTime.count());
+				_player->move(InputDirection::BACKWARD, _deltaTime.count());
 				break;
 			case SDLK_a:
 				//_camera->move(CameraDirection::LEFT, _deltaTime.count());
-				_player->move(PlayerDirection::LEFT, _deltaTime.count());
+				_player->move(InputDirection::LEFT, _deltaTime.count());
 				break;
 			case SDLK_d:
 				//_camera->move(CameraDirection::RIGHT, _deltaTime.count());
-				_player->move(PlayerDirection::RIGHT, _deltaTime.count());
+				_player->move(InputDirection::RIGHT, _deltaTime.count());
 				break;
 		}
 	}

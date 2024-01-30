@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Enums.h"
 #include "ICamera.h"
 
 #include <glm/glm.hpp>
@@ -15,7 +16,7 @@ class FirstPersonCamera : public ICamera
 		glm::mat4 viewMatrix() const override;
 		float zoom() const override;
 
-		void move(CameraDirection direction, double deltaTime) override;
+		void move(InputDirection direction, double deltaTime) override;
 		void rotate(float xOffset, float yOffset) override;
 		void zoom(float yOffset) override;
 

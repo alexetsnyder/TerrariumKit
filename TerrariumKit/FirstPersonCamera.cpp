@@ -26,21 +26,21 @@ float FirstPersonCamera::zoom() const
 	return _zoom;
 }
 
-void FirstPersonCamera::move(CameraDirection direction, double deltaTime)
+void FirstPersonCamera::move(InputDirection direction, double deltaTime)
 {
 	float velocity = static_cast<float>(_speed * deltaTime);
 	switch (direction)
 	{
-		case CameraDirection::FORWARD:
+		case InputDirection::FORWARD:
 			_position += _front * velocity;
 			break;
-		case CameraDirection::BACKWARD:
+		case InputDirection::BACKWARD:
 			_position -= _front * velocity;
 			break;
-		case CameraDirection::LEFT:
+		case InputDirection::LEFT:
 			_position -= _right * velocity;
 			break;
-		case CameraDirection::RIGHT:
+		case InputDirection::RIGHT:
 			_position += _right * velocity;
 			break;
 	}

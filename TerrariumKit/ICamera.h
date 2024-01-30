@@ -1,14 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "Enums.h"
 
-enum class CameraDirection
-{
-	FORWARD,
-	BACKWARD,
-	RIGHT,
-	LEFT,
-};
+#include <glm/glm.hpp>
 
 class ICamera
 {
@@ -17,7 +11,7 @@ class ICamera
 		virtual glm::mat4 viewMatrix() const = 0;
 		virtual float zoom() const = 0;
 
-		virtual void move(CameraDirection direction, double deltaTime) = 0;
+		virtual void move(InputDirection direction, double deltaTime) = 0;
 		virtual void rotate(float xOffset, float yOffset) = 0;
 		virtual void zoom(float yOffset) = 0;
 

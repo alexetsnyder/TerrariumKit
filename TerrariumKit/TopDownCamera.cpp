@@ -24,21 +24,21 @@ float TopDownCamera::zoom() const
 	return _zoom;
 }
 
-void TopDownCamera::move(CameraDirection direction, double deltaTime)
+void TopDownCamera::move(InputDirection direction, double deltaTime)
 {
 	float velocity = static_cast<float>(_speed * deltaTime);
 	switch (direction)
 	{
-		case CameraDirection::FORWARD:
+		case InputDirection::FORWARD:
 			_position += glm::vec3(0.0f, 0.0f, -1.0f) * velocity;
 			break;
-		case CameraDirection::BACKWARD:
+		case InputDirection::BACKWARD:
 			_position -= glm::vec3(0.0f, 0.0f, -1.0f) * velocity;
 			break;
-		case CameraDirection::LEFT:
+		case InputDirection::LEFT:
 			_position -= _right * velocity;
 			break;
-		case CameraDirection::RIGHT:
+		case InputDirection::RIGHT:
 			_position += _right * velocity;
 			break;
 	}
