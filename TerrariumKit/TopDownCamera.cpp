@@ -24,6 +24,19 @@ float TopDownCamera::zoom() const
 	return _zoom;
 }
 
+void TopDownCamera::zoom(float yOffset)
+{
+	_zoom -= yOffset;
+	if (_zoom < 1.0f)
+	{
+		_zoom = 1.0f;
+	}
+	else if (_zoom > 45.0f)
+	{
+		_zoom = 45.0f;
+	}
+}
+
 void TopDownCamera::move(InputDirection direction, double deltaTime)
 {
 	float velocity = static_cast<float>(_speed * deltaTime);
@@ -41,23 +54,6 @@ void TopDownCamera::move(InputDirection direction, double deltaTime)
 		case InputDirection::RIGHT:
 			_position += _right * velocity;
 			break;
-	}
-}
-
-void TopDownCamera::rotate(float xOffset, float yOffset)
-{
-}
-
-void TopDownCamera::zoom(float yOffset)
-{
-	_zoom -= yOffset;
-	if (_zoom < 1.0f)
-	{
-		_zoom = 1.0f;
-	}
-	else if (_zoom > 45.0f)
-	{
-		_zoom = 45.0f;
 	}
 }
 

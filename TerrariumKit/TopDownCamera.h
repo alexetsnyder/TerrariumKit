@@ -2,21 +2,28 @@
 
 #include "Enums.h"
 #include "ICamera.h"
+#include "IGameActor.h"
+#include "ShaderProgram.h"
 
 #include <glm/glm.hpp>
 
-class TopDownCamera : public ICamera
+class TopDownCamera : public ICamera, public IGameActor
 {
 	public:
 		TopDownCamera(glm::vec3 position, glm::vec3 worldUp, float speed, float zoom);
 
+		//From ICamera
 		glm::vec3 position() const override;
 		glm::mat4 viewMatrix() const override;
 		float zoom() const override;
 
-		void move(InputDirection direction, double deltaTime) override;
-		void rotate(float xOffset, float yOffset) override;
+		void rotate(float xOffset, float yOffset) override {};
 		void zoom(float yOffset) override;
+
+		//From IGameActor
+		void move(InputDirection direction, double deltaTime) override;
+		void update() override {};
+		void draw(const ShaderProgram& program) override {};
 
 	private:
 		void updateVectors();

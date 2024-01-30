@@ -145,7 +145,7 @@
     <ClInclude Include="ICommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="moveCommand.h">
+    <ClInclude Include="MoveCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="IGameActor.h">

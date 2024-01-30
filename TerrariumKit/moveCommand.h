@@ -6,10 +6,10 @@
 
 namespace CmdTK
 {
-	class moveCommand : public ICommand
+	class MoveCommand : public ICommand
 	{
 		public:
-			moveCommand(IGameActor* gameActor, InputDirection direction, double deltaTime)
+			MoveCommand(IGameActor* gameActor, InputDirection direction, double deltaTime)
 			{
 				_gameActor = gameActor;
 				_inputDirection = direction;

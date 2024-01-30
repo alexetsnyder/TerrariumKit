@@ -170,7 +170,7 @@
     <ClInclude Include="IGameActor.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="moveCommand.h" />
+    <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Structs.h" />

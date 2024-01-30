@@ -26,26 +26,6 @@ float FirstPersonCamera::zoom() const
 	return _zoom;
 }
 
-void FirstPersonCamera::move(InputDirection direction, double deltaTime)
-{
-	float velocity = static_cast<float>(_speed * deltaTime);
-	switch (direction)
-	{
-		case InputDirection::FORWARD:
-			_position += _front * velocity;
-			break;
-		case InputDirection::BACKWARD:
-			_position -= _front * velocity;
-			break;
-		case InputDirection::LEFT:
-			_position -= _right * velocity;
-			break;
-		case InputDirection::RIGHT:
-			_position += _right * velocity;
-			break;
-	}
-}
-
 void FirstPersonCamera::rotate(float xOffset, float yOffset)
 {
 	xOffset *= _sensitivity;
@@ -76,6 +56,26 @@ void FirstPersonCamera::zoom(float yOffset)
 	else if (_zoom > 45.0f)
 	{
 		_zoom = 45.0f;
+	}
+}
+
+void FirstPersonCamera::move(InputDirection direction, double deltaTime)
+{
+	float velocity = static_cast<float>(_speed * deltaTime);
+	switch (direction)
+	{
+		case InputDirection::FORWARD:
+			_position += _front * velocity;
+			break;
+		case InputDirection::BACKWARD:
+			_position -= _front * velocity;
+			break;
+		case InputDirection::LEFT:
+			_position -= _right * velocity;
+			break;
+		case InputDirection::RIGHT:
+			_position += _right * velocity;
+			break;
 	}
 }
 

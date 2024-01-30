@@ -334,16 +334,16 @@ void MainGame::handleKeys()
 				_gameState = GameState::EXIT;
 				break;
 			case SDLK_w:
-				CmdTK::moveCommand(_player, InputDirection::FORWARD, _deltaTime.count()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::FORWARD, _deltaTime.count()).execute();
 				break;
 			case SDLK_s:
-				CmdTK::moveCommand(_player, InputDirection::BACKWARD, _deltaTime.count()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::BACKWARD, _deltaTime.count()).execute();
 				break;
 			case SDLK_a:
-				CmdTK::moveCommand(_player, InputDirection::LEFT, _deltaTime.count()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::LEFT, _deltaTime.count()).execute();
 				break;
 			case SDLK_d:
-				CmdTK::moveCommand(_player, InputDirection::RIGHT, _deltaTime.count()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::RIGHT, _deltaTime.count()).execute();
 				break;
 		}
 	}
