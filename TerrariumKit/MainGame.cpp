@@ -3,7 +3,8 @@
 #include "Enums.h"
 #include "ErrorLog.h"
 #include "FirstPersonCamera.h"
-#include "moveCommand.h"
+#include "MoveCommand.h"
+#include "RotateCameraCommand.h"
 #include "ShaderProgram.h"
 #include "TopDownCamera.h"
 #include "World.h"
@@ -251,7 +252,8 @@ void MainGame::processMouseMotion(SDL_Event event)
 {
 	float xRel = static_cast<float>(event.motion.xrel);
 	float yRel = static_cast<float>(event.motion.yrel);
-	_camera->rotate(xRel, -yRel);
+
+	CmdTK::RotateCameraCommand(_camera, xRel, -yRel).execute();
 }
 
 void MainGame::updateGame()

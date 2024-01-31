@@ -172,6 +172,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RotateCameraCommand.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="TerrainGen.h" />
