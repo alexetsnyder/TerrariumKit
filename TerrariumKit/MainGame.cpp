@@ -8,6 +8,7 @@
 #include "ShaderProgram.h"
 #include "TopDownCamera.h"
 #include "World.h"
+#include "ZoomCameraCommand.h"
 
 #include <SDL/SDL_image.h>
 #include <glad/glad.h>
@@ -225,7 +226,7 @@ void MainGame::pollEvents()
 				processMouseMotion(event);
 				break;
 			case SDL_MOUSEWHEEL:
-				_camera->zoom(static_cast<float>(event.wheel.y));
+				CmdTK::ZoomCameraCommand(_camera, static_cast<float>(event.wheel.y)).execute();
 				break;
 		}
 	}
