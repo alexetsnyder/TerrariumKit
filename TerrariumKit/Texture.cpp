@@ -8,6 +8,11 @@ Texture::Texture()
 	_id = 0;
 }
 
+Texture::~Texture()
+{
+	glDeleteTextures(1, &_id);
+}
+
 void Texture::init(const char* filePath)
 {
 	glGenTextures(1, &_id);

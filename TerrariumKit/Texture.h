@@ -9,6 +9,7 @@ class Texture
 {
 	public:
 		Texture();
+		~Texture();
 
 		void init(const char* filePath);
 
