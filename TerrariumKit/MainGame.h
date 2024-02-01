@@ -4,6 +4,7 @@
 #include "ICamera.h"
 #include "Player.h"
 #include "ShaderProgram.h"
+#include "Time.h"
 #include "World.h"
 
 #include <SDL/SDL.h>
@@ -67,8 +68,7 @@ class MainGame
 
 		ICamera* _camera;
 		Player* _player;
-		std::chrono::duration<double> _deltaTime;
-		std::chrono::high_resolution_clock::time_point _lastFrame;
+		SysTK::Time _time;
 
 		std::list<SDL_Keycode> _keyCodes;
 };

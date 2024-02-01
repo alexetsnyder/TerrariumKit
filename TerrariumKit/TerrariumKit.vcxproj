@@ -148,6 +148,7 @@
     <ClCompile Include="TerrainGen.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureAtlas.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="TopDownCamera.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -178,6 +179,7 @@
     <ClInclude Include="TerrainGen.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureAtlas.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="TopDownCamera.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="ZoomCameraCommand.h" />

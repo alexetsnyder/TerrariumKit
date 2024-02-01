@@ -26,8 +26,6 @@ MainGame::MainGame()
 	_screenHeight = 768;
 	_gameState = GameState::RUNNING;
 	_drawWireFrame = false;
-	_deltaTime = std::chrono::duration<double>(0.0);
-	_lastFrame = std::chrono::high_resolution_clock::now();
 
 	initSystems();
 
@@ -194,9 +192,7 @@ void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
 	{
-		std::chrono::high_resolution_clock::time_point currentFrame = std::chrono::high_resolution_clock::now();
-		_deltaTime = currentFrame - _lastFrame;
-		_lastFrame = currentFrame;
+		_time.update();
 
 		pollEvents();
 
@@ -337,16 +333,16 @@ void MainGame::handleKeys()
 				_gameState = GameState::EXIT;
 				break;
 			case SDLK_w:
-				CmdTK::MoveCommand(_player, InputDirection::FORWARD, _deltaTime.count()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::FORWARD, _time.deltaTime()).execute();
 				break;
 			case SDLK_s:
-				CmdTK::MoveCommand(_player, InputDirection::BACKWARD, _deltaTime.count()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::BACKWARD, _time.deltaTime()).execute();
 				break;
 			case SDLK_a:
-				CmdTK::MoveCommand(_player, InputDirection::LEFT, _deltaTime.count()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::LEFT, _time.deltaTime()).execute();
 				break;
 			case SDLK_d:
-				CmdTK::MoveCommand(_player, InputDirection::RIGHT, _deltaTime.count()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::RIGHT, _time.deltaTime()).execute();
 				break;
 		}
 	}
