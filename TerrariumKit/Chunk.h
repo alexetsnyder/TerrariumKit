@@ -38,15 +38,14 @@ class Chunk
 		
 		bool isOutsideChunk(glm::vec3 position) const;
 
-		void draw(const ShaderProgram& shader) const;
+		void draw(const ShaderProgram& shader) const;	
 
-		void deleteAll();
-
-	private:
+	private:	
 		void createTextureAtlas();
 		void genAll();	
 		void bindAll();
 		void unbindAll();
+		void free();
 		std::string getFaceName(BlockSides blockSides, int face) const;
 		int convertPositionToIndex(const glm::vec3& position) const;
 

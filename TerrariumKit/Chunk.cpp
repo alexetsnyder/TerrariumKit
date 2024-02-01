@@ -39,6 +39,7 @@ Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
 
 Chunk::~Chunk()
 {
+    free();
 }
 
 void Chunk::populateBlockMap(TerrainGen terrainGen)
@@ -137,7 +138,7 @@ void Chunk::genAll()
 	glGenBuffers(1, &_ebo);
 }
 
-void Chunk::deleteAll()
+void Chunk::free()
 {
     if (_vao > 0)
     {

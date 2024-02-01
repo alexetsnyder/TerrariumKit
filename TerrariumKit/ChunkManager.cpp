@@ -64,13 +64,11 @@ ChunkManager::~ChunkManager()
 
     for (auto& pair : _activeChunkMap)
     {
-        pair.second->deleteAll();
         delete pair.second;
     }
 
     for (auto& pair : _inactiveChunkMap)
     {
-        pair.second->deleteAll();
         delete pair.second;
     }
 }
