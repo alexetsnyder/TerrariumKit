@@ -10,6 +10,8 @@ class Texture
 	public:
 		Texture();
 		~Texture();
+		Texture(const Texture&) = delete;
+		Texture& operator=(const Texture&) = delete;
 
 		void init(const char* filePath);
 

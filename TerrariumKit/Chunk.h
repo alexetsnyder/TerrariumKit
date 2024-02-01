@@ -19,6 +19,9 @@ class Chunk
 {
 	public:
 		Chunk(glm::vec3 position, ChunkSize chunkSize);
+		~Chunk();
+		Chunk(const Chunk&) = delete;
+		Chunk& operator=(const Chunk&) = delete;
 
 		glm::mat4 getModelMatrix() const;
 		glm::vec3 getPosition() const;

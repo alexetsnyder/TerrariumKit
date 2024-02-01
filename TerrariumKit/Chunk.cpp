@@ -37,6 +37,10 @@ Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
     createTextureAtlas();
 }
 
+Chunk::~Chunk()
+{
+}
+
 void Chunk::populateBlockMap(TerrainGen terrainGen)
 {
     for (int y = 0; y < _size.height; y++)
