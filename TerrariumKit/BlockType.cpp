@@ -7,14 +7,14 @@ namespace ProcGenTK
 		_isSolid = false;
 	}
 
-	BlockType::BlockType(std::string name, bool isSolid, std::vector<std::string> blockSidesVct)
+	BlockType::BlockType(const std::string& name, bool isSolid, const std::vector<std::string>& blockSidesVct)
 	{
 		setName(name);
 		setIsSolid(isSolid);
 		setBlockSides(blockSidesVct);
 	}
 
-	BlockType::BlockType(std::string name, bool isSolid, BlockSides blockSides)
+	BlockType::BlockType(const std::string& name, bool isSolid, BlockSides blockSides)
 	{
 		setName(name);
 		setIsSolid(isSolid);
@@ -41,7 +41,7 @@ namespace ProcGenTK
 		_isSolid = isSolid;
 	}
 
-	void BlockType::setName(std::string name)
+	void BlockType::setName(const std::string& name)
 	{
 		_name = name;
 	}
@@ -51,7 +51,7 @@ namespace ProcGenTK
 		_blockSides = blockSides;
 	}
 
-	void BlockType::setBlockSides(std::vector<std::string> blockSidesVct)
+	void BlockType::setBlockSides(const std::vector<std::string>& blockSidesVct)
 	{
 		BlockSides blockSides;
 		blockSides.frontTextureName = blockSidesVct[0];

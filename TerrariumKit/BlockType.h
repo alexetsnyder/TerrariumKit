@@ -17,30 +17,27 @@ namespace ProcGenTK
 
 	class BlockType
 	{
-	public:
-		BlockType();
+		public:
+			BlockType();
 
-		//Expects vector of size 6 with strings to be in order:
-		// Front, Back, Left, Right, Top, Bottom.
-		BlockType(std::string name, bool isSolid, std::vector<std::string> blockSidesVct);
+			//Expects vector of size 6 with strings to be in order:
+			// Front, Back, Left, Right, Top, Bottom.
+			BlockType(const std::string& name, bool isSolid, const std::vector<std::string>& blockSidesVct);
 
-		BlockType(std::string name, bool isSolid, BlockSides blockSides);
+			BlockType(const std::string& name, bool isSolid, BlockSides blockSides);
 
-		bool isSolid() const;
-		std::string getName() const;
-		BlockSides getBlockSides() const;
+			bool isSolid() const;
+			std::string getName() const;
+			BlockSides getBlockSides() const;
 
-		void setIsSolid(bool isSolid);
-		void setName(std::string name);
-		void setBlockSides(BlockSides blockSides);
+		private:
+			void setIsSolid(bool isSolid);
+			void setName(const std::string& name);
+			void setBlockSides(BlockSides blockSides);
+			void setBlockSides(const std::vector<std::string>& blockSidesVct);
 
-		//Expects vector of size 6 with strings to be in order:
-		// Front, Back, Left, Right, Top, Bottom.
-		void setBlockSides(std::vector<std::string> blockSidesVct);
-
-	private:
-		bool _isSolid;
-		std::string _name;
-		BlockSides _blockSides;
+			bool _isSolid;
+			std::string _name;
+			BlockSides _blockSides;
 	};
 }
