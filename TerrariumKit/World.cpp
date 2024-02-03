@@ -6,94 +6,97 @@
 
 #include <iostream>
 
-World::World(const ICamera* camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite)
+namespace ProcGenTK
 {
-    _camera = camera;
-    _worldSize = worldSize;
-    _worldHeight = worldHeight;
-    _isInfinite = isInfinite;
-    _chunkSize = chunkSize;
-    _currentChunkId.init(_chunkSize, 0.0f, 4.0f, 0.0f);
-    _hasCurrentChunkIdChanged = false;
-}
-
-int World::worldSize() const
-{
-    return _worldSize;
-}
-
-int World::worldHeight() const
-{
-    return _worldHeight;
-}
-
-ChunkSize World::chunkSize() const
-{
-    return _chunkSize;
-}
-
-ChunkID World::currentChunkID() const
-{
-    return _currentChunkId;
-}
-
-bool World::isInfinite() const
-{
-    return _isInfinite;
-}
-
-bool World::hasCurrentChunkIdChanged() const
-{
-    return _hasCurrentChunkIdChanged;
-}
-
-bool World::isOutsideWorld(const glm::vec3& worldPos) const
-{
-    if (!isInfinite())
+    World::World(const ICamera* camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite)
     {
-        //# of chunks per side depending on the world size
-        int dim = _worldSize + _worldSize + 1;
+        _camera = camera;
+        _worldSize = worldSize;
+        _worldHeight = worldHeight;
+        _isInfinite = isInfinite;
+        _chunkSize = chunkSize;
+        _currentChunkId.init(_chunkSize, 0.0f, 4.0f, 0.0f);
+        _hasCurrentChunkIdChanged = false;
+    }
 
-        int boundY = _worldHeight - 1;
+    int World::worldSize() const
+    {
+        return _worldSize;
+    }
 
-        int lowerBoundX = -(dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;
-        int lowerBoundZ = -(dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
-        int upperBoundX = (dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;
-        int upperBoundZ = (dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
+    int World::worldHeight() const
+    {
+        return _worldHeight;
+    }
 
-        int x = static_cast<int>(floor(worldPos.x));
-        int y = static_cast<int>(floor(worldPos.y));
-        int z = static_cast<int>(floor(worldPos.z));
+    ChunkSize World::chunkSize() const
+    {
+        return _chunkSize;
+    }
 
-        if (y < 0 || y > boundY ||
-            x < lowerBoundX || x > upperBoundX - 1 ||
-            z < lowerBoundZ || z > upperBoundZ - 1)
+    ChunkID World::currentChunkID() const
+    {
+        return _currentChunkId;
+    }
+
+    bool World::isInfinite() const
+    {
+        return _isInfinite;
+    }
+
+    bool World::hasCurrentChunkIdChanged() const
+    {
+        return _hasCurrentChunkIdChanged;
+    }
+
+    bool World::isOutsideWorld(const glm::vec3& worldPos) const
+    {
+        if (!isInfinite())
         {
-            return true;
+            //# of chunks per side depending on the world size
+            int dim = _worldSize + _worldSize + 1;
+
+            int boundY = _worldHeight - 1;
+
+            int lowerBoundX = -(dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;
+            int lowerBoundZ = -(dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
+            int upperBoundX = (dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;
+            int upperBoundZ = (dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
+
+            int x = static_cast<int>(floor(worldPos.x));
+            int y = static_cast<int>(floor(worldPos.y));
+            int z = static_cast<int>(floor(worldPos.z));
+
+            if (y < 0 || y > boundY ||
+                x < lowerBoundX || x > upperBoundX - 1 ||
+                z < lowerBoundZ || z > upperBoundZ - 1)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void World::update()
+    {
+        checkCurrentChunk();
+    }
+
+    void World::checkCurrentChunk()
+    {
+        _hasCurrentChunkIdChanged = false;
+        glm::vec3 cameraPos = _camera->position();
+
+        ChunkID chunkId{ _chunkSize, cameraPos };
+
+        if (chunkId.getX() != _currentChunkId.getX() || chunkId.getZ() != _currentChunkId.getZ())
+        {
+            _hasCurrentChunkIdChanged = true;
+
+            std::cout << "X: " << chunkId.getX() << " Y: " << chunkId.getY() << " Z: " << chunkId.getZ() << std::endl;
+            _currentChunkId = chunkId;
         }
     }
 
-    return false;
 }
-
-void World::update()
-{
-    checkCurrentChunk();
-}
-
-void World::checkCurrentChunk()
-{
-    _hasCurrentChunkIdChanged = false;
-    glm::vec3 cameraPos = _camera->position();
-
-    ChunkID chunkId{ _chunkSize, cameraPos };
-
-    if (chunkId.getX() != _currentChunkId.getX() || chunkId.getZ() != _currentChunkId.getZ())
-    {
-        _hasCurrentChunkIdChanged = true;
-
-        std::cout <<"X: " << chunkId.getX() << " Y: " << chunkId.getY() << " Z: " << chunkId.getZ() << std::endl;
-        _currentChunkId = chunkId;   
-    }
-}
-

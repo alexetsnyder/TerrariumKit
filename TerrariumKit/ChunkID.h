@@ -6,30 +6,32 @@
 
 #include <array>
 
-class ChunkID
+namespace ProcGenTK
 {
-	public:
-		ChunkID();
-		ChunkID(ChunkSize chunkSize, float x, float y, float z);
-		ChunkID(ChunkSize chunkSize, glm::vec3 worldPos);
+	class ChunkID
+	{
+		public:
+			ChunkID();
+			ChunkID(ChunkSize chunkSize, float x, float y, float z);
+			ChunkID(ChunkSize chunkSize, glm::vec3 worldPos);
 
-		float getX();
-		float getY();
-		float getZ();
+			float getX();
+			float getY();
+			float getZ();
 
-		std::array<float, 3> getID() const;
-		glm::vec3 getPosition() const;
-		glm::vec3 getRelativeVoxelPosition(const glm::vec3& worldPos) const;
-		
-		void setID(float x, float y, float z);
-		void setPosition(const glm::vec3& worldPos);
+			std::array<float, 3> getID() const;
+			glm::vec3 getPosition() const;
+			glm::vec3 getRelativeVoxelPosition(const glm::vec3& worldPos) const;
 
-		void init(ChunkSize chunkSize, float x, float y, float z);
+			void setID(float x, float y, float z);
+			void setPosition(const glm::vec3& worldPos);
 
-		bool Equals(const ChunkID& rhs);
+			void init(ChunkSize chunkSize, float x, float y, float z);
 
-	private:
-		ChunkSize _chunkSize;
-		std::array<float, 3> _id;
-};
+			bool Equals(const ChunkID& rhs);
 
+		private:
+			ChunkSize _chunkSize;
+			std::array<float, 3> _id;
+	};
+}

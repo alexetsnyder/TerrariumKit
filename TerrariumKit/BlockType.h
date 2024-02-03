@@ -3,18 +3,20 @@
 #include <string>
 #include <vector>
 
-struct BlockSides
+namespace ProcGenTK
 {
-	std::string frontTextureName;
-	std::string backTextureName;
-	std::string leftTextureName;
-	std::string rightTextureName;
-	std::string topTextureName;
-	std::string bottomTextureName;
-};
+	struct BlockSides
+	{
+		std::string frontTextureName;
+		std::string backTextureName;
+		std::string leftTextureName;
+		std::string rightTextureName;
+		std::string topTextureName;
+		std::string bottomTextureName;
+	};
 
-class BlockType
-{
+	class BlockType
+	{
 	public:
 		BlockType();
 
@@ -38,8 +40,7 @@ class BlockType
 
 	private:
 		bool _isSolid;
-		std::string _name;	
+		std::string _name;
 		BlockSides _blockSides;
-};
-
-
+	};
+}

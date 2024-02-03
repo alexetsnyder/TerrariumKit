@@ -178,7 +178,7 @@ void MainGame::createWorld()
 	int worldHeight = 128;
 	bool isInfinite = true;
 
-	_world = new World(_camera, worldSize, worldHeight, chunkSize, isInfinite);
+	_world = new ProcGenTK::World(_camera, worldSize, worldHeight, chunkSize, isInfinite);
 }
 
 void MainGame::createChunkManager()

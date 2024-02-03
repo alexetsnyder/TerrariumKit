@@ -63,7 +63,7 @@ class MainGame
 		ShaderProgram _shaderProgram;
 
 		bool _drawWireFrame;
-		World* _world;
+		ProcGenTK::World* _world;
 		ProcGenTK::ChunkManager* _chunkManager;
 
 		ICamera* _camera;
