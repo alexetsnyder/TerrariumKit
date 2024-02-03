@@ -90,11 +90,11 @@ namespace ProcGenTK
 
         ChunkID chunkId{ _chunkSize, cameraPos };
 
-        if (chunkId.getX() != _currentChunkId.getX() || chunkId.getZ() != _currentChunkId.getZ())
+        if (chunkId.x() != _currentChunkId.x() || chunkId.z() != _currentChunkId.z())
         {
             _hasCurrentChunkIdChanged = true;
 
-            std::cout << "X: " << chunkId.getX() << " Y: " << chunkId.getY() << " Z: " << chunkId.getZ() << std::endl;
+            std::cout << "X: " << chunkId.x() << " Y: " << chunkId.y() << " Z: " << chunkId.z() << std::endl;
             _currentChunkId = chunkId;
         }
     }

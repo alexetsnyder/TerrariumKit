@@ -14,27 +14,27 @@ namespace ProcGenTK
 		setPosition(worldPos);
 	}
 
-	float ChunkID::getX() const
+	float ChunkID::x() const
 	{
 		return _id[0];
 	}
 
-	float ChunkID::getY() const
+	float ChunkID::y() const
 	{
 		return _id[1];
 	}
 
-	float ChunkID::getZ() const
+	float ChunkID::z() const
 	{
 		return _id[2];
 	}
 
-	std::array<float, 3> ChunkID::getID() const
+	std::array<float, 3> ChunkID::id() const
 	{
 		return _id;
 	}
 
-	glm::vec3 ChunkID::getPosition() const
+	glm::vec3 ChunkID::position() const
 	{
 		float x = _id[0] * _chunkSize.xWidth;
 		float y = _id[1] * _chunkSize.height;
@@ -43,7 +43,7 @@ namespace ProcGenTK
 		return glm::vec3{ x, y, z };
 	}
 
-	glm::vec3 ChunkID::getRelativeVoxelPosition(const glm::vec3& worldPos) const
+	glm::vec3 ChunkID::computeRelativeVoxelPosition(const glm::vec3& worldPos) const
 	{
 		float x = floor(worldPos.x);
 		float y = floor(worldPos.y);

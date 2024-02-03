@@ -99,10 +99,10 @@ namespace ProcGenTK
         float startY = 0.0f;
         float endY = static_cast<float>(_world->worldHeight() / _world->chunkSize().height);
         int viewDistanceInChunks = _world->worldSize();
-        float startX = currentChunkId.getX() - viewDistanceInChunks;
-        float endX = currentChunkId.getX() + viewDistanceInChunks;
-        float startZ = currentChunkId.getZ() - viewDistanceInChunks;
-        float endZ = currentChunkId.getZ() + viewDistanceInChunks;
+        float startX = currentChunkId.x() - viewDistanceInChunks;
+        float endX = currentChunkId.x() + viewDistanceInChunks;
+        float startZ = currentChunkId.z() - viewDistanceInChunks;
+        float endZ = currentChunkId.z() + viewDistanceInChunks;
 
         for (float y = startY; y < endY; y++)
         {
@@ -111,7 +111,7 @@ namespace ProcGenTK
                 for (float z = startZ; z < endZ + 1; z++)
                 {
                     ChunkID chunkId{ _world->chunkSize(), x, y, z };
-                    auto mapIter = _inactiveChunkMap.find(chunkId.getID());
+                    auto mapIter = _inactiveChunkMap.find(chunkId.id());
                     if (mapIter != _inactiveChunkMap.end())
                     {
                         _activeChunkMap.emplace(mapIter->first, mapIter->second);
@@ -119,8 +119,8 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ new Chunk{ chunkId.getPosition(), _world->chunkSize() } };
-                        _activeChunkMap.emplace(chunkId.getID(), chunkPointer);
+                        Chunk* chunkPointer{ new Chunk{ chunkId.position(), _world->chunkSize() } };
+                        _activeChunkMap.emplace(chunkId.id(), chunkPointer);
                         _chunkCreateQueue.push(chunkPointer);
                     }
                 }
@@ -234,9 +234,9 @@ namespace ProcGenTK
         }
 
         ChunkID chunkId{ _world->chunkSize(), worldPos };
-        glm::vec3 voxelPos{ chunkId.getRelativeVoxelPosition(worldPos) };
+        glm::vec3 voxelPos{ chunkId.computeRelativeVoxelPosition(worldPos) };
 
-        const auto mapIter = _activeChunkMap.find(chunkId.getID());
+        const auto mapIter = _activeChunkMap.find(chunkId.id());
         if (mapIter != _activeChunkMap.end() && mapIter->second->hasPopulatedBlockMap())
         {
             return _terrainGen->getBlockType(mapIter->second->getBlockByte(voxelPos)).isSolid();

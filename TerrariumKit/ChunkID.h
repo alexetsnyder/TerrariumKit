@@ -14,13 +14,13 @@ namespace ProcGenTK
 			ChunkID(ChunkSize chunkSize, float x, float y, float z);
 			ChunkID(ChunkSize chunkSize, const glm::vec3& worldPos);
 
-			float getX() const;
-			float getY() const;
-			float getZ() const;
+			float x() const;
+			float y() const;
+			float z() const;
 
-			std::array<float, 3> getID() const;
-			glm::vec3 getPosition() const;
-			glm::vec3 getRelativeVoxelPosition(const glm::vec3& worldPos) const;
+			std::array<float, 3> id() const;
+			glm::vec3 position() const;
+			glm::vec3 computeRelativeVoxelPosition(const glm::vec3& worldPos) const;
 
 			bool Equals(const ChunkID& rhs);
 
