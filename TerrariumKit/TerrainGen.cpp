@@ -1,21 +1,8 @@
 #include "TerrainGen.h"
 
-TerrainGen::TerrainGen()
-	: _chunkSize{}, _noise{}
-{
-	_minHeight = 0;
-	_varyHeight = 0;
-}
-
 TerrainGen::TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight)
+	: _chunkSize{ chunkSize }
 {
-	init(chunkSize, minHeight, varyHeight);
-}
-
-void TerrainGen::init(ChunkSize chunkSize, float minHeight, float varyHeight)
-{
-	_chunkSize = chunkSize;
-
 	_noise.SetSeed(42);
 	_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
 	_noise.SetFractalType(FastNoiseLite::FractalType_FBm);

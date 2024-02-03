@@ -44,7 +44,7 @@ class ChunkManager
 		void cleanUpChunkThreads();
 
 		const World* _world;
-		TerrainGen _terrainGen;
+		const TerrainGen* _terrainGen;
 		std::queue<Chunk*> _chunkCreateQueue;
 
 		bool _useThreading;

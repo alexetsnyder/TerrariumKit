@@ -12,10 +12,7 @@
 class TerrainGen
 {
 	public:
-		TerrainGen();
 		TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight);
-
-		void init(ChunkSize chunkSize, float minHeight, float varyHeight);
 
 		GLubyte getVoxel(const glm::vec3& position) const;
 		BlockType getBlockType(GLubyte byte) const;
