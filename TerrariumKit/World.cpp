@@ -9,13 +9,13 @@
 namespace ProcGenTK
 {
     World::World(const ICamera* camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite)
+        : _currentChunkId{ chunkSize, 0.0f, 4.0f, 0.0f }
     {
         _camera = camera;
         _worldSize = worldSize;
         _worldHeight = worldHeight;
         _isInfinite = isInfinite;
         _chunkSize = chunkSize;
-        _currentChunkId.init(_chunkSize, 0.0f, 4.0f, 0.0f);
         _hasCurrentChunkIdChanged = false;
     }
 
