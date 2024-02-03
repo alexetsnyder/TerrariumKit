@@ -15,55 +15,57 @@
 #include <vector>
 #include <string>
 
-class Chunk
+namespace ProcGenTK
 {
-	public:
-		Chunk(glm::vec3 position, ChunkSize chunkSize);
-		~Chunk();
-		Chunk(const Chunk&) = delete;
-		Chunk& operator=(const Chunk&) = delete;
+	class Chunk
+	{
+		public:
+			Chunk(glm::vec3 position, ChunkSize chunkSize);
+			~Chunk();
+			Chunk(const Chunk&) = delete;
+			Chunk& operator=(const Chunk&) = delete;
 
-		glm::mat4 getModelMatrix() const;
-		glm::vec3 getPosition() const;
-		bool hasPopulatedBlockMap() const;
+			glm::mat4 getModelMatrix() const;
+			glm::vec3 getPosition() const;
+			bool hasPopulatedBlockMap() const;
 
-		GLubyte getBlockByte(const glm::vec3& position) const;
-		std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
+			GLubyte getBlockByte(const glm::vec3& position) const;
+			std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
 
-		void setNoDraw(bool noDraw);
+			void setNoDraw(bool noDraw);
 
-		void populateBlockMap(TerrainGen worldGen);
+			void populateBlockMap(TerrainGen worldGen);
 
-		void setChunkMesh(Mesh& chunkMesh);
-		
-		bool isOutsideChunk(glm::vec3 position) const;
+			void setChunkMesh(Mesh& chunkMesh);
 
-		void draw(const ShaderProgram& shader) const;	
+			bool isOutsideChunk(glm::vec3 position) const;
 
-	private:	
-		void createTextureAtlas();
-		void genAll();	
-		void bindAll();
-		void unbindAll();
-		void free();
-		std::string getFaceName(BlockSides blockSides, int face) const;
-		int convertPositionToIndex(const glm::vec3& position) const;
+			void draw(const ShaderProgram& shader) const;
 
-		std::vector<GLubyte> _blocks;
-		bool _hasPopulatedBlockMap;
+		private:
+			void createTextureAtlas();
+			void genAll();
+			void bindAll();
+			void unbindAll();
+			void free();
+			std::string getFaceName(BlockSides blockSides, int face) const;
+			int convertPositionToIndex(const glm::vec3& position) const;
 
-		ChunkSize _size;
-		glm::vec3 _position;
+			std::vector<GLubyte> _blocks;
+			bool _hasPopulatedBlockMap;
 
-		TextureAtlas _atlas;
-		Texture _texture;
+			ChunkSize _size;
+			glm::vec3 _position;
 
-		GLuint _vao;
-		GLuint _vbo;
-		GLuint _ebo;
+			TextureAtlas _atlas;
+			Texture _texture;
 
-		GLuint _indicesCount;
+			GLuint _vao;
+			GLuint _vbo;
+			GLuint _ebo;
 
-		bool _noDraw;
-};
+			GLuint _indicesCount;
 
+			bool _noDraw;
+	};
+}

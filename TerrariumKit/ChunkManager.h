@@ -14,45 +14,47 @@
 #include <queue>
 #include <thread>
 
-struct ChunkMeshInfo
+namespace ProcGenTK
 {
-	Chunk* chunkPointer;
-	Mesh chunkMesh;
-};
+	struct ChunkMeshInfo
+	{
+		Chunk* chunkPointer;
+		Mesh chunkMesh;
+	};
 
-class ChunkManager
-{
-	public:
-		ChunkManager(const World* world, bool useThreading);
-		~ChunkManager();
+	class ChunkManager
+	{
+		public:
+			ChunkManager(const World* world, bool useThreading);
+			~ChunkManager();
 
-		void queueChunks();
-		void createChunks(int n);
-		void createChunkThreads(int n);
-		void joinChunkThreads(int n);
-		void sendChunkData(int n);
+			void queueChunks();
+			void createChunks(int n);
+			void createChunkThreads(int n);
+			void joinChunkThreads(int n);
+			void sendChunkData(int n);
 
-		void update();
-		void draw(const ShaderProgram& program);
+			void update();
+			void draw(const ShaderProgram& program);
 
-	private:
-		bool hasSolidVoxel(const Chunk* chunk, const glm::vec3& position) const;
-		bool hasSolidVoxel(const glm::vec3& worldPos) const;
+		private:
+			bool hasSolidVoxel(const Chunk* chunk, const glm::vec3& position) const;
+			bool hasSolidVoxel(const glm::vec3& worldPos) const;
 
-		void createChunk(Chunk* chunk);
-		void createVoxel(const Chunk* chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
-		void cleanUpChunkThreads();
+			void createChunk(Chunk* chunk);
+			void createVoxel(const Chunk* chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
+			void cleanUpChunkThreads();
 
-		const World* _world;
-		const TerrainGen* _terrainGen;
-		std::queue<Chunk*> _chunkCreateQueue;
+			const World* _world;
+			const TerrainGen* _terrainGen;
+			std::queue<Chunk*> _chunkCreateQueue;
 
-		bool _useThreading;
-		std::queue<std::thread> _threadQueue;
-		std::mutex _chunkMeshInfoAccess;
-		std::queue<ChunkMeshInfo> _chunkMeshInfoQueue;
+			bool _useThreading;
+			std::queue<std::thread> _threadQueue;
+			std::mutex _chunkMeshInfoAccess;
+			std::queue<ChunkMeshInfo> _chunkMeshInfoQueue;
 
-		std::map<std::array<float, 3>, Chunk*> _activeChunkMap;
-		std::map<std::array<float, 3>, Chunk*> _inactiveChunkMap;
-};
-
+			std::map<std::array<float, 3>, Chunk*> _activeChunkMap;
+			std::map<std::array<float, 3>, Chunk*> _inactiveChunkMap;
+	};
+}

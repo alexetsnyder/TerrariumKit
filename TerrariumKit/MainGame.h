@@ -64,7 +64,7 @@ class MainGame
 
 		bool _drawWireFrame;
 		World* _world;
-		ChunkManager* _chunkManager;
+		ProcGenTK::ChunkManager* _chunkManager;
 
 		ICamera* _camera;
 		Player* _player;

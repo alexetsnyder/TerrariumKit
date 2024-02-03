@@ -185,7 +185,7 @@ void MainGame::createChunkManager()
 {
 	bool useThreading = false;
 
-	_chunkManager = new ChunkManager(_world, useThreading);
+	_chunkManager = new ProcGenTK::ChunkManager(_world, useThreading);
 }
 
 void MainGame::gameLoop()

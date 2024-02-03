@@ -169,6 +169,7 @@
     <ClInclude Include="ICamera.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IGameActor.h" />
+    <ClInclude Include="ITerrainGen.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MoveCommand.h" />

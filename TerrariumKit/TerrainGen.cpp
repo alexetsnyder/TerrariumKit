@@ -1,93 +1,96 @@
 #include "TerrainGen.h"
 
-TerrainGen::TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight)
-	: _chunkSize{ chunkSize }
+namespace ProcGenTK
 {
-	_noise.SetSeed(42);
-	_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
-	_noise.SetFractalType(FastNoiseLite::FractalType_FBm);
-
-	_minHeight = minHeight;
-	_varyHeight = varyHeight;
-
-	BlockSides blockSides{};
-	_blockTypeLookUp[0] = BlockType("air", false, blockSides);
-
-	blockSides.frontTextureName = "bedrock";
-	blockSides.backTextureName = "bedrock";
-	blockSides.leftTextureName = "bedrock";
-	blockSides.rightTextureName = "bedrock";
-	blockSides.topTextureName = "bedrock";
-	blockSides.bottomTextureName = "bedrock";
-	_blockTypeLookUp[1] = BlockType("bedrock", true, blockSides);
-
-	blockSides.frontTextureName = "stone";
-	blockSides.backTextureName = "stone";
-	blockSides.leftTextureName = "stone";
-	blockSides.rightTextureName = "stone";
-	blockSides.topTextureName = "stone";
-	blockSides.bottomTextureName = "stone";
-	_blockTypeLookUp[2] = BlockType("stone", true, blockSides);
-
-	blockSides.frontTextureName = "dirt";
-	blockSides.backTextureName = "dirt";
-	blockSides.leftTextureName = "dirt";
-	blockSides.rightTextureName = "dirt";
-	blockSides.topTextureName = "dirt";
-	blockSides.bottomTextureName = "dirt";
-	_blockTypeLookUp[3] = BlockType("dirt", true, blockSides);
-
-	blockSides.frontTextureName = "grassSide";
-	blockSides.backTextureName = "grassSide";
-	blockSides.leftTextureName = "grassSide";
-	blockSides.rightTextureName = "grassSide";
-	blockSides.topTextureName = "grassTop";
-	blockSides.bottomTextureName = "dirt";
-	_blockTypeLookUp[4] = BlockType("grass", true, blockSides);
-
-	createBlockByteLookUp();
-}
-
-GLubyte TerrainGen::getVoxel(const glm::vec3& position) const
-{
-	int y = static_cast<int>(floor(position.y));
-
-	if (y == 0)
+	TerrainGen::TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight)
+		: _chunkSize{ chunkSize }
 	{
-		return _blockByteLookUp.at("bedrock");
+		_noise.SetSeed(42);
+		_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+		_noise.SetFractalType(FastNoiseLite::FractalType_FBm);
+
+		_minHeight = minHeight;
+		_varyHeight = varyHeight;
+
+		BlockSides blockSides{};
+		_blockTypeLookUp[0] = BlockType("air", false, blockSides);
+
+		blockSides.frontTextureName = "bedrock";
+		blockSides.backTextureName = "bedrock";
+		blockSides.leftTextureName = "bedrock";
+		blockSides.rightTextureName = "bedrock";
+		blockSides.topTextureName = "bedrock";
+		blockSides.bottomTextureName = "bedrock";
+		_blockTypeLookUp[1] = BlockType("bedrock", true, blockSides);
+
+		blockSides.frontTextureName = "stone";
+		blockSides.backTextureName = "stone";
+		blockSides.leftTextureName = "stone";
+		blockSides.rightTextureName = "stone";
+		blockSides.topTextureName = "stone";
+		blockSides.bottomTextureName = "stone";
+		_blockTypeLookUp[2] = BlockType("stone", true, blockSides);
+
+		blockSides.frontTextureName = "dirt";
+		blockSides.backTextureName = "dirt";
+		blockSides.leftTextureName = "dirt";
+		blockSides.rightTextureName = "dirt";
+		blockSides.topTextureName = "dirt";
+		blockSides.bottomTextureName = "dirt";
+		_blockTypeLookUp[3] = BlockType("dirt", true, blockSides);
+
+		blockSides.frontTextureName = "grassSide";
+		blockSides.backTextureName = "grassSide";
+		blockSides.leftTextureName = "grassSide";
+		blockSides.rightTextureName = "grassSide";
+		blockSides.topTextureName = "grassTop";
+		blockSides.bottomTextureName = "dirt";
+		_blockTypeLookUp[4] = BlockType("grass", true, blockSides);
+
+		createBlockByteLookUp();
 	}
 
-	/* TERRAIN GENERATION */
+	GLubyte TerrainGen::getVoxel(const glm::vec3& position) const
+	{
+		int y = static_cast<int>(floor(position.y));
 
-	int height = static_cast<int>(floor(_noise.GetNoise(position.x, position.z) * _varyHeight + _minHeight));
+		if (y == 0)
+		{
+			return _blockByteLookUp.at("bedrock");
+		}
 
-	if (y > height)
-	{
-		return _blockByteLookUp.at("air");
-	}
-	else if (y >= height)
-	{
-		return _blockByteLookUp.at("grass");
-	}
-	else if (y >= height - 6)
-	{
-		return _blockByteLookUp.at("dirt");
-	}
-	else
-	{
-		return _blockByteLookUp.at("stone");
-	}
-}
+		/* TERRAIN GENERATION */
 
-BlockType TerrainGen::getBlockType(GLubyte byte) const
-{
-	return _blockTypeLookUp.at(byte);
-}
+		int height = static_cast<int>(floor(_noise.GetNoise(position.x, position.z) * _varyHeight + _minHeight));
 
-void TerrainGen::createBlockByteLookUp()
-{
-	for (const auto& pair : _blockTypeLookUp)
+		if (y > height)
+		{
+			return _blockByteLookUp.at("air");
+		}
+		else if (y >= height)
+		{
+			return _blockByteLookUp.at("grass");
+		}
+		else if (y >= height - 6)
+		{
+			return _blockByteLookUp.at("dirt");
+		}
+		else
+		{
+			return _blockByteLookUp.at("stone");
+		}
+	}
+
+	BlockType TerrainGen::getBlockType(GLubyte byte) const
 	{
-		_blockByteLookUp[pair.second.getName()] = pair.first;
+		return _blockTypeLookUp.at(byte);
+	}
+
+	void TerrainGen::createBlockByteLookUp()
+	{
+		for (const auto& pair : _blockTypeLookUp)
+		{
+			_blockByteLookUp[pair.second.getName()] = pair.first;
+		}
 	}
 }

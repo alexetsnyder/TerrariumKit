@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "BlockType.h"
+#include "ITerrainGen.h"
 #include "Structs.h"
 
 #include "FastNoiseLite.h"
@@ -9,23 +10,25 @@
 
 #include <map>
 
-class TerrainGen
+namespace ProcGenTK
 {
-	public:
-		TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight);
+	class TerrainGen : public ITerrainGen
+	{
+		public:
+			TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight);
 
-		GLubyte getVoxel(const glm::vec3& position) const;
-		BlockType getBlockType(GLubyte byte) const;
+			GLubyte getVoxel(const glm::vec3& position) const override;
+			BlockType getBlockType(GLubyte byte) const override;
 
-	private:
-		void createBlockByteLookUp();
+		private:
+			void createBlockByteLookUp();
 
-		ChunkSize _chunkSize;
-		std::map<GLubyte, BlockType> _blockTypeLookUp;
-		std::map<std::string, GLubyte> _blockByteLookUp;
+			ChunkSize _chunkSize;
+			std::map<GLubyte, BlockType> _blockTypeLookUp;
+			std::map<std::string, GLubyte> _blockByteLookUp;
 
-		FastNoiseLite _noise;
-		float _minHeight;
-		float _varyHeight;
-};
-
+			FastNoiseLite _noise;
+			float _minHeight;
+			float _varyHeight;
+	};
+}
