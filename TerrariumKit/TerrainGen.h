@@ -4,7 +4,7 @@
 #include "ITerrainGen.h"
 #include "Structs.h"
 
-#include "FastNoiseLite.h"
+#include <FastNoise/FastNoiseLite.h>
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 

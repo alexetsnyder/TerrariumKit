@@ -165,7 +165,6 @@
     <ClInclude Include="ChunkID.h" />
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="ErrorLog.h" />
-    <ClInclude Include="FastNoiseLite.h" />
     <ClInclude Include="ICamera.h" />
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="IGameActor.h" />
