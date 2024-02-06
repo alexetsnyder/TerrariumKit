@@ -12,42 +12,42 @@ namespace ProcGenTK
 		_minHeight = minHeight;
 		_varyHeight = varyHeight;
 
-		BlockSides blockSides{};
-		_blockTypeLookUp[0] = VoxelType("air", false, blockSides);
+		VoxelSides voxelSides{};
+		_voxelTypeLookUp[0] = VoxelType("air", false, voxelSides);
 
-		blockSides.frontTextureName = "bedrock";
-		blockSides.backTextureName = "bedrock";
-		blockSides.leftTextureName = "bedrock";
-		blockSides.rightTextureName = "bedrock";
-		blockSides.topTextureName = "bedrock";
-		blockSides.bottomTextureName = "bedrock";
-		_blockTypeLookUp[1] = VoxelType("bedrock", true, blockSides);
+		voxelSides.frontTextureName = "bedrock";
+		voxelSides.backTextureName = "bedrock";
+		voxelSides.leftTextureName = "bedrock";
+		voxelSides.rightTextureName = "bedrock";
+		voxelSides.topTextureName = "bedrock";
+		voxelSides.bottomTextureName = "bedrock";
+		_voxelTypeLookUp[1] = VoxelType("bedrock", true, voxelSides);
 
-		blockSides.frontTextureName = "stone";
-		blockSides.backTextureName = "stone";
-		blockSides.leftTextureName = "stone";
-		blockSides.rightTextureName = "stone";
-		blockSides.topTextureName = "stone";
-		blockSides.bottomTextureName = "stone";
-		_blockTypeLookUp[2] = VoxelType("stone", true, blockSides);
+		voxelSides.frontTextureName = "stone";
+		voxelSides.backTextureName = "stone";
+		voxelSides.leftTextureName = "stone";
+		voxelSides.rightTextureName = "stone";
+		voxelSides.topTextureName = "stone";
+		voxelSides.bottomTextureName = "stone";
+		_voxelTypeLookUp[2] = VoxelType("stone", true, voxelSides);
 
-		blockSides.frontTextureName = "dirt";
-		blockSides.backTextureName = "dirt";
-		blockSides.leftTextureName = "dirt";
-		blockSides.rightTextureName = "dirt";
-		blockSides.topTextureName = "dirt";
-		blockSides.bottomTextureName = "dirt";
-		_blockTypeLookUp[3] = VoxelType("dirt", true, blockSides);
+		voxelSides.frontTextureName = "dirt";
+		voxelSides.backTextureName = "dirt";
+		voxelSides.leftTextureName = "dirt";
+		voxelSides.rightTextureName = "dirt";
+		voxelSides.topTextureName = "dirt";
+		voxelSides.bottomTextureName = "dirt";
+		_voxelTypeLookUp[3] = VoxelType("dirt", true, voxelSides);
 
-		blockSides.frontTextureName = "grassSide";
-		blockSides.backTextureName = "grassSide";
-		blockSides.leftTextureName = "grassSide";
-		blockSides.rightTextureName = "grassSide";
-		blockSides.topTextureName = "grassTop";
-		blockSides.bottomTextureName = "dirt";
-		_blockTypeLookUp[4] = VoxelType("grass", true, blockSides);
+		voxelSides.frontTextureName = "grassSide";
+		voxelSides.backTextureName = "grassSide";
+		voxelSides.leftTextureName = "grassSide";
+		voxelSides.rightTextureName = "grassSide";
+		voxelSides.topTextureName = "grassTop";
+		voxelSides.bottomTextureName = "dirt";
+		_voxelTypeLookUp[4] = VoxelType("grass", true, voxelSides);
 
-		createBlockByteLookUp();
+		createVoxelByteLookUp();
 	}
 
 	GLubyte TerrainGen::getVoxel(const glm::vec3& position) const
@@ -56,7 +56,7 @@ namespace ProcGenTK
 
 		if (y == 0)
 		{
-			return _blockByteLookUp.at("bedrock");
+			return _voxelByteLookUp.at("bedrock");
 		}
 
 		/* TERRAIN GENERATION */
@@ -65,32 +65,32 @@ namespace ProcGenTK
 
 		if (y > height)
 		{
-			return _blockByteLookUp.at("air");
+			return _voxelByteLookUp.at("air");
 		}
 		else if (y >= height)
 		{
-			return _blockByteLookUp.at("grass");
+			return _voxelByteLookUp.at("grass");
 		}
 		else if (y >= height - 6)
 		{
-			return _blockByteLookUp.at("dirt");
+			return _voxelByteLookUp.at("dirt");
 		}
 		else
 		{
-			return _blockByteLookUp.at("stone");
+			return _voxelByteLookUp.at("stone");
 		}
 	}
 
-	VoxelType TerrainGen::getBlockType(GLubyte byte) const
+	VoxelType TerrainGen::getVoxelType(GLubyte byte) const
 	{
-		return _blockTypeLookUp.at(byte);
+		return _voxelTypeLookUp.at(byte);
 	}
 
-	void TerrainGen::createBlockByteLookUp()
+	void TerrainGen::createVoxelByteLookUp()
 	{
-		for (const auto& pair : _blockTypeLookUp)
+		for (const auto& pair : _voxelTypeLookUp)
 		{
-			_blockByteLookUp[pair.second.getName()] = pair.first;
+			_voxelByteLookUp[pair.second.getName()] = pair.first;
 		}
 	}
 }

@@ -123,7 +123,7 @@ namespace ProcGenTK
                 for (int z = 0; z < _size.zWidth; z++)
                 {
                     glm::vec3 voxelPosition{ x, y, z };
-                    if (_terrainGen->getBlockType(getVoxelByte(voxelPosition)).isSolid())
+                    if (_terrainGen->getVoxelType(getVoxelByte(voxelPosition)).isSolid())
                     {
                         createVoxel(voxelPosition, chunkMesh, vertexCount);
                     }
@@ -132,9 +132,9 @@ namespace ProcGenTK
         }
     }
 
-    std::vector<float> Chunk::getTextureCoordinates(BlockSides blockSides, int face) const
+    std::vector<float> Chunk::getTextureCoordinates(VoxelSides voxelSides, int face) const
     {
-        return _atlas.getTextureCoordinates(getFaceName(blockSides, face));
+        return _atlas.getTextureCoordinates(getFaceName(voxelSides, face));
     }
 
     void Chunk::setNoDraw(bool noDraw)
@@ -203,8 +203,8 @@ namespace ProcGenTK
         {
             if (!hasSolidVoxel(voxelPosition + voxelNeighbors[face]))
             {
-                VoxelType voxelType{ _terrainGen->getBlockType(getVoxelByte(voxelPosition)) };
-                std::vector<float> textureCoordinates{ getTextureCoordinates(voxelType.getBlockSides(), face) };
+                VoxelType voxelType{ _terrainGen->getVoxelType(getVoxelByte(voxelPosition)) };
+                std::vector<float> textureCoordinates{ getTextureCoordinates(voxelType.getVoxelSides(), face) };
                 for (int vertex = 0; vertex < 4; vertex++)
                 {
                     Vertex newVertex{};
@@ -239,7 +239,7 @@ namespace ProcGenTK
             return _chunkMediator->hasSolidVoxel(_position + position);
         }
 
-        return _terrainGen->getBlockType(getVoxelByte(position)).isSolid();
+        return _terrainGen->getVoxelType(getVoxelByte(position)).isSolid();
     }
 
     void Chunk::createTextureAtlas()
@@ -287,29 +287,29 @@ namespace ProcGenTK
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    std::string Chunk::getFaceName(BlockSides blockSides, int face) const
+    std::string Chunk::getFaceName(VoxelSides voxelSides, int face) const
     {
         std::string faceName{};
 
         switch (face)
         {
         case 0:
-            faceName = blockSides.frontTextureName;
+            faceName = voxelSides.frontTextureName;
             break;
         case 1:
-            faceName = blockSides.backTextureName;
+            faceName = voxelSides.backTextureName;
             break;
         case 2:
-            faceName = blockSides.leftTextureName;
+            faceName = voxelSides.leftTextureName;
             break;
         case 3:
-            faceName = blockSides.rightTextureName;
+            faceName = voxelSides.rightTextureName;
             break;
         case 4:
-            faceName = blockSides.topTextureName;
+            faceName = voxelSides.topTextureName;
             break;
         case 5:
-            faceName = blockSides.bottomTextureName;
+            faceName = voxelSides.bottomTextureName;
             break;
         }
 

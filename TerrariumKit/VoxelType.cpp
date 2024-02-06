@@ -7,18 +7,18 @@ namespace ProcGenTK
 		_isSolid = false;
 	}
 
-	VoxelType::VoxelType(const std::string& name, bool isSolid, const std::vector<std::string>& blockSidesVct)
+	VoxelType::VoxelType(const std::string& name, bool isSolid, const std::vector<std::string>& voxelSidesVct)
 	{
 		setName(name);
 		setIsSolid(isSolid);
-		setBlockSides(blockSidesVct);
+		setVoxelSides(voxelSidesVct);
 	}
 
-	VoxelType::VoxelType(const std::string& name, bool isSolid, BlockSides blockSides)
+	VoxelType::VoxelType(const std::string& name, bool isSolid, VoxelSides voxelSides)
 	{
 		setName(name);
 		setIsSolid(isSolid);
-		setBlockSides(blockSides);
+		setVoxelSides(voxelSides);
 	}
 
 	bool VoxelType::isSolid() const
@@ -31,9 +31,9 @@ namespace ProcGenTK
 		return _name;
 	}
 
-	BlockSides VoxelType::getBlockSides() const
+	VoxelSides VoxelType::getVoxelSides() const
 	{
-		return _blockSides;
+		return _voxelSides;
 	}
 
 	void VoxelType::setIsSolid(bool isSolid)
@@ -46,20 +46,20 @@ namespace ProcGenTK
 		_name = name;
 	}
 
-	void VoxelType::setBlockSides(BlockSides blockSides)
+	void VoxelType::setVoxelSides(VoxelSides voxelSides)
 	{
-		_blockSides = blockSides;
+		_voxelSides = voxelSides;
 	}
 
-	void VoxelType::setBlockSides(const std::vector<std::string>& blockSidesVct)
+	void VoxelType::setVoxelSides(const std::vector<std::string>& voxelSidesVct)
 	{
-		BlockSides blockSides;
-		blockSides.frontTextureName = blockSidesVct[0];
-		blockSides.backTextureName = blockSidesVct[1];
-		blockSides.leftTextureName = blockSidesVct[2];
-		blockSides.rightTextureName = blockSidesVct[3];
-		blockSides.topTextureName = blockSidesVct[4];
-		blockSides.bottomTextureName = blockSidesVct[5];
-		setBlockSides(blockSides);
+		VoxelSides voxelSides;
+		voxelSides.frontTextureName = voxelSidesVct[0];
+		voxelSides.backTextureName = voxelSidesVct[1];
+		voxelSides.leftTextureName = voxelSidesVct[2];
+		voxelSides.rightTextureName = voxelSidesVct[3];
+		voxelSides.topTextureName = voxelSidesVct[4];
+		voxelSides.bottomTextureName = voxelSidesVct[5];
+		setVoxelSides(voxelSides);
 	}
 }

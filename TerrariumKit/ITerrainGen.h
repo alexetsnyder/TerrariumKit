@@ -11,6 +11,6 @@ namespace ProcGenTK
 	{
 		public:
 			virtual GLubyte getVoxel(const glm::vec3& position) const = 0;
-			virtual VoxelType getBlockType(GLubyte byte) const = 0;
+			virtual VoxelType getVoxelType(GLubyte byte) const = 0;
 	};
 }

@@ -29,7 +29,7 @@ namespace ProcGenTK
 			bool hasPopulatedBlockMap() const;
 
 			GLubyte getVoxelByte(const glm::vec3& position) const;
-			std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
+			std::vector<float> getTextureCoordinates(VoxelSides voxelSides, int face) const;
 
 			void setNoDraw(bool noDraw);
 
@@ -51,7 +51,7 @@ namespace ProcGenTK
 			void bindAll();
 			void unbindAll();
 			void free();
-			std::string getFaceName(BlockSides blockSides, int face) const;
+			std::string getFaceName(VoxelSides voxelSides, int face) const;
 			int convertPositionToIndex(const glm::vec3& position) const;
 
 			std::vector<GLubyte> _blocks;

@@ -18,14 +18,14 @@ namespace ProcGenTK
 			TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight);
 
 			GLubyte getVoxel(const glm::vec3& position) const override;
-			VoxelType getBlockType(GLubyte byte) const override;
+			VoxelType getVoxelType(GLubyte byte) const override;
 
 		private:
-			void createBlockByteLookUp();
+			void createVoxelByteLookUp();
 
 			ChunkSize _chunkSize;
-			std::map<GLubyte, VoxelType> _blockTypeLookUp;
-			std::map<std::string, GLubyte> _blockByteLookUp;
+			std::map<GLubyte, VoxelType> _voxelTypeLookUp;
+			std::map<std::string, GLubyte> _voxelByteLookUp;
 
 			FastNoiseLite _noise;
 			float _minHeight;
