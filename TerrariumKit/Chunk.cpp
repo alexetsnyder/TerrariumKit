@@ -12,6 +12,55 @@
 
 namespace ProcGenTK
 {
+    const float voxelVertices[] 
+    {
+        //Front Face
+        0.5f,  0.5f,  0.5f,  //0
+       -0.5f,  0.5f,  0.5f,  //1
+        0.5f, -0.5f,  0.5f,  //2
+       -0.5f, -0.5f,  0.5f,  //3
+
+        //Back Face
+       -0.5f,  0.5f, -0.5f,  //4
+        0.5f,  0.5f, -0.5f,  //5
+       -0.5f, -0.5f, -0.5f,  //6
+        0.5f, -0.5f, -0.5f,  //7
+
+        //Left Face
+       -0.5f,  0.5f,  0.5f,  //8
+       -0.5f,  0.5f, -0.5f,  //9
+       -0.5f, -0.5f,  0.5f,  //10
+       -0.5f, -0.5f, -0.5f,  //11
+   
+        //Right Face
+        0.5f,  0.5f, -0.5f,  //12
+        0.5f,  0.5f,  0.5f,  //13
+        0.5f, -0.5f, -0.5f,  //14
+        0.5f, -0.5f,  0.5f,  //15
+
+        //Top Face
+        0.5f,  0.5f, -0.5f,  //16
+       -0.5f,  0.5f, -0.5f,  //17
+        0.5f,  0.5f,  0.5f,  //18
+       -0.5f,  0.5f,  0.5f,  //19
+    
+        //Bottom Face
+       -0.5f, -0.5f, -0.5f,  //20
+        0.5f, -0.5f, -0.5f,  //21
+       -0.5f, -0.5f,  0.5f,  //22
+        0.5f, -0.5f,  0.5f,  //23 
+    };
+
+    const glm::vec3 voxelNeighbors[] 
+    {
+        glm::vec3( 0.0f,  0.0f,  1.0f),
+        glm::vec3( 0.0f,  0.0f, -1.0f),
+        glm::vec3(-1.0f,  0.0f,  0.0f),
+        glm::vec3( 1.0f,  0.0f,  0.0f),
+        glm::vec3( 0.0f,  1.0f,  0.0f),
+        glm::vec3( 0.0f, -1.0f,  0.0f),
+    };
+
     std::vector<std::string> blockNames =
     {
         "bedrock",
@@ -24,13 +73,14 @@ namespace ProcGenTK
         "sand",
     };
 
-    Chunk::Chunk(const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize)
+    Chunk::Chunk(const IChunkMediator* chunkMediator, const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize)
         : _atlas{ 256, 16 }, _size{ chunkSize }
     {
         _hasPopulatedBlockMap = false;
         _vao = 0;
         _vbo = 0;
         _ebo = 0;
+        _chunkMediator = chunkMediator;
         _terrainGen = terrainGen;
         _position = position;
         _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
@@ -61,6 +111,25 @@ namespace ProcGenTK
         }
 
         _hasPopulatedBlockMap = true;
+    }
+
+    void Chunk::createChunkMesh(Mesh& chunkMesh)
+    {
+        int vertexCount = 0;
+        for (int y = 0; y < _size.height; y++)
+        {
+            for (int x = 0; x < _size.xWidth; x++)
+            {
+                for (int z = 0; z < _size.zWidth; z++)
+                {
+                    glm::vec3 voxelPosition{ x, y, z };
+                    if (_terrainGen->getBlockType(getBlockByte(voxelPosition)).isSolid())
+                    {
+                        createVoxel(voxelPosition, chunkMesh, vertexCount);
+                    }
+                }
+            }
+        }
     }
 
     std::vector<float> Chunk::getTextureCoordinates(BlockSides blockSides, int face) const
@@ -126,6 +195,51 @@ namespace ProcGenTK
             glDrawElements(GL_TRIANGLES, _indicesCount, GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
         }
+    }
+
+    void Chunk::createVoxel(const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
+    {
+        for (int face = 0; face < 6; face++)
+        {
+            if (!hasSolidVoxel(voxelPosition + voxelNeighbors[face]))
+            {
+                BlockType blockType{ _terrainGen->getBlockType(getBlockByte(voxelPosition)) };
+                std::vector<float> textureCoordinates{ getTextureCoordinates(blockType.getBlockSides(), face) };
+                for (int vertex = 0; vertex < 4; vertex++)
+                {
+                    Vertex newVertex{};
+
+                    //3 components in 1 vertex, and 4 vertex in a face: 3 * 4 = 12
+                    newVertex.position.x = voxelPosition.x + voxelVertices[12 * face + 3 * vertex] + 0.5f;
+                    newVertex.position.y = voxelPosition.y + voxelVertices[12 * face + 3 * vertex + 1] + 0.5f;
+                    newVertex.position.z = voxelPosition.z + voxelVertices[12 * face + 3 * vertex + 2] + 0.5f;
+
+                    //2 texture coordinates for each vertex
+                    newVertex.textureCoordinate.u = textureCoordinates[2 * vertex];
+                    newVertex.textureCoordinate.v = textureCoordinates[2 * vertex + 1];
+
+                    chunkMesh.addVertex(newVertex);
+                }
+
+                int indices[] = { 0, 1, 2, 2, 1, 3 };
+                for (int i = 0; i < 6; i++)
+                {
+                    chunkMesh.addIndex(vertexCount + indices[i]);
+                }
+
+                vertexCount += 4;
+            }
+        }
+    }
+
+    bool Chunk::hasSolidVoxel(const glm::vec3& position) const
+    {
+        if (isOutsideChunk(position))
+        {
+            return _chunkMediator->hasSolidVoxel(getPosition() + position);
+        }
+
+        return _terrainGen->getBlockType(getBlockByte(position)).isSolid();
     }
 
     void Chunk::createTextureAtlas()

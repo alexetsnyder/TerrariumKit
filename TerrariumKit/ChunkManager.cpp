@@ -2,55 +2,6 @@
 
 namespace ProcGenTK
 {
-    const float voxelVertices[] 
-    {
-        //Front Face
-        0.5f,  0.5f,  0.5f,  //0
-       -0.5f,  0.5f,  0.5f,  //1
-        0.5f, -0.5f,  0.5f,  //2
-       -0.5f, -0.5f,  0.5f,  //3
-
-        //Back Face
-       -0.5f,  0.5f, -0.5f,  //4
-        0.5f,  0.5f, -0.5f,  //5
-       -0.5f, -0.5f, -0.5f,  //6
-        0.5f, -0.5f, -0.5f,  //7
-
-        //Left Face
-       -0.5f,  0.5f,  0.5f,  //8
-       -0.5f,  0.5f, -0.5f,  //9
-       -0.5f, -0.5f,  0.5f,  //10
-       -0.5f, -0.5f, -0.5f,  //11
-   
-        //Right Face
-        0.5f,  0.5f, -0.5f,  //12
-        0.5f,  0.5f,  0.5f,  //13
-        0.5f, -0.5f, -0.5f,  //14
-        0.5f, -0.5f,  0.5f,  //15
-
-        //Top Face
-        0.5f,  0.5f, -0.5f,  //16
-       -0.5f,  0.5f, -0.5f,  //17
-        0.5f,  0.5f,  0.5f,  //18
-       -0.5f,  0.5f,  0.5f,  //19
-    
-        //Bottom Face
-       -0.5f, -0.5f, -0.5f,  //20
-        0.5f, -0.5f, -0.5f,  //21
-       -0.5f, -0.5f,  0.5f,  //22
-        0.5f, -0.5f,  0.5f,  //23 
-    };
-
-    const glm::vec3 voxelNeighbors[] 
-    {
-        glm::vec3( 0.0f,  0.0f,  1.0f),
-        glm::vec3( 0.0f,  0.0f, -1.0f),
-        glm::vec3(-1.0f,  0.0f,  0.0f),
-        glm::vec3( 1.0f,  0.0f,  0.0f),
-        glm::vec3( 0.0f,  1.0f,  0.0f),
-        glm::vec3( 0.0f, -1.0f,  0.0f),
-    };
-
     ChunkManager::ChunkManager(const World* world, bool useThreading)
     {
         _world = world;
@@ -119,7 +70,7 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ new Chunk{ _terrainGen, chunkId.position(), _world->chunkSize() } };
+                        Chunk* chunkPointer{ new Chunk{ this, _terrainGen, chunkId.position(), _world->chunkSize() } };
                         _activeChunkMap.emplace(chunkId.id(), chunkPointer);
                         _chunkCreateQueue.push(chunkPointer);
                     }
@@ -210,16 +161,6 @@ namespace ProcGenTK
         }
     }
 
-    bool ChunkManager::hasSolidVoxel(const Chunk* chunk, const glm::vec3& position) const
-    {
-        if (chunk->isOutsideChunk(position))
-        {
-            return hasSolidVoxel(chunk->getPosition() + position);
-        }
-
-        return _terrainGen->getBlockType(chunk->getBlockByte(position)).isSolid();
-    }
-
     bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
     {
         //isOutsideWorld can only return true if no infinite terrain generation
@@ -254,61 +195,10 @@ namespace ProcGenTK
         ChunkMeshInfo chunkMeshInfo;
         chunkMeshInfo.chunkPointer = chunk;
 
-        int vertexCount = 0;
-        ChunkSize chunkSize{ _world->chunkSize() };
-
-        for (int y = 0; y < chunkSize.height; y++)
-        {
-            for (int x = 0; x < chunkSize.xWidth; x++)
-            {
-                for (int z = 0; z < chunkSize.zWidth; z++)
-                {
-                    glm::vec3 voxelPosition{ x, y, z };
-                    if (_terrainGen->getBlockType(chunk->getBlockByte(voxelPosition)).isSolid())
-                    {
-                        createVoxel(chunk, voxelPosition, chunkMeshInfo.chunkMesh, vertexCount);
-                    }
-                }
-            }
-        }
+        chunk->createChunkMesh(chunkMeshInfo.chunkMesh);
 
         std::lock_guard<std::mutex> lock(_chunkMeshInfoAccess);
         _chunkMeshInfoQueue.push(chunkMeshInfo);
-    }
-
-    void ChunkManager::createVoxel(const Chunk* chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
-    {
-        for (int face = 0; face < 6; face++)
-        {
-            if (!hasSolidVoxel(chunk, voxelPosition + voxelNeighbors[face]))
-            {
-                BlockType blockType{ _terrainGen->getBlockType(chunk->getBlockByte(voxelPosition)) };
-                std::vector<float> textureCoordinates{ chunk->getTextureCoordinates(blockType.getBlockSides(), face) };
-                for (int vertex = 0; vertex < 4; vertex++)
-                {
-                    Vertex newVertex{};
-
-                    //3 components in 1 vertex, and 4 vertex in a face: 3 * 4 = 12
-                    newVertex.position.x = voxelPosition.x + voxelVertices[12 * face + 3 * vertex] + 0.5f;
-                    newVertex.position.y = voxelPosition.y + voxelVertices[12 * face + 3 * vertex + 1] + 0.5f;
-                    newVertex.position.z = voxelPosition.z + voxelVertices[12 * face + 3 * vertex + 2] + 0.5f;
-
-                    //2 texture coordinates for each vertex
-                    newVertex.textureCoordinate.u = textureCoordinates[2 * vertex];
-                    newVertex.textureCoordinate.v = textureCoordinates[2 * vertex + 1];
-
-                    chunkMesh.addVertex(newVertex);
-                }
-
-                int indices[] = { 0, 1, 2, 2, 1, 3 };
-                for (int i = 0; i < 6; i++)
-                {
-                    chunkMesh.addIndex(vertexCount + indices[i]);
-                }
-
-                vertexCount += 4;
-            }
-        }
     }
 
     void ChunkManager::cleanUpChunkThreads()

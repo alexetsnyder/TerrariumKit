@@ -2,6 +2,7 @@
 
 #include "Chunk.h"
 #include "ChunkID.h"
+#include "IChunkMediator.h"
 #include "ITerrainGen.h"
 #include "ShaderProgram.h"
 #include "TerrainGen.h"
@@ -23,11 +24,13 @@ namespace ProcGenTK
 		Mesh chunkMesh;
 	};
 
-	class ChunkManager
+	class ChunkManager : public IChunkMediator
 	{
 		public:
 			ChunkManager(const World* world, bool useThreading);
 			~ChunkManager();
+
+			bool hasSolidVoxel(const glm::vec3& worldPos) const override;
 
 			void queueChunks();
 			void createChunks(int n);
@@ -39,11 +42,7 @@ namespace ProcGenTK
 			void draw(const ShaderProgram& program);
 
 		private:
-			bool hasSolidVoxel(const Chunk* chunk, const glm::vec3& position) const;
-			bool hasSolidVoxel(const glm::vec3& worldPos) const;
-
 			void createChunk(Chunk* chunk);
-			void createVoxel(const Chunk* chunk, const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
 			void cleanUpChunkThreads();
 
 			const World* _world;

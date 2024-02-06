@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BlockType.h"
+#include "IChunkMediator.h"
 #include "ITerrainGen.h"
 #include "Mesh.h"
 #include "ShaderProgram.h"
@@ -19,7 +20,7 @@ namespace ProcGenTK
 	class Chunk
 	{
 		public:
-			Chunk(const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize);
+			Chunk(const IChunkMediator* chunkMediator, const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize);
 			~Chunk();
 			Chunk(const Chunk&) = delete;
 			Chunk& operator=(const Chunk&) = delete;
@@ -35,6 +36,8 @@ namespace ProcGenTK
 
 			void populateBlockMap();
 
+			void createChunkMesh(Mesh& chunkMesh);
+
 			void setChunkMesh(Mesh& chunkMesh);
 
 			bool isOutsideChunk(glm::vec3 position) const;
@@ -42,6 +45,8 @@ namespace ProcGenTK
 			void draw(const ShaderProgram& shader) const;
 
 		private:
+			void createVoxel(const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
+			bool hasSolidVoxel(const glm::vec3& position) const;
 			void createTextureAtlas();
 			void genAll();
 			void bindAll();
@@ -53,6 +58,7 @@ namespace ProcGenTK
 			std::vector<GLubyte> _blocks;
 			bool _hasPopulatedBlockMap;
 
+			const IChunkMediator* _chunkMediator;
 			const ITerrainGen* _terrainGen;
 			ChunkSize _size;
 			glm::vec3 _position;
