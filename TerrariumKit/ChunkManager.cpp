@@ -178,7 +178,7 @@ namespace ProcGenTK
         glm::vec3 voxelPos{ chunkId.computeRelativeVoxelPosition(worldPos) };
 
         const auto mapIter = _activeChunkMap.find(chunkId.id());
-        if (mapIter != _activeChunkMap.end() && mapIter->second->hasPopulatedBlockMap())
+        if (mapIter != _activeChunkMap.end() && mapIter->second->hasPopulatedVoxelMap())
         {
             return _terrainGen->getVoxelType(mapIter->second->getVoxelByte(voxelPos)).isSolid();
         }
@@ -190,7 +190,7 @@ namespace ProcGenTK
 
     void ChunkManager::createChunk(Chunk* chunk)
     {
-        chunk->populateBlockMap();
+        chunk->populateVoxelMap();
 
         ChunkMeshInfo chunkMeshInfo;
         chunkMeshInfo.chunkPointer = chunk;

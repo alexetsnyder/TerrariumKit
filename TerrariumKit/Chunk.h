@@ -26,14 +26,14 @@ namespace ProcGenTK
 			Chunk& operator=(const Chunk&) = delete;
 
 			glm::mat4 modelMatrix() const;
-			bool hasPopulatedBlockMap() const;
+			bool hasPopulatedVoxelMap() const;
 
 			GLubyte getVoxelByte(const glm::vec3& position) const;
 			std::vector<float> getTextureCoordinates(VoxelSides voxelSides, int face) const;
 
 			void setNoDraw(bool noDraw);
 
-			void populateBlockMap();
+			void populateVoxelMap();
 
 			void createChunkMesh(Mesh& chunkMesh);
 
@@ -54,8 +54,8 @@ namespace ProcGenTK
 			std::string getFaceName(VoxelSides voxelSides, int face) const;
 			int convertPositionToIndex(const glm::vec3& position) const;
 
-			std::vector<GLubyte> _blocks;
-			bool _hasPopulatedBlockMap;
+			std::vector<GLubyte> _voxels;
+			bool _hasPopulatedVoxelMap;
 
 			const IChunkMediator* _chunkMediator;
 			const ITerrainGen* _terrainGen;

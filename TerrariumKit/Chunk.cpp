@@ -76,14 +76,14 @@ namespace ProcGenTK
     Chunk::Chunk(const IChunkMediator* chunkMediator, const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize)
         : _atlas{ 256, 16 }, _size{ chunkSize }
     {
-        _hasPopulatedBlockMap = false;
+        _hasPopulatedVoxelMap = false;
         _vao = 0;
         _vbo = 0;
         _ebo = 0;
         _chunkMediator = chunkMediator;
         _terrainGen = terrainGen;
         _position = position;
-        _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
+        _voxels.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
         _indicesCount = 0;
         _noDraw = false;
 
@@ -95,7 +95,7 @@ namespace ProcGenTK
         free();
     }
 
-    void Chunk::populateBlockMap()
+    void Chunk::populateVoxelMap()
     {
         for (int y = 0; y < _size.height; y++)
         {
@@ -105,12 +105,12 @@ namespace ProcGenTK
                 {
                     glm::vec3 voxelPosition{ x, y, z };
                     int index = convertPositionToIndex(voxelPosition);
-                    _blocks[index] = _terrainGen->getVoxel(_position + voxelPosition);
+                    _voxels[index] = _terrainGen->getVoxel(_position + voxelPosition);
                 }
             }
         }
 
-        _hasPopulatedBlockMap = true;
+        _hasPopulatedVoxelMap = true;
     }
 
     void Chunk::createChunkMesh(Mesh& chunkMesh)
@@ -326,12 +326,12 @@ namespace ProcGenTK
     GLubyte Chunk::getVoxelByte(const glm::vec3& position) const
     {
         int index = convertPositionToIndex(position);
-        return _blocks[index];
+        return _voxels[index];
     }
 
-    bool Chunk::hasPopulatedBlockMap() const
+    bool Chunk::hasPopulatedVoxelMap() const
     {
-        return _hasPopulatedBlockMap;
+        return _hasPopulatedVoxelMap;
     }
 
     int Chunk::convertPositionToIndex(const glm::vec3& position) const
@@ -342,10 +342,10 @@ namespace ProcGenTK
 
         int index = y * _size.xWidth * _size.zWidth + x * _size.zWidth + z;
 
-        if (index < 0 || index >= _blocks.size())
+        if (index < 0 || index >= _voxels.size())
         {
             std::string errorMsg{ "" };
-            std::size_t blocksSize = _blocks.size();
+            std::size_t blocksSize = _voxels.size();
             if (blocksSize == 0)
             {
                 errorMsg += "Blocks vector has size zero";
