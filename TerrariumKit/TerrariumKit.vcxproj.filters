@@ -19,6 +19,24 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{a322069f-a030-437d-918f-2a4479ad5b78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Commands">
+      <UniqueIdentifier>{dce9713c-3810-4595-84d3-ca33355ac708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Glad">
+      <UniqueIdentifier>{1a780c01-abc5-4099-804e-17d1dd99b031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TerrainGen">
+      <UniqueIdentifier>{d92be932-6862-443d-8cfa-57a830d6b693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TerrainGen">
+      <UniqueIdentifier>{53525e77-cc6a-4a9d-a10b-ae11a16889ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{8cf428f9-4897-4b9a-a613-41a2005c86c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{9c9d5c9a-8c2d-437e-ac62-d1768c5cb49b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -39,31 +57,7 @@
     <ClCompile Include="TextureAtlas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FirstPersonCamera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Chunk.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BlockType.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChunkID.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChunkManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainGen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TopDownCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -73,7 +67,31 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Dependencies\CFiles\glad.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Glad</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockType.cpp">
+      <Filter>Source Files\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="Chunk.cpp">
+      <Filter>Source Files\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkID.cpp">
+      <Filter>Source Files\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkManager.cpp">
+      <Filter>Source Files\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainGen.cpp">
+      <Filter>Source Files\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstPersonCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TopDownCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,37 +118,10 @@
     <ClInclude Include="TextureAtlas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FirstPersonCamera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Chunk.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Structs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChunkID.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChunkManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainGen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ICamera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TopDownCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -145,20 +136,47 @@
     <ClInclude Include="Time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ITerrainGen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ICommand.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="MoveCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RotateCameraCommand.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="ZoomCameraCommand.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="RotateCameraCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockType.h">
+      <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkID.h">
+      <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkManager.h">
+      <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="ITerrainGen.h">
+      <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainGen.h">
+      <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="FirstPersonCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ICamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TopDownCamera.h">
+      <Filter>Header Files\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
