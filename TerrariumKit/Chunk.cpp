@@ -61,7 +61,7 @@ namespace ProcGenTK
         glm::vec3( 0.0f, -1.0f,  0.0f),
     };
 
-    std::vector<std::string> blockNames =
+    std::vector<std::string> voxelNames =
     {
         "bedrock",
         "stone",
@@ -244,7 +244,7 @@ namespace ProcGenTK
 
     void Chunk::createTextureAtlas()
     {
-        _atlas.createAtlas(blockNames);
+        _atlas.createAtlas(voxelNames);
         _texture.init("Assets/Textures/Atlas.png");
     }
 
