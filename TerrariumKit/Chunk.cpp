@@ -123,7 +123,7 @@ namespace ProcGenTK
                 for (int z = 0; z < _size.zWidth; z++)
                 {
                     glm::vec3 voxelPosition{ x, y, z };
-                    if (_terrainGen->getBlockType(getBlockByte(voxelPosition)).isSolid())
+                    if (_terrainGen->getBlockType(getVoxelByte(voxelPosition)).isSolid())
                     {
                         createVoxel(voxelPosition, chunkMesh, vertexCount);
                     }
@@ -185,7 +185,7 @@ namespace ProcGenTK
     {
         if (!_noDraw)
         {
-            glm::mat4 model{ getModelMatrix() };
+            glm::mat4 model{ modelMatrix() };
 
             shader.setUniform("model", model);
 
@@ -203,7 +203,7 @@ namespace ProcGenTK
         {
             if (!hasSolidVoxel(voxelPosition + voxelNeighbors[face]))
             {
-                BlockType blockType{ _terrainGen->getBlockType(getBlockByte(voxelPosition)) };
+                BlockType blockType{ _terrainGen->getBlockType(getVoxelByte(voxelPosition)) };
                 std::vector<float> textureCoordinates{ getTextureCoordinates(blockType.getBlockSides(), face) };
                 for (int vertex = 0; vertex < 4; vertex++)
                 {
@@ -236,10 +236,10 @@ namespace ProcGenTK
     {
         if (isOutsideChunk(position))
         {
-            return _chunkMediator->hasSolidVoxel(getPosition() + position);
+            return _chunkMediator->hasSolidVoxel(_position + position);
         }
 
-        return _terrainGen->getBlockType(getBlockByte(position)).isSolid();
+        return _terrainGen->getBlockType(getVoxelByte(position)).isSolid();
     }
 
     void Chunk::createTextureAtlas()
@@ -316,22 +316,17 @@ namespace ProcGenTK
         return faceName;
     }
 
-    glm::mat4 Chunk::getModelMatrix() const
+    glm::mat4 Chunk::modelMatrix() const
     {
         glm::mat4 model{ 1.0f };
         model = glm::translate(model, _position);
         return model;
     }
 
-    GLubyte Chunk::getBlockByte(const glm::vec3& position) const
+    GLubyte Chunk::getVoxelByte(const glm::vec3& position) const
     {
         int index = convertPositionToIndex(position);
         return _blocks[index];
-    }
-
-    glm::vec3 Chunk::getPosition() const
-    {
-        return _position;
     }
 
     bool Chunk::hasPopulatedBlockMap() const

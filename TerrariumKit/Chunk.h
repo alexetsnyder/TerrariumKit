@@ -25,11 +25,10 @@ namespace ProcGenTK
 			Chunk(const Chunk&) = delete;
 			Chunk& operator=(const Chunk&) = delete;
 
-			glm::mat4 getModelMatrix() const;
-			glm::vec3 getPosition() const;
+			glm::mat4 modelMatrix() const;
 			bool hasPopulatedBlockMap() const;
 
-			GLubyte getBlockByte(const glm::vec3& position) const;
+			GLubyte getVoxelByte(const glm::vec3& position) const;
 			std::vector<float> getTextureCoordinates(BlockSides blockSides, int face) const;
 
 			void setNoDraw(bool noDraw);

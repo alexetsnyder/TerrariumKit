@@ -180,7 +180,7 @@ namespace ProcGenTK
         const auto mapIter = _activeChunkMap.find(chunkId.id());
         if (mapIter != _activeChunkMap.end() && mapIter->second->hasPopulatedBlockMap())
         {
-            return _terrainGen->getBlockType(mapIter->second->getBlockByte(voxelPos)).isSolid();
+            return _terrainGen->getBlockType(mapIter->second->getVoxelByte(voxelPos)).isSolid();
         }
         else
         {
