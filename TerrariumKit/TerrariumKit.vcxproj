@@ -134,7 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
-    <ClCompile Include="BlockType.cpp" />
+    <ClCompile Include="VoxelType.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="ChunkID.cpp" />
@@ -158,7 +158,7 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BlockType.h" />
+    <ClInclude Include="VoxelType.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="Chunk.h" />

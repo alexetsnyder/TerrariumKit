@@ -15,16 +15,16 @@ namespace ProcGenTK
 		std::string bottomTextureName;
 	};
 
-	class BlockType
+	class VoxelType
 	{
 		public:
-			BlockType();
+			VoxelType();
 
 			//Expects vector of size 6 with strings to be in order:
 			// Front, Back, Left, Right, Top, Bottom.
-			BlockType(const std::string& name, bool isSolid, const std::vector<std::string>& blockSidesVct);
+			VoxelType(const std::string& name, bool isSolid, const std::vector<std::string>& blockSidesVct);
 
-			BlockType(const std::string& name, bool isSolid, BlockSides blockSides);
+			VoxelType(const std::string& name, bool isSolid, BlockSides blockSides);
 
 			bool isSolid() const;
 			std::string getName() const;

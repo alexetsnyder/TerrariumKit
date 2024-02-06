@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BlockType.h"
+#include "VoxelType.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -11,6 +11,6 @@ namespace ProcGenTK
 	{
 		public:
 			virtual GLubyte getVoxel(const glm::vec3& position) const = 0;
-			virtual BlockType getBlockType(GLubyte byte) const = 0;
+			virtual VoxelType getBlockType(GLubyte byte) const = 0;
 	};
 }

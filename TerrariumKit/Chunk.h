@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BlockType.h"
+#include "VoxelType.h"
 #include "IChunkMediator.h"
 #include "ITerrainGen.h"
 #include "Mesh.h"

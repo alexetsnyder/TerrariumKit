@@ -1,7 +1,7 @@
 #include "Chunk.h"
 
 #include "Mesh.h"
-#include "BlockType.h"
+#include "VoxelType.h"
 #include "ErrorLog.h"
 
 #include <glad/glad.h>
@@ -203,8 +203,8 @@ namespace ProcGenTK
         {
             if (!hasSolidVoxel(voxelPosition + voxelNeighbors[face]))
             {
-                BlockType blockType{ _terrainGen->getBlockType(getVoxelByte(voxelPosition)) };
-                std::vector<float> textureCoordinates{ getTextureCoordinates(blockType.getBlockSides(), face) };
+                VoxelType voxelType{ _terrainGen->getBlockType(getVoxelByte(voxelPosition)) };
+                std::vector<float> textureCoordinates{ getTextureCoordinates(voxelType.getBlockSides(), face) };
                 for (int vertex = 0; vertex < 4; vertex++)
                 {
                     Vertex newVertex{};

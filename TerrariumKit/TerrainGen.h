@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "BlockType.h"
+#include "VoxelType.h"
 #include "ITerrainGen.h"
 #include "Structs.h"
 
@@ -18,13 +18,13 @@ namespace ProcGenTK
 			TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight);
 
 			GLubyte getVoxel(const glm::vec3& position) const override;
-			BlockType getBlockType(GLubyte byte) const override;
+			VoxelType getBlockType(GLubyte byte) const override;
 
 		private:
 			void createBlockByteLookUp();
 
 			ChunkSize _chunkSize;
-			std::map<GLubyte, BlockType> _blockTypeLookUp;
+			std::map<GLubyte, VoxelType> _blockTypeLookUp;
 			std::map<std::string, GLubyte> _blockByteLookUp;
 
 			FastNoiseLite _noise;

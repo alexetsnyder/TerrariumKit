@@ -1,57 +1,57 @@
-#include "BlockType.h"
+#include "VoxelType.h"
 
 namespace ProcGenTK
 {
-	BlockType::BlockType()
+	VoxelType::VoxelType()
 	{
 		_isSolid = false;
 	}
 
-	BlockType::BlockType(const std::string& name, bool isSolid, const std::vector<std::string>& blockSidesVct)
+	VoxelType::VoxelType(const std::string& name, bool isSolid, const std::vector<std::string>& blockSidesVct)
 	{
 		setName(name);
 		setIsSolid(isSolid);
 		setBlockSides(blockSidesVct);
 	}
 
-	BlockType::BlockType(const std::string& name, bool isSolid, BlockSides blockSides)
+	VoxelType::VoxelType(const std::string& name, bool isSolid, BlockSides blockSides)
 	{
 		setName(name);
 		setIsSolid(isSolid);
 		setBlockSides(blockSides);
 	}
 
-	bool BlockType::isSolid() const
+	bool VoxelType::isSolid() const
 	{
 		return _isSolid;
 	}
 
-	std::string BlockType::getName() const
+	std::string VoxelType::getName() const
 	{
 		return _name;
 	}
 
-	BlockSides BlockType::getBlockSides() const
+	BlockSides VoxelType::getBlockSides() const
 	{
 		return _blockSides;
 	}
 
-	void BlockType::setIsSolid(bool isSolid)
+	void VoxelType::setIsSolid(bool isSolid)
 	{
 		_isSolid = isSolid;
 	}
 
-	void BlockType::setName(const std::string& name)
+	void VoxelType::setName(const std::string& name)
 	{
 		_name = name;
 	}
 
-	void BlockType::setBlockSides(BlockSides blockSides)
+	void VoxelType::setBlockSides(BlockSides blockSides)
 	{
 		_blockSides = blockSides;
 	}
 
-	void BlockType::setBlockSides(const std::vector<std::string>& blockSidesVct)
+	void VoxelType::setBlockSides(const std::vector<std::string>& blockSidesVct)
 	{
 		BlockSides blockSides;
 		blockSides.frontTextureName = blockSidesVct[0];

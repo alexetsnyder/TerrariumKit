@@ -13,7 +13,7 @@ namespace ProcGenTK
 		_varyHeight = varyHeight;
 
 		BlockSides blockSides{};
-		_blockTypeLookUp[0] = BlockType("air", false, blockSides);
+		_blockTypeLookUp[0] = VoxelType("air", false, blockSides);
 
 		blockSides.frontTextureName = "bedrock";
 		blockSides.backTextureName = "bedrock";
@@ -21,7 +21,7 @@ namespace ProcGenTK
 		blockSides.rightTextureName = "bedrock";
 		blockSides.topTextureName = "bedrock";
 		blockSides.bottomTextureName = "bedrock";
-		_blockTypeLookUp[1] = BlockType("bedrock", true, blockSides);
+		_blockTypeLookUp[1] = VoxelType("bedrock", true, blockSides);
 
 		blockSides.frontTextureName = "stone";
 		blockSides.backTextureName = "stone";
@@ -29,7 +29,7 @@ namespace ProcGenTK
 		blockSides.rightTextureName = "stone";
 		blockSides.topTextureName = "stone";
 		blockSides.bottomTextureName = "stone";
-		_blockTypeLookUp[2] = BlockType("stone", true, blockSides);
+		_blockTypeLookUp[2] = VoxelType("stone", true, blockSides);
 
 		blockSides.frontTextureName = "dirt";
 		blockSides.backTextureName = "dirt";
@@ -37,7 +37,7 @@ namespace ProcGenTK
 		blockSides.rightTextureName = "dirt";
 		blockSides.topTextureName = "dirt";
 		blockSides.bottomTextureName = "dirt";
-		_blockTypeLookUp[3] = BlockType("dirt", true, blockSides);
+		_blockTypeLookUp[3] = VoxelType("dirt", true, blockSides);
 
 		blockSides.frontTextureName = "grassSide";
 		blockSides.backTextureName = "grassSide";
@@ -45,7 +45,7 @@ namespace ProcGenTK
 		blockSides.rightTextureName = "grassSide";
 		blockSides.topTextureName = "grassTop";
 		blockSides.bottomTextureName = "dirt";
-		_blockTypeLookUp[4] = BlockType("grass", true, blockSides);
+		_blockTypeLookUp[4] = VoxelType("grass", true, blockSides);
 
 		createBlockByteLookUp();
 	}
@@ -81,7 +81,7 @@ namespace ProcGenTK
 		}
 	}
 
-	BlockType TerrainGen::getBlockType(GLubyte byte) const
+	VoxelType TerrainGen::getBlockType(GLubyte byte) const
 	{
 		return _blockTypeLookUp.at(byte);
 	}

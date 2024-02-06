@@ -69,7 +69,7 @@
     <ClCompile Include="..\Dependencies\CFiles\glad.c">
       <Filter>Source Files\Glad</Filter>
     </ClCompile>
-    <ClCompile Include="BlockType.cpp">
+    <ClCompile Include="VoxelType.cpp">
       <Filter>Source Files\TerrainGen</Filter>
     </ClCompile>
     <ClCompile Include="Chunk.cpp">
@@ -148,7 +148,7 @@
     <ClInclude Include="RotateCameraCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="BlockType.h">
+    <ClInclude Include="VoxelType.h">
       <Filter>Header Files\TerrainGen</Filter>
     </ClInclude>
     <ClInclude Include="Chunk.h">
