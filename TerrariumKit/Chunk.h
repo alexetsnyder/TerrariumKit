@@ -1,16 +1,15 @@
 #pragma once
 
+#include "BlockType.h"
+#include "ITerrainGen.h"
 #include "Mesh.h"
+#include "ShaderProgram.h"
+#include "Structs.h"
 #include "TextureAtlas.h"
 #include "Texture.h"
-#include "BlockType.h"
-#include "Structs.h"
-#include "TerrainGen.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-
-#include "ShaderProgram.h"
 
 #include <vector>
 #include <string>
@@ -20,7 +19,7 @@ namespace ProcGenTK
 	class Chunk
 	{
 		public:
-			Chunk(glm::vec3 position, ChunkSize chunkSize);
+			Chunk(const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize);
 			~Chunk();
 			Chunk(const Chunk&) = delete;
 			Chunk& operator=(const Chunk&) = delete;
@@ -34,7 +33,7 @@ namespace ProcGenTK
 
 			void setNoDraw(bool noDraw);
 
-			void populateBlockMap(TerrainGen worldGen);
+			void populateBlockMap();
 
 			void setChunkMesh(Mesh& chunkMesh);
 
@@ -54,6 +53,7 @@ namespace ProcGenTK
 			std::vector<GLubyte> _blocks;
 			bool _hasPopulatedBlockMap;
 
+			const ITerrainGen* _terrainGen;
 			ChunkSize _size;
 			glm::vec3 _position;
 

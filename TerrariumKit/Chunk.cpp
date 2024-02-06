@@ -24,13 +24,14 @@ namespace ProcGenTK
         "sand",
     };
 
-    Chunk::Chunk(glm::vec3 position, ChunkSize chunkSize)
+    Chunk::Chunk(const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize)
         : _atlas{ 256, 16 }, _size{ chunkSize }
     {
         _hasPopulatedBlockMap = false;
         _vao = 0;
         _vbo = 0;
         _ebo = 0;
+        _terrainGen = terrainGen;
         _position = position;
         _blocks.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
         _indicesCount = 0;
@@ -44,7 +45,7 @@ namespace ProcGenTK
         free();
     }
 
-    void Chunk::populateBlockMap(TerrainGen terrainGen)
+    void Chunk::populateBlockMap()
     {
         for (int y = 0; y < _size.height; y++)
         {
@@ -54,7 +55,7 @@ namespace ProcGenTK
                 {
                     glm::vec3 voxelPosition{ x, y, z };
                     int index = convertPositionToIndex(voxelPosition);
-                    _blocks[index] = terrainGen.getVoxel(_position + voxelPosition);
+                    _blocks[index] = _terrainGen->getVoxel(_position + voxelPosition);
                 }
             }
         }

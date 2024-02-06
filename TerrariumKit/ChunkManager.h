@@ -2,6 +2,7 @@
 
 #include "Chunk.h"
 #include "ChunkID.h"
+#include "ITerrainGen.h"
 #include "ShaderProgram.h"
 #include "TerrainGen.h"
 #include "World.h"
@@ -46,7 +47,7 @@ namespace ProcGenTK
 			void cleanUpChunkThreads();
 
 			const World* _world;
-			const TerrainGen* _terrainGen;
+			const ITerrainGen* _terrainGen;
 			std::queue<Chunk*> _chunkCreateQueue;
 
 			bool _useThreading;

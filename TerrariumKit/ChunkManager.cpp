@@ -119,7 +119,7 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ new Chunk{ chunkId.position(), _world->chunkSize() } };
+                        Chunk* chunkPointer{ new Chunk{ _terrainGen, chunkId.position(), _world->chunkSize() } };
                         _activeChunkMap.emplace(chunkId.id(), chunkPointer);
                         _chunkCreateQueue.push(chunkPointer);
                     }
@@ -249,7 +249,7 @@ namespace ProcGenTK
 
     void ChunkManager::createChunk(Chunk* chunk)
     {
-        chunk->populateBlockMap(*_terrainGen);
+        chunk->populateBlockMap();
 
         ChunkMeshInfo chunkMeshInfo;
         chunkMeshInfo.chunkPointer = chunk;
