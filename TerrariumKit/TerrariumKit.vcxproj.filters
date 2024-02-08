@@ -93,6 +93,9 @@
     <ClCompile Include="TopDownCamera.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="FlyingCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -180,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="IChunkMediator.h">
       <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="FlyingCamera.h">
+      <Filter>Header Files\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
