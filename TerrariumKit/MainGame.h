@@ -68,7 +68,6 @@ class MainGame
 
 		ICamera* _camera;
 		Player* _player;
-		SysTK::Time _time;
 
 		std::list<SDL_Keycode> _keyCodes;
 };

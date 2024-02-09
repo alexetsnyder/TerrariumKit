@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "MoveCommand.h"
+#include "Time.h"
 
 #include <iostream>
 
@@ -14,10 +15,12 @@ Player::~Player()
 {
 }
 
-void Player::move(InputDirection direction, double deltaTime)
+void Player::move(InputDirection direction)
 {
+	double deltaTime = SysTK::Time::deltaTime();
+
 	IGameActor* pointer = dynamic_cast<IGameActor*>(_camera);
-	CmdTK::MoveCommand(pointer, direction, deltaTime).execute();
+	CmdTK::MoveCommand(pointer, direction).execute();
 
 	glm::vec3 cameraPos = _camera->position();
 	_position = glm::vec3(cameraPos.x, cameraPos.y - height, cameraPos.z);

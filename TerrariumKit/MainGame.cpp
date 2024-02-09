@@ -192,9 +192,10 @@ void MainGame::createChunkManager()
 
 void MainGame::gameLoop()
 {
+	SysTK::Time::start();
 	while (_gameState != GameState::EXIT)
 	{
-		_time.update();
+		SysTK::Time::update();
 
 		pollEvents();
 
@@ -335,16 +336,16 @@ void MainGame::handleKeys()
 				_gameState = GameState::EXIT;
 				break;
 			case SDLK_w:
-				CmdTK::MoveCommand(_player, InputDirection::FORWARD, _time.deltaTime()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::FORWARD).execute();
 				break;
 			case SDLK_s:
-				CmdTK::MoveCommand(_player, InputDirection::BACKWARD, _time.deltaTime()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::BACKWARD).execute();
 				break;
 			case SDLK_a:
-				CmdTK::MoveCommand(_player, InputDirection::LEFT, _time.deltaTime()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::LEFT).execute();
 				break;
 			case SDLK_d:
-				CmdTK::MoveCommand(_player, InputDirection::RIGHT, _time.deltaTime()).execute();
+				CmdTK::MoveCommand(_player, InputDirection::RIGHT).execute();
 				break;
 		}
 	}

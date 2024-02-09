@@ -7,15 +7,16 @@ namespace SysTK
 	class Time
 	{
 		public:
-			Time();
-			~Time();
+			Time() = delete;
 
-			double deltaTime() const;
+			static void start();
 
-			void update();
+			static double deltaTime();
+
+			static void update();
 
 		private:
-			std::chrono::duration<double> _deltaTime;
-			std::chrono::high_resolution_clock::time_point _lastFrame;
+			static std::chrono::duration<double> _deltaTime;
+			static std::chrono::high_resolution_clock::time_point _lastFrame;
 	};
 }

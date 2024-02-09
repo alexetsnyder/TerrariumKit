@@ -1,5 +1,7 @@
 #include "FlyingCamera.h"
 
+#include "Time.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -59,23 +61,25 @@ void FlyingCamera::zoom(float yOffset)
 	}
 }
 
-void FlyingCamera::move(InputDirection direction, double deltaTime)
+void FlyingCamera::move(InputDirection direction)
 {
+	double deltaTime = SysTK::Time::deltaTime();
+
 	float velocity = static_cast<float>(_speed * deltaTime);
 	switch (direction)
 	{
-	case InputDirection::FORWARD:
-		_position += _front * velocity;
-		break;
-	case InputDirection::BACKWARD:
-		_position -= _front * velocity;
-		break;
-	case InputDirection::LEFT:
-		_position -= _right * velocity;
-		break;
-	case InputDirection::RIGHT:
-		_position += _right * velocity;
-		break;
+		case InputDirection::FORWARD:
+			_position += _front * velocity;
+			break;
+		case InputDirection::BACKWARD:
+			_position -= _front * velocity;
+			break;
+		case InputDirection::LEFT:
+			_position -= _right * velocity;
+			break;
+		case InputDirection::RIGHT:
+			_position += _right * velocity;
+			break;
 	}
 }
 

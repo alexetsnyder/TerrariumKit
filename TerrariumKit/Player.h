@@ -15,8 +15,8 @@ class Player : public IGameActor
 		Player(ICamera* camera);
 		~Player();
 
-		void move(InputDirection direction, double deltaTime) override;	
-
+		//From IGameActor
+		void move(InputDirection direction) override;	
 		void update() override;
 		void draw(const ShaderProgram& program) override;
 

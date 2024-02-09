@@ -2,17 +2,16 @@
 
 namespace SysTK
 {
-	Time::Time()
+	std::chrono::duration<double> Time::_deltaTime{ 0.0f };
+	std::chrono::high_resolution_clock::time_point Time::_lastFrame{ std::chrono::high_resolution_clock::now() };
+
+	void Time::start()
 	{
 		_deltaTime = std::chrono::duration<double>(0.0);
 		_lastFrame = std::chrono::high_resolution_clock::now();
 	}
 
-	Time::~Time()
-	{
-	}
-
-	double Time::deltaTime() const
+	double Time::deltaTime()
 	{
 		return _deltaTime.count();
 	}

@@ -6,7 +6,7 @@
 class IGameActor
 {
 	public:
-		virtual void move(InputDirection direction, double deltaTime) = 0;
+		virtual void move(InputDirection direction) = 0;
 		virtual void update() = 0;
 		virtual void draw(const ShaderProgram& program) = 0;
 

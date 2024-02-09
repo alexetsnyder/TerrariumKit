@@ -1,5 +1,7 @@
 #include "FirstPersonCamera.h"
 
+#include "Time.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -59,8 +61,10 @@ void FirstPersonCamera::zoom(float yOffset)
 	}
 }
 
-void FirstPersonCamera::move(InputDirection direction, double deltaTime)
+void FirstPersonCamera::move(InputDirection direction)
 {
+	double deltaTime = SysTK::Time::deltaTime();
+
 	float velocity = static_cast<float>(_speed * deltaTime);
 	switch (direction)
 	{

@@ -1,5 +1,7 @@
 #include "TopDownCamera.h"
 
+#include "Time.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -37,8 +39,10 @@ void TopDownCamera::zoom(float yOffset)
 	}
 }
 
-void TopDownCamera::move(InputDirection direction, double deltaTime)
+void TopDownCamera::move(InputDirection direction)
 {
+	double deltaTime = SysTK::Time::deltaTime();
+
 	float velocity = static_cast<float>(_speed * deltaTime);
 	switch (direction)
 	{
