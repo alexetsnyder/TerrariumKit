@@ -14,6 +14,8 @@ class FirstPersonCamera : public ICamera, public IGameActor
 						  float speed, float sensitivity, float zoom);
 		~FirstPersonCamera() {};
 
+		void translate(glm::vec3 translation);
+
 		//From ICamera
 		glm::vec3 position() const override;
 		glm::mat4 viewMatrix() const override;
