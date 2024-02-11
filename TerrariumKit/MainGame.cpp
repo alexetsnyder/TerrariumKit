@@ -287,29 +287,10 @@ void MainGame::drawGame()
 
 void MainGame::free()
 {
-	if (_camera != nullptr)
-	{
-		delete _camera;
-		_camera = nullptr;
-	}
-
-	if (_player != nullptr)
-	{
-		delete _player;
-		_player = nullptr;
-	}
-
-	if (_world != nullptr)
-	{
-		delete _world;
-		_world = nullptr;
-	}
-
-	if (_chunkManager != nullptr)
-	{
-		delete _chunkManager;
-		_chunkManager = nullptr;
-	}
+	delete _camera;
+	delete _player;
+	delete _world;
+	delete _chunkManager;
 }
 
 void MainGame::terminate()
