@@ -160,6 +160,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FlyingCamera.h" />
+    <ClInclude Include="IComponent.h" />
+    <ClInclude Include="TransfromComponent.h" />
     <ClInclude Include="VoxelType.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="FirstPersonCamera.h" />

@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Camera">
       <UniqueIdentifier>{9c9d5c9a-8c2d-437e-ac62-d1768c5cb49b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{62e2a487-384f-421d-afc3-a520169ffa7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -186,6 +189,12 @@
     </ClInclude>
     <ClInclude Include="FlyingCamera.h">
       <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="IComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TransfromComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
