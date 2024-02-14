@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
     <ClCompile Include="FlyingCamera.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="VoxelType.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="Chunk.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="FlyingCamera.h" />
     <ClInclude Include="IComponent.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="TransfromComponent.h" />
     <ClInclude Include="VoxelType.h" />
     <ClInclude Include="Enums.h" />

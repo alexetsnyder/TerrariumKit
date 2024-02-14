@@ -42,8 +42,6 @@ class MainGame
 		
 		void gameLoop();
 		void pollEvents();
-		void addKey(SDL_Keycode key);
-		void removeKey(SDL_Keycode key);
 		void processMouseMotion(SDL_Event event);
 		void updateGame();
 		void drawGame();
@@ -53,7 +51,6 @@ class MainGame
 		void fatalError();
 
 		void handleKeys();
-		std::list<SDL_Keycode>::iterator find(SDL_Keycode key, std::list<SDL_Keycode>& keys);
 
 		SDL_Window* window_;
 		int screenWidth_;
@@ -68,7 +65,5 @@ class MainGame
 
 		ICamera* camera_;
 		Player* player_;
-
-		std::list<SDL_Keycode> keyCodes_;
 };
 

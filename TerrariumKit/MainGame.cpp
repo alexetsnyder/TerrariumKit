@@ -4,6 +4,7 @@
 #include "ErrorLog.h"
 #include "FirstPersonCamera.h"
 #include "FlyingCamera.h"
+#include "Input.h"
 #include "MoveCommand.h"
 #include "RotateCameraCommand.h"
 #include "ShaderProgram.h"
@@ -216,10 +217,10 @@ void MainGame::pollEvents()
 				gameState_ = GameState::EXIT;
 				break;
 			case SDL_KEYDOWN:
-				addKey(event.key.keysym.sym);
+				SysTK::Input::addKey(event.key.keysym.sym);
 				break;
 			case SDL_KEYUP:
-				removeKey(event.key.keysym.sym);
+				SysTK::Input::removeKey(event.key.keysym.sym);
 				break;
 			case SDL_MOUSEMOTION:
 				processMouseMotion(event);
@@ -228,23 +229,6 @@ void MainGame::pollEvents()
 				CmdTK::ZoomCameraCommand(camera_, static_cast<float>(event.wheel.y)).execute();
 				break;
 		}
-	}
-}
-
-void MainGame::addKey(SDL_Keycode key)
-{
-	if (keyCodes_.empty() || find(key, keyCodes_) == keyCodes_.end())
-	{
-		keyCodes_.push_back(key);
-	}
-}
-
-void MainGame::removeKey(SDL_Keycode key)
-{
-	auto keyIter = find(key, keyCodes_);
-	if (keyIter != keyCodes_.end())
-	{
-		keyCodes_.erase(keyIter);
 	}
 }
 
@@ -310,39 +294,25 @@ void MainGame::fatalError()
 
 void MainGame::handleKeys()
 {
-	for (auto key : keyCodes_)
+	if (SysTK::Input::getKey(SDLK_ESCAPE))
 	{
-		switch (key)
-		{
-			case SDLK_ESCAPE:
-				gameState_ = GameState::EXIT;
-				break;
-			case SDLK_w:
-				CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::FORWARD).execute();
-				break;
-			case SDLK_s:
-				CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::BACKWARD).execute();
-				break;
-			case SDLK_a:
-				CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::LEFT).execute();
-				break;
-			case SDLK_d:
-				CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::RIGHT).execute();
-				break;
-		}
+		gameState_ = GameState::EXIT;
 	}
-}
-
-std::list<SDL_Keycode>::iterator MainGame::find(SDL_Keycode key, std::list<SDL_Keycode>& keys)
-{
-	for (std::list<SDL_Keycode>::iterator keyIter = keys.begin(); keyIter != keys.end(); keyIter++)
+	else if (SysTK::Input::getKey(SDLK_w))
 	{
-		if (*keyIter == key)
-		{
-			return keyIter;
-		}
+		CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::FORWARD).execute();
 	}
-
-	return keys.end();
+	else if (SysTK::Input::getKey(SDLK_s))
+	{
+		CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::BACKWARD).execute();
+	}
+	else if (SysTK::Input::getKey(SDLK_a))
+	{
+		CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::LEFT).execute();
+	}
+	else if (SysTK::Input::getKey(SDLK_d))
+	{
+		CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::RIGHT).execute();
+	}
 }
 
