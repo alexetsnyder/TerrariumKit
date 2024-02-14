@@ -26,7 +26,7 @@ class FirstPersonCamera : public ICamera, public IGameActor
 
 		//From IGameActor
 		void move(InputDirection direction) override;
-		void update() override {};
+		void update() override;
 		void draw(const ShaderProgram& program) override {};
 		
 
@@ -34,6 +34,7 @@ class FirstPersonCamera : public ICamera, public IGameActor
 		void updateVectors();
 
 		glm::vec3 position_;
+		glm::vec3 velocity_;
 		glm::vec3 up_;
 		glm::vec3 front_;
 		glm::vec3 right_;

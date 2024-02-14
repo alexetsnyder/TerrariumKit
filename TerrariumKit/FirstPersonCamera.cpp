@@ -7,7 +7,7 @@
 
 FirstPersonCamera::FirstPersonCamera(glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch, 
 	                                 float speed, float sensitivity, float zoom)
-	: position_(position), worldUp_(worldUp), yaw_(yaw), pitch_(pitch),
+	: position_(position), velocity_{ 0.0f }, worldUp_(worldUp), yaw_(yaw), pitch_(pitch),
 	  speed_(speed), sensitivity_(sensitivity), zoom_(zoom)
 {
 	updateVectors();
@@ -71,28 +71,34 @@ void FirstPersonCamera::move(InputDirection direction)
 	double deltaTime = SysTK::Time::deltaTime();
 	float speed = static_cast<float>(speed_ * deltaTime);
 
-	glm::vec3 velocity{ 0.0f };
+	//_glm::vec3 velocity{ 0.0f };
 	switch (direction)
 	{
 		case InputDirection::FORWARD:
 			//_position += _front * speed;
-			velocity = front_ * speed;
+			velocity_ = front_ * speed;
 			break;
 		case InputDirection::BACKWARD:
 			//_position -= _front * speed;
-			velocity = -front_ * speed;
+			velocity_ = -front_ * speed;
 			break;
 		case InputDirection::LEFT:
 			//_position -= _right * speed;
-			velocity = -right_ * speed;
+			velocity_ = -right_ * speed;
 			break;
 		case InputDirection::RIGHT:
 			//_position += _right * speed;
-			velocity = right_ * speed;
+			velocity_ = right_ * speed;
 			break;
 	}
 
-	translate(velocity);
+	//translate(velocity_);
+}
+
+void FirstPersonCamera::update()
+{
+	translate(velocity_);
+	velocity_ = glm::vec3{ 0.0f };
 }
 
 void FirstPersonCamera::updateVectors()

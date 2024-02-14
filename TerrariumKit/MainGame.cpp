@@ -261,6 +261,7 @@ void MainGame::updateGame()
 	handleKeys();
 
 	player_->update();
+	dynamic_cast<IGameActor*>(camera_)->update();
 	world_->update();
 	chunkManager_->update();
 }
