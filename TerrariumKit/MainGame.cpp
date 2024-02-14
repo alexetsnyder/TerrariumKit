@@ -22,11 +22,11 @@
 
 MainGame::MainGame()
 {
-	_window = nullptr;
-	_screenWidth = 1024;
-	_screenHeight = 768;
-	_gameState = GameState::RUNNING;
-	_drawWireFrame = false;
+	window_ = nullptr;
+	screenWidth_ = 1024;
+	screenHeight_ = 768;
+	gameState_ = GameState::RUNNING;
+	drawWireFrame_ = false;
 
 	initSystems();
 
@@ -91,16 +91,16 @@ void MainGame::setGLAttributes()
 
 void MainGame::createWindow()
 {
-	_window = SDL_CreateWindow(
+	window_ = SDL_CreateWindow(
 		"TerrariumKit",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		_screenWidth,
-		_screenHeight,
+		screenWidth_,
+		screenHeight_,
 		SDL_WINDOW_OPENGL
 	);
 
-	if (_window == NULL)
+	if (window_ == NULL)
 	{
 		logError("SDL_CreateWindow", SDL_GetError());
 		fatalError();
@@ -109,7 +109,7 @@ void MainGame::createWindow()
 
 void MainGame::createGLContext()
 {
-	SDL_GLContext glContext = SDL_GL_CreateContext(_window);
+	SDL_GLContext glContext = SDL_GL_CreateContext(window_);
 	if (glContext == NULL)
 	{
 		logError("SDL_GL_CreateContext", SDL_GetError());
@@ -128,12 +128,12 @@ void MainGame::initGlad()
 
 void MainGame::setGLSettings()
 {
-	glViewport(0, 0, _screenWidth, _screenHeight);
+	glViewport(0, 0, screenWidth_, screenHeight_);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
-	if (_drawWireFrame)
+	if (drawWireFrame_)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
@@ -141,10 +141,10 @@ void MainGame::setGLSettings()
 
 void MainGame::createShaderProgram()
 {
-	if (!_shaderProgram.setVertexShader("Shaders/vertex.glsl") ||
-		!_shaderProgram.setFragmentShader("Shaders/fragment.glsl") ||
-		!_shaderProgram.compile() ||
-		!_shaderProgram.link())
+	if (!shaderProgram_.setVertexShader("Shaders/vertex.glsl") ||
+		!shaderProgram_.setFragmentShader("Shaders/fragment.glsl") ||
+		!shaderProgram_.compile() ||
+		!shaderProgram_.link())
 	{
 		fatalError();
 	}
@@ -161,13 +161,13 @@ void MainGame::createCamera()
 	float zoom = 45.0f;
 
 	//_camera = new FlyingCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
-	_camera = new FirstPersonCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
+	camera_ = new FirstPersonCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
 	//_camera = new TopDownCamera{ cameraPos, worldUp, speed, zoom };
 }
 
 void MainGame::createPlayer()
 {
-	_player = new Player(_camera);
+	player_ = new Player(camera_);
 }
 
 void MainGame::createWorld()
@@ -180,20 +180,20 @@ void MainGame::createWorld()
 	int worldHeight = 128;
 	bool isInfinite = true;
 
-	_world = new ProcGenTK::World(_camera, worldSize, worldHeight, chunkSize, isInfinite);
+	world_ = new ProcGenTK::World(camera_, worldSize, worldHeight, chunkSize, isInfinite);
 }
 
 void MainGame::createChunkManager()
 {
 	bool useThreading = false;
 
-	_chunkManager = new ProcGenTK::ChunkManager(_world, useThreading);
+	chunkManager_ = new ProcGenTK::ChunkManager(world_, useThreading);
 }
 
 void MainGame::gameLoop()
 {
 	SysTK::Time::start();
-	while (_gameState != GameState::EXIT)
+	while (gameState_ != GameState::EXIT)
 	{
 		SysTK::Time::update();
 
@@ -213,7 +213,7 @@ void MainGame::pollEvents()
 		switch (event.type)
 		{
 			case SDL_QUIT:
-				_gameState = GameState::EXIT;
+				gameState_ = GameState::EXIT;
 				break;
 			case SDL_KEYDOWN:
 				addKey(event.key.keysym.sym);
@@ -225,7 +225,7 @@ void MainGame::pollEvents()
 				processMouseMotion(event);
 				break;
 			case SDL_MOUSEWHEEL:
-				CmdTK::ZoomCameraCommand(_camera, static_cast<float>(event.wheel.y)).execute();
+				CmdTK::ZoomCameraCommand(camera_, static_cast<float>(event.wheel.y)).execute();
 				break;
 		}
 	}
@@ -233,18 +233,18 @@ void MainGame::pollEvents()
 
 void MainGame::addKey(SDL_Keycode key)
 {
-	if (_keyCodes.empty() || find(key, _keyCodes) == _keyCodes.end())
+	if (keyCodes_.empty() || find(key, keyCodes_) == keyCodes_.end())
 	{
-		_keyCodes.push_back(key);
+		keyCodes_.push_back(key);
 	}
 }
 
 void MainGame::removeKey(SDL_Keycode key)
 {
-	auto keyIter = find(key, _keyCodes);
-	if (keyIter != _keyCodes.end())
+	auto keyIter = find(key, keyCodes_);
+	if (keyIter != keyCodes_.end())
 	{
-		_keyCodes.erase(keyIter);
+		keyCodes_.erase(keyIter);
 	}
 }
 
@@ -253,49 +253,49 @@ void MainGame::processMouseMotion(SDL_Event event)
 	float xRel = static_cast<float>(event.motion.xrel);
 	float yRel = static_cast<float>(event.motion.yrel);
 
-	CmdTK::RotateCameraCommand(_camera, xRel, -yRel).execute();
+	CmdTK::RotateCameraCommand(camera_, xRel, -yRel).execute();
 }
 
 void MainGame::updateGame()
 {
 	handleKeys();
 
-	_player->update();
-	_world->update();
-	_chunkManager->update();
+	player_->update();
+	world_->update();
+	chunkManager_->update();
 }
 
 void MainGame::drawGame()
 {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	_shaderProgram.use();
+	shaderProgram_.use();
 
-	glm::mat4 view{ _camera->viewMatrix() };
+	glm::mat4 view{ camera_->viewMatrix() };
 	glm::mat4 projection{ 1.0f };
 	
-	projection = glm::perspective(glm::radians(_camera->zoom()), (float)_screenWidth / (float)_screenHeight, 0.1f, 1000.0f);
+	projection = glm::perspective(glm::radians(camera_->zoom()), (float)screenWidth_ / (float)screenHeight_, 0.1f, 1000.0f);
 	
-	_shaderProgram.setUniform("view", view);
-	_shaderProgram.setUniform("projection", projection);
+	shaderProgram_.setUniform("view", view);
+	shaderProgram_.setUniform("projection", projection);
 
-	_chunkManager->draw(_shaderProgram);
-	_player->draw(_shaderProgram);
+	chunkManager_->draw(shaderProgram_);
+	player_->draw(shaderProgram_);
 
-	SDL_GL_SwapWindow(_window);
+	SDL_GL_SwapWindow(window_);
 }
 
 void MainGame::free()
 {
-	delete _camera;
-	delete _player;
-	delete _world;
-	delete _chunkManager;
+	delete camera_;
+	delete player_;
+	delete world_;
+	delete chunkManager_;
 }
 
 void MainGame::terminate()
 {
-	SDL_DestroyWindow(_window);
+	SDL_DestroyWindow(window_);
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -309,24 +309,24 @@ void MainGame::fatalError()
 
 void MainGame::handleKeys()
 {
-	for (auto key : _keyCodes)
+	for (auto key : keyCodes_)
 	{
 		switch (key)
 		{
 			case SDLK_ESCAPE:
-				_gameState = GameState::EXIT;
+				gameState_ = GameState::EXIT;
 				break;
 			case SDLK_w:
-				CmdTK::MoveCommand(_player, InputDirection::FORWARD).execute();
+				CmdTK::MoveCommand(player_, InputDirection::FORWARD).execute();
 				break;
 			case SDLK_s:
-				CmdTK::MoveCommand(_player, InputDirection::BACKWARD).execute();
+				CmdTK::MoveCommand(player_, InputDirection::BACKWARD).execute();
 				break;
 			case SDLK_a:
-				CmdTK::MoveCommand(_player, InputDirection::LEFT).execute();
+				CmdTK::MoveCommand(player_, InputDirection::LEFT).execute();
 				break;
 			case SDLK_d:
-				CmdTK::MoveCommand(_player, InputDirection::RIGHT).execute();
+				CmdTK::MoveCommand(player_, InputDirection::RIGHT).execute();
 				break;
 		}
 	}

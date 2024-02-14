@@ -55,20 +55,20 @@ class MainGame
 		void handleKeys();
 		std::list<SDL_Keycode>::iterator find(SDL_Keycode key, std::list<SDL_Keycode>& keys);
 
-		SDL_Window* _window;
-		int _screenWidth;
-		int _screenHeight;
+		SDL_Window* window_;
+		int screenWidth_;
+		int screenHeight_;
 
-		GameState _gameState;
-		ShaderProgram _shaderProgram;
+		GameState gameState_;
+		ShaderProgram shaderProgram_;
 
-		bool _drawWireFrame;
-		ProcGenTK::World* _world;
-		ProcGenTK::ChunkManager* _chunkManager;
+		bool drawWireFrame_;
+		ProcGenTK::World* world_;
+		ProcGenTK::ChunkManager* chunkManager_;
 
-		ICamera* _camera;
-		Player* _player;
+		ICamera* camera_;
+		Player* player_;
 
-		std::list<SDL_Keycode> _keyCodes;
+		std::list<SDL_Keycode> keyCodes_;
 };
 
