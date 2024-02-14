@@ -33,16 +33,16 @@ class FirstPersonCamera : public ICamera, public IGameActor
 	private:
 		void updateVectors();
 
-		glm::vec3 _position;
-		glm::vec3 _up;
-		glm::vec3 _front;
-		glm::vec3 _right;
-		glm::vec3 _worldUp;
+		glm::vec3 position_;
+		glm::vec3 up_;
+		glm::vec3 front_;
+		glm::vec3 right_;
+		glm::vec3 worldUp_;
 
-		float _yaw;
-		float _pitch;
-		float _speed;
-		float _sensitivity;
-		float _zoom;
+		float yaw_;
+		float pitch_;
+		float speed_;
+		float sensitivity_;
+		float zoom_;
 };
 

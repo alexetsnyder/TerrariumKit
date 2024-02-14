@@ -317,16 +317,16 @@ void MainGame::handleKeys()
 				gameState_ = GameState::EXIT;
 				break;
 			case SDLK_w:
-				CmdTK::MoveCommand(player_, InputDirection::FORWARD).execute();
+				CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::FORWARD).execute();
 				break;
 			case SDLK_s:
-				CmdTK::MoveCommand(player_, InputDirection::BACKWARD).execute();
+				CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::BACKWARD).execute();
 				break;
 			case SDLK_a:
-				CmdTK::MoveCommand(player_, InputDirection::LEFT).execute();
+				CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::LEFT).execute();
 				break;
 			case SDLK_d:
-				CmdTK::MoveCommand(player_, InputDirection::RIGHT).execute();
+				CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::RIGHT).execute();
 				break;
 		}
 	}
