@@ -21,7 +21,7 @@ class Player : public IGameActor
 		void draw(const ShaderProgram& program) override;
 
 	private:
-		ICamera* _camera;
-		glm::vec3 _position;
+		ICamera* camera_;
+		glm::vec3 position_;
 };
 
