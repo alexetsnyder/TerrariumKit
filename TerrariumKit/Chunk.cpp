@@ -74,18 +74,18 @@ namespace ProcGenTK
     };
 
     Chunk::Chunk(const IChunkMediator* chunkMediator, const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize)
-        : _atlas{ 256, 16 }, _size{ chunkSize }
+        : atlas_{ 256, 16 }, size_{ chunkSize }
     {
-        _hasPopulatedVoxelMap = false;
-        _vao = 0;
-        _vbo = 0;
-        _ebo = 0;
-        _chunkMediator = chunkMediator;
-        _terrainGen = terrainGen;
-        _position = position;
-        _voxels.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
-        _indicesCount = 0;
-        _noDraw = false;
+        hasPopulatedVoxelMap_ = false;
+        vao_ = 0;
+        vbo_ = 0;
+        ebo_ = 0;
+        chunkMediator_ = chunkMediator;
+        terrainGen_ = terrainGen;
+        position_ = position;
+        voxels_.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
+        indicesCount_ = 0;
+        noDraw_ = false;
 
         createTextureAtlas();
     }
@@ -97,33 +97,33 @@ namespace ProcGenTK
 
     void Chunk::populateVoxelMap()
     {
-        for (int y = 0; y < _size.height; y++)
+        for (int y = 0; y < size_.height; y++)
         {
-            for (int x = 0; x < _size.xWidth; x++)
+            for (int x = 0; x < size_.xWidth; x++)
             {
-                for (int z = 0; z < _size.zWidth; z++)
+                for (int z = 0; z < size_.zWidth; z++)
                 {
                     glm::vec3 voxelPosition{ x, y, z };
                     int index = convertPositionToIndex(voxelPosition);
-                    _voxels[index] = _terrainGen->getVoxel(_position + voxelPosition);
+                    voxels_[index] = terrainGen_->getVoxel(position_ + voxelPosition);
                 }
             }
         }
 
-        _hasPopulatedVoxelMap = true;
+        hasPopulatedVoxelMap_ = true;
     }
 
     void Chunk::createChunkMesh(Mesh& chunkMesh)
     {
         int vertexCount = 0;
-        for (int y = 0; y < _size.height; y++)
+        for (int y = 0; y < size_.height; y++)
         {
-            for (int x = 0; x < _size.xWidth; x++)
+            for (int x = 0; x < size_.xWidth; x++)
             {
-                for (int z = 0; z < _size.zWidth; z++)
+                for (int z = 0; z < size_.zWidth; z++)
                 {
                     glm::vec3 voxelPosition{ x, y, z };
-                    if (_terrainGen->getVoxelType(getVoxelByte(voxelPosition)).isSolid())
+                    if (terrainGen_->getVoxelType(getVoxelByte(voxelPosition)).isSolid())
                     {
                         createVoxel(voxelPosition, chunkMesh, vertexCount);
                     }
@@ -134,12 +134,12 @@ namespace ProcGenTK
 
     std::vector<float> Chunk::getTextureCoordinates(VoxelSides voxelSides, int face) const
     {
-        return _atlas.getTextureCoordinates(getFaceName(voxelSides, face));
+        return atlas_.getTextureCoordinates(getFaceName(voxelSides, face));
     }
 
     void Chunk::setNoDraw(bool noDraw)
     {
-        _noDraw = noDraw;
+        noDraw_ = noDraw;
     }
 
     void Chunk::setChunkMesh(Mesh& chunkMesh)
@@ -147,7 +147,7 @@ namespace ProcGenTK
         genAll();
         bindAll();
 
-        _indicesCount = static_cast<GLuint>(chunkMesh.getIndices().size());
+        indicesCount_ = static_cast<GLuint>(chunkMesh.getIndices().size());
 
         glBufferData(GL_ARRAY_BUFFER, chunkMesh.getVertices().size() * sizeof(Vertex), &chunkMesh.getVertices().front(), GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
@@ -163,9 +163,9 @@ namespace ProcGenTK
 
     bool Chunk::isOutsideChunk(glm::vec3 position) const
     {
-        int xBound = _size.xWidth - 1;
-        int yBound = _size.height - 1;
-        int zBound = _size.zWidth - 1;
+        int xBound = size_.xWidth - 1;
+        int yBound = size_.height - 1;
+        int zBound = size_.zWidth - 1;
 
         int x = static_cast<int>(floor(position.x));
         int y = static_cast<int>(floor(position.y));
@@ -183,16 +183,16 @@ namespace ProcGenTK
 
     void Chunk::draw(const ShaderProgram& shader) const
     {
-        if (!_noDraw)
+        if (!noDraw_)
         {
             glm::mat4 model{ modelMatrix() };
 
             shader.setUniform("model", model);
 
-            _texture.bind();
+            texture_.bind();
 
-            glBindVertexArray(_vao);
-            glDrawElements(GL_TRIANGLES, _indicesCount, GL_UNSIGNED_INT, 0);
+            glBindVertexArray(vao_);
+            glDrawElements(GL_TRIANGLES, indicesCount_, GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
         }
     }
@@ -203,7 +203,7 @@ namespace ProcGenTK
         {
             if (!hasSolidVoxel(voxelPosition + voxelNeighbors[face]))
             {
-                VoxelType voxelType{ _terrainGen->getVoxelType(getVoxelByte(voxelPosition)) };
+                VoxelType voxelType{ terrainGen_->getVoxelType(getVoxelByte(voxelPosition)) };
                 std::vector<float> textureCoordinates{ getTextureCoordinates(voxelType.getVoxelSides(), face) };
                 for (int vertex = 0; vertex < 4; vertex++)
                 {
@@ -236,48 +236,48 @@ namespace ProcGenTK
     {
         if (isOutsideChunk(position))
         {
-            return _chunkMediator->hasSolidVoxel(_position + position);
+            return chunkMediator_->hasSolidVoxel(position_ + position);
         }
 
-        return _terrainGen->getVoxelType(getVoxelByte(position)).isSolid();
+        return terrainGen_->getVoxelType(getVoxelByte(position)).isSolid();
     }
 
     void Chunk::createTextureAtlas()
     {
-        _atlas.createAtlas(voxelNames);
-        _texture.init("Assets/Textures/Atlas.png");
+        atlas_.createAtlas(voxelNames);
+        texture_.init("Assets/Textures/Atlas.png");
     }
 
     void Chunk::genAll()
     {
-        glGenVertexArrays(1, &_vao);
-        glGenBuffers(1, &_vbo);
-        glGenBuffers(1, &_ebo);
+        glGenVertexArrays(1, &vao_);
+        glGenBuffers(1, &vbo_);
+        glGenBuffers(1, &ebo_);
     }
 
     void Chunk::free()
     {
-        if (_vao > 0)
+        if (vao_ > 0)
         {
-            glDeleteVertexArrays(1, &_vao);
+            glDeleteVertexArrays(1, &vao_);
         }
 
-        if (_vbo > 0)
+        if (vbo_ > 0)
         {
-            glDeleteBuffers(1, &_vbo);
+            glDeleteBuffers(1, &vbo_);
         }
 
-        if (_ebo > 0)
+        if (ebo_ > 0)
         {
-            glDeleteBuffers(1, &_ebo);
+            glDeleteBuffers(1, &ebo_);
         }
     }
 
     void Chunk::bindAll()
     {
-        glBindVertexArray(_vao);
-        glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
+        glBindVertexArray(vao_);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
     }
 
     void Chunk::unbindAll()
@@ -319,19 +319,19 @@ namespace ProcGenTK
     glm::mat4 Chunk::modelMatrix() const
     {
         glm::mat4 model{ 1.0f };
-        model = glm::translate(model, _position);
+        model = glm::translate(model, position_);
         return model;
     }
 
     GLubyte Chunk::getVoxelByte(const glm::vec3& position) const
     {
         int index = convertPositionToIndex(position);
-        return _voxels[index];
+        return voxels_[index];
     }
 
     bool Chunk::hasPopulatedVoxelMap() const
     {
-        return _hasPopulatedVoxelMap;
+        return hasPopulatedVoxelMap_;
     }
 
     int Chunk::convertPositionToIndex(const glm::vec3& position) const
@@ -340,12 +340,12 @@ namespace ProcGenTK
         int y = static_cast<int>(floor(position.y));
         int z = static_cast<int>(floor(position.z));
 
-        int index = y * _size.xWidth * _size.zWidth + x * _size.zWidth + z;
+        int index = y * size_.xWidth * size_.zWidth + x * size_.zWidth + z;
 
-        if (index < 0 || index >= _voxels.size())
+        if (index < 0 || index >= voxels_.size())
         {
             std::string errorMsg{ "" };
-            std::size_t blocksSize = _voxels.size();
+            std::size_t blocksSize = voxels_.size();
             if (blocksSize == 0)
             {
                 errorMsg += "Blocks vector has size zero";

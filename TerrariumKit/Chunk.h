@@ -54,23 +54,23 @@ namespace ProcGenTK
 			std::string getFaceName(VoxelSides voxelSides, int face) const;
 			int convertPositionToIndex(const glm::vec3& position) const;
 
-			std::vector<GLubyte> _voxels;
-			bool _hasPopulatedVoxelMap;
+			std::vector<GLubyte> voxels_;
+			bool hasPopulatedVoxelMap_;
 
-			const IChunkMediator* _chunkMediator;
-			const ITerrainGen* _terrainGen;
-			ChunkSize _size;
-			glm::vec3 _position;
+			const IChunkMediator* chunkMediator_;
+			const ITerrainGen* terrainGen_;
+			ChunkSize size_;
+			glm::vec3 position_;
 
-			TextureAtlas _atlas;
-			Texture _texture;
+			TextureAtlas atlas_;
+			Texture texture_;
 
-			GLuint _vao;
-			GLuint _vbo;
-			GLuint _ebo;
+			GLuint vao_;
+			GLuint vbo_;
+			GLuint ebo_;
 
-			GLuint _indicesCount;
+			GLuint indicesCount_;
 
-			bool _noDraw;
+			bool noDraw_;
 	};
 }
