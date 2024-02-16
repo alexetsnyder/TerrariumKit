@@ -108,6 +108,9 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="Keybindings.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -206,6 +209,9 @@
       <Filter>Header Files\System</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Keybindings.h">
       <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>

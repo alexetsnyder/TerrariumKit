@@ -5,6 +5,7 @@
 #include "FirstPersonCamera.h"
 #include "FlyingCamera.h"
 #include "Input.h"
+#include "Keybindings.h"
 #include "MoveCommand.h"
 #include "RotateCameraCommand.h"
 #include "ShaderProgram.h"
@@ -298,19 +299,19 @@ void MainGame::handleKeys()
 	{
 		gameState_ = GameState::EXIT;
 	}
-	else if (SysTK::Input::getKey(SDLK_w))
+	else if (SysTK::Input::getKey(SysTK::Keybindings::upKey))
 	{
 		CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::FORWARD).execute();
 	}
-	else if (SysTK::Input::getKey(SDLK_s))
+	else if (SysTK::Input::getKey(SysTK::Keybindings::downKey))
 	{
 		CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::BACKWARD).execute();
 	}
-	else if (SysTK::Input::getKey(SDLK_a))
+	else if (SysTK::Input::getKey(SysTK::Keybindings::leftKey))
 	{
 		CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::LEFT).execute();
 	}
-	else if (SysTK::Input::getKey(SDLK_d))
+	else if (SysTK::Input::getKey(SysTK::Keybindings::rightKey))
 	{
 		CmdTK::MoveCommand(dynamic_cast<IGameActor*>(camera_), InputDirection::RIGHT).execute();
 	}
