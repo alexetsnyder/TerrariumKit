@@ -40,6 +40,12 @@
     <Filter Include="Header Files\Components">
       <UniqueIdentifier>{62e2a487-384f-421d-afc3-a520169ffa7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{d9991421-cb80-4ca4-a8f7-6fad89b376ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{04f8f846-4e14-4364-8c67-d32fb349de48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -64,9 +70,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Dependencies\CFiles\glad.c">
@@ -99,8 +102,11 @@
     <ClCompile Include="FlyingCamera.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +146,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ICommand.h">
@@ -199,8 +202,11 @@
     <ClInclude Include="TransfromComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
     <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
