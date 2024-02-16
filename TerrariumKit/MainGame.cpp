@@ -161,9 +161,9 @@ void MainGame::createCamera()
 	float sensititvity = 0.1f;
 	float zoom = 45.0f;
 
-	//_camera = new FlyingCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
+	//camera_ = new FlyingCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
 	camera_ = new FirstPersonCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
-	//_camera = new TopDownCamera{ cameraPos, worldUp, speed, zoom };
+	//camera_ = new TopDownCamera{ cameraPos, worldUp, speed, zoom };
 }
 
 void MainGame::createPlayer()

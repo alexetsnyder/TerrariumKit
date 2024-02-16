@@ -7,42 +7,42 @@
 
 FlyingCamera::FlyingCamera(glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch,
 	float speed, float sensitivity, float zoom)
-	: _position(position), _worldUp(worldUp), _yaw(yaw), _pitch(pitch),
-	_speed(speed), _sensitivity(sensitivity), _zoom(zoom)
+	: position_(position), worldUp_(worldUp), yaw_(yaw), pitch_(pitch),
+	speed_(speed), sensitivity_(sensitivity), zoom_(zoom)
 {
 	updateVectors();
 }
 
 glm::vec3 FlyingCamera::position() const
 {
-	return _position;
+	return position_;
 }
 
 glm::mat4 FlyingCamera::viewMatrix() const
 {
-	return glm::lookAt(_position, _position + _front, _up);
+	return glm::lookAt(position_, position_ + front_, up_);
 }
 
 float FlyingCamera::zoom() const
 {
-	return _zoom;
+	return zoom_;
 }
 
 void FlyingCamera::rotate(float xOffset, float yOffset)
 {
-	xOffset *= _sensitivity;
-	yOffset *= _sensitivity;
+	xOffset *= sensitivity_;
+	yOffset *= sensitivity_;
 
-	_yaw += xOffset;
-	_pitch += yOffset;
+	yaw_ += xOffset;
+	pitch_ += yOffset;
 
-	if (_pitch > 89.0f)
+	if (pitch_ > 89.0f)
 	{
-		_pitch = 89.0f;
+		pitch_ = 89.0f;
 	}
-	else if (_pitch < -89.0f)
+	else if (pitch_ < -89.0f)
 	{
-		_pitch = -89.0f;
+		pitch_ = -89.0f;
 	}
 
 	updateVectors();
@@ -50,14 +50,14 @@ void FlyingCamera::rotate(float xOffset, float yOffset)
 
 void FlyingCamera::zoom(float yOffset)
 {
-	_zoom -= yOffset;
-	if (_zoom < 1.0f)
+	zoom_ -= yOffset;
+	if (zoom_ < 1.0f)
 	{
-		_zoom = 1.0f;
+		zoom_ = 1.0f;
 	}
-	else if (_zoom > 45.0f)
+	else if (zoom_ > 45.0f)
 	{
-		_zoom = 45.0f;
+		zoom_ = 45.0f;
 	}
 }
 
@@ -65,20 +65,20 @@ void FlyingCamera::move(InputDirection direction)
 {
 	double deltaTime = SysTK::Time::deltaTime();
 
-	float velocity = static_cast<float>(_speed * deltaTime);
+	float velocity = static_cast<float>(speed_ * deltaTime);
 	switch (direction)
 	{
 		case InputDirection::FORWARD:
-			_position += _front * velocity;
+			position_ += front_ * velocity;
 			break;
 		case InputDirection::BACKWARD:
-			_position -= _front * velocity;
+			position_ -= front_ * velocity;
 			break;
 		case InputDirection::LEFT:
-			_position -= _right * velocity;
+			position_ -= right_ * velocity;
 			break;
 		case InputDirection::RIGHT:
-			_position += _right * velocity;
+			position_ += right_ * velocity;
 			break;
 	}
 }
@@ -86,11 +86,11 @@ void FlyingCamera::move(InputDirection direction)
 void FlyingCamera::updateVectors()
 {
 	glm::vec3 front{};
-	front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-	front.y = sin(glm::radians(_pitch));
-	front.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-	_front = glm::normalize(front);
+	front.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+	front.y = sin(glm::radians(pitch_));
+	front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+	front_ = glm::normalize(front);
 
-	_right = glm::normalize(glm::cross(_front, _worldUp));
-	_up = glm::normalize(glm::cross(_right, _front));
+	right_ = glm::normalize(glm::cross(front_, worldUp_));
+	up_ = glm::normalize(glm::cross(right_, front_));
 }
