@@ -143,7 +143,7 @@ namespace ProcGenTK
         }
         else
         {
-            createChunks(16);
+            createChunks(4);
         }
         sendChunkData(4);
 
