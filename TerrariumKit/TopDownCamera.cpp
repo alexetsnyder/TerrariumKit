@@ -6,36 +6,36 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 TopDownCamera::TopDownCamera(glm::vec3 position, glm::vec3 worldUp, float speed, float zoom)
-	: _position{ position }, _worldUp{ worldUp }, _speed{ speed }, _zoom{ zoom }
+	: position_{ position }, worldUp_{ worldUp }, speed_{ speed }, zoom_{ zoom }
 {
 	updateVectors();
 }
 
 glm::vec3 TopDownCamera::position() const
 {
-	return _position;
+	return position_;
 }
 
 glm::mat4 TopDownCamera::viewMatrix() const
 {
-	return glm::lookAt(_position, _position + _front, _up);
+	return glm::lookAt(position_, position_ + front_, up_);
 }
 
 float TopDownCamera::zoom() const
 {
-	return _zoom;
+	return zoom_;
 }
 
 void TopDownCamera::zoom(float yOffset)
 {
-	_zoom -= yOffset;
-	if (_zoom < 1.0f)
+	zoom_ -= yOffset;
+	if (zoom_ < 1.0f)
 	{
-		_zoom = 1.0f;
+		zoom_ = 1.0f;
 	}
-	else if (_zoom > 45.0f)
+	else if (zoom_ > 45.0f)
 	{
-		_zoom = 45.0f;
+		zoom_ = 45.0f;
 	}
 }
 
@@ -43,27 +43,27 @@ void TopDownCamera::move(InputDirection direction)
 {
 	double deltaTime = SysTK::Time::deltaTime();
 
-	float velocity = static_cast<float>(_speed * deltaTime);
+	float velocity = static_cast<float>(speed_ * deltaTime);
 	switch (direction)
 	{
 		case InputDirection::FORWARD:
-			_position += glm::vec3(0.0f, 0.0f, -1.0f) * velocity;
+			position_ += glm::vec3(0.0f, 0.0f, -1.0f) * velocity;
 			break;
 		case InputDirection::BACKWARD:
-			_position -= glm::vec3(0.0f, 0.0f, -1.0f) * velocity;
+			position_ -= glm::vec3(0.0f, 0.0f, -1.0f) * velocity;
 			break;
 		case InputDirection::LEFT:
-			_position -= _right * velocity;
+			position_ -= right_ * velocity;
 			break;
 		case InputDirection::RIGHT:
-			_position += _right * velocity;
+			position_ += right_ * velocity;
 			break;
 	}
 }
 
 void TopDownCamera::updateVectors()
 {
-	_front = -glm::normalize(_worldUp);
-	_right = glm::normalize(glm::vec3{ 1.0f, 0.0f, 0.0f });
-	_up = glm::normalize(glm::cross(_right, _front));
+	front_ = -glm::normalize(worldUp_);
+	right_ = glm::normalize(glm::vec3{ 1.0f, 0.0f, 0.0f });
+	up_ = glm::normalize(glm::cross(right_, front_));
 }
