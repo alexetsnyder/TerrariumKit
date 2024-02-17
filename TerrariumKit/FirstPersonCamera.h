@@ -25,7 +25,7 @@ class FirstPersonCamera : public ICamera, public IGameActor
 		void zoom(float yOffset) override;
 
 		//From IGameActor
-		void move(InputDirection direction) override;
+		void move(InputDirection direction) override {};
 		void update() override;
 		void draw(const ShaderProgram& program) override {};
 		

@@ -1,5 +1,7 @@
 #include "FirstPersonCamera.h"
 
+#include "Input.h"
+#include "Keybindings.h"
 #include "Time.h"
 
 #include <glm/glm.hpp>
@@ -66,39 +68,30 @@ void FirstPersonCamera::zoom(float yOffset)
 	}
 }
 
-void FirstPersonCamera::move(InputDirection direction)
+void FirstPersonCamera::update()
 {
+	velocity_ = glm::vec3{ 0.0f };
 	double deltaTime = SysTK::Time::deltaTime();
 	float speed = static_cast<float>(speed_ * deltaTime);
 
-	//_glm::vec3 velocity{ 0.0f };
-	switch (direction)
+	if (SysTK::Input::getKey(SysTK::Keybindings::upKey))
 	{
-		case InputDirection::FORWARD:
-			//_position += _front * speed;
-			velocity_ = front_ * speed;
-			break;
-		case InputDirection::BACKWARD:
-			//_position -= _front * speed;
-			velocity_ = -front_ * speed;
-			break;
-		case InputDirection::LEFT:
-			//_position -= _right * speed;
-			velocity_ = -right_ * speed;
-			break;
-		case InputDirection::RIGHT:
-			//_position += _right * speed;
-			velocity_ = right_ * speed;
-			break;
+		velocity_ += front_ * speed;
+	}
+	if (SysTK::Input::getKey(SysTK::Keybindings::downKey))
+	{
+		velocity_ += -front_ * speed;
+	}
+	if (SysTK::Input::getKey(SysTK::Keybindings::leftKey))
+	{
+		velocity_ += -right_ * speed;
+	}
+	if (SysTK::Input::getKey(SysTK::Keybindings::rightKey))
+	{
+		velocity_ += right_ * speed;
 	}
 
-	//translate(velocity_);
-}
-
-void FirstPersonCamera::update()
-{
 	translate(velocity_);
-	velocity_ = glm::vec3{ 0.0f };
 }
 
 void FirstPersonCamera::updateVectors()
