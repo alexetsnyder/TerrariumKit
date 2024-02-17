@@ -70,6 +70,10 @@ void FirstPersonCamera::zoom(float yOffset)
 
 void FirstPersonCamera::update()
 {
+	float xRel = SysTK::Input::getMouseAxis(MouseAxis::X_AXIS);
+	float yRel = SysTK::Input::getMouseAxis(MouseAxis::Y_AXIS);
+	rotate(xRel, -yRel);
+
 	velocity_ = glm::vec3{ 0.0f };
 	double deltaTime = SysTK::Time::deltaTime();
 	float speed = static_cast<float>(speed_ * deltaTime);

@@ -42,7 +42,6 @@ class MainGame
 		
 		void gameLoop();
 		void pollEvents();
-		void processMouseMotion(SDL_Event event);
 		void updateGame();
 		void drawGame();
 
@@ -66,4 +65,3 @@ class MainGame
 		ICamera* camera_;
 		Player* player_;
 };
-

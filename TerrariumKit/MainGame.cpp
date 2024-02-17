@@ -221,21 +221,13 @@ void MainGame::pollEvents()
 				SysTK::Input::removeKey(event.key.keysym.sym);
 				break;
 			case SDL_MOUSEMOTION:
-				processMouseMotion(event);
+				SysTK::Input::processMouseMotion(event);
 				break;
 			case SDL_MOUSEWHEEL:
 				CmdTK::ZoomCameraCommand(camera_, static_cast<float>(event.wheel.y)).execute();
 				break;
 		}
 	}
-}
-
-void MainGame::processMouseMotion(SDL_Event event)
-{
-	float xRel = static_cast<float>(event.motion.xrel);
-	float yRel = static_cast<float>(event.motion.yrel);
-
-	CmdTK::RotateCameraCommand(camera_, xRel, -yRel).execute();
 }
 
 void MainGame::updateGame()
@@ -246,6 +238,8 @@ void MainGame::updateGame()
 	dynamic_cast<IGameActor*>(camera_)->update();
 	world_->update();
 	chunkManager_->update();
+
+	SysTK::Input::update();
 }
 
 void MainGame::drawGame()
@@ -297,4 +291,3 @@ void MainGame::handleKeys()
 		gameState_ = GameState::EXIT;
 	}
 }
-
