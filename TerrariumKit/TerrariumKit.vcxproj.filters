@@ -114,6 +114,9 @@
     <ClCompile Include="Keybindings.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -210,6 +213,9 @@
     </ClInclude>
     <ClInclude Include="Keybindings.h">
       <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
