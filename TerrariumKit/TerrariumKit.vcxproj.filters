@@ -46,6 +46,9 @@
     <Filter Include="Source Files\System">
       <UniqueIdentifier>{04f8f846-4e14-4364-8c67-d32fb349de48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{86309c4f-0631-4fe8-a707-15949fb60e32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -198,12 +201,6 @@
     </ClInclude>
     <ClInclude Include="FlyingCamera.h">
       <Filter>Header Files\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="IComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="TransfromComponent.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Header Files\System</Filter>
