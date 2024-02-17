@@ -214,17 +214,8 @@ void MainGame::pollEvents()
 			case SDL_QUIT:
 				gameState_ = GameState::EXIT;
 				break;
-			case SDL_KEYDOWN:
-				SysTK::Input::addKey(event.key.keysym.sym);
-				break;
-			case SDL_KEYUP:
-				SysTK::Input::removeKey(event.key.keysym.sym);
-				break;
-			case SDL_MOUSEMOTION:
-				SysTK::Input::processMouseMotion(event);
-				break;
-			case SDL_MOUSEWHEEL:
-				CmdTK::ZoomCameraCommand(camera_, static_cast<float>(event.wheel.y)).execute();
+			default:
+				SysTK::Input::processInput(event);
 				break;
 		}
 	}

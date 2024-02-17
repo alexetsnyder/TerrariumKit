@@ -74,6 +74,9 @@ void FirstPersonCamera::update()
 	float yRel = SysTK::Input::getMouseAxis(MouseAxis::Y_AXIS);
 	rotate(xRel, -yRel);
 
+	float yWheel = SysTK::Input::getMouseWheel();
+	zoom(yWheel);
+
 	velocity_ = glm::vec3{ 0.0f };
 	double deltaTime = SysTK::Time::deltaTime();
 	float speed = static_cast<float>(speed_ * deltaTime);

@@ -4,6 +4,7 @@ namespace SysTK
 {
 	float Input::xRel_;
 	float Input::yRel_;
+	float Input::yWheel_;
 	std::unordered_map<SDL_Keycode, bool> Input::keys_{};
 
 	bool Input::getKey(SDL_Keycode key)
@@ -34,8 +35,33 @@ namespace SysTK
 		return retValue;
 	}
 
+	float Input::getMouseWheel()
+	{
+		return yWheel_;
+	}
+
+	void Input::processInput(SDL_Event event)
+	{
+		switch (event.type)
+		{
+			case SDL_KEYDOWN:
+				addKey(event.key.keysym.sym);
+				break;
+			case SDL_KEYUP:
+				removeKey(event.key.keysym.sym);
+				break;
+			case SDL_MOUSEMOTION:
+				processMouseMotion(event);
+				break;
+			case SDL_MOUSEWHEEL:
+				yWheel_ = static_cast<float>(event.wheel.y);
+				break;
+		}
+	}
+
 	void Input::update()
 	{
+		yWheel_ = 0.0f;
 		xRel_ = 0.0f;
 		yRel_ = 0.0f;
 	}

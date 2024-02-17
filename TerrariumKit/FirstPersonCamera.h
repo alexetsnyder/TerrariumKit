@@ -28,7 +28,6 @@ class FirstPersonCamera : public ICamera, public IGameActor
 		void move(InputDirection direction) override {};
 		void update() override;
 		void draw(const ShaderProgram& program) override {};
-		
 
 	private:
 		void updateVectors();
