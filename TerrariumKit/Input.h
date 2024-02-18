@@ -4,14 +4,14 @@
 
 #include <unordered_map>
 
-enum class MouseAxis
-{
-	X_AXIS,
-	Y_AXIS,
-};
-
 namespace SysTK
 {
+	enum class MouseAxis
+	{
+		X_AXIS,
+		Y_AXIS,
+	};
+
 	class Input
 	{
 		public:

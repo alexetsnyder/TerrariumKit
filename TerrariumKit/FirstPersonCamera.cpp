@@ -56,8 +56,8 @@ void FirstPersonCamera::zoom(float yOffset)
 
 void FirstPersonCamera::update()
 {
-	float xRel = SysTK::Input::getMouseAxis(MouseAxis::X_AXIS);
-	float yRel = SysTK::Input::getMouseAxis(MouseAxis::Y_AXIS);
+	float xRel = SysTK::Input::getMouseAxis(SysTK::MouseAxis::X_AXIS);
+	float yRel = SysTK::Input::getMouseAxis(SysTK::MouseAxis::Y_AXIS);
 	rotate(xRel, -yRel);
 
 	float yWheel = SysTK::Input::getMouseWheel();

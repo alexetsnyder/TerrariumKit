@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ICamera.h"
-#include "ShaderProgram.h"
 #include "TransformComponent.h"
 
 #include <glm/glm.hpp>
