@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Enums.h"
-
 #include <glm/glm.hpp>
 
 class ICamera
@@ -13,6 +11,8 @@ class ICamera
 
 		virtual void rotate(float xOffset, float yOffset) = 0;
 		virtual void zoom(float yOffset) = 0;
+
+		virtual void update() = 0;
 
 		virtual ~ICamera() {};
 };

@@ -1,13 +1,11 @@
 #pragma once
 
-#include "Enums.h"
 #include "ICamera.h"
-#include "IGameActor.h"
 #include "ShaderProgram.h"
 
 #include <glm/glm.hpp>
 
-class FirstPersonCamera : public ICamera, public IGameActor
+class FirstPersonCamera : public ICamera
 {
 	public:
 		FirstPersonCamera(glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch, 
@@ -23,11 +21,7 @@ class FirstPersonCamera : public ICamera, public IGameActor
 
 		void rotate(float xOffset, float yOffset) override;
 		void zoom(float yOffset) override;
-
-		//From IGameActor
-		void move(InputDirection direction) override {};
 		void update() override;
-		void draw(const ShaderProgram& program) override {};
 
 	private:
 		void updateVectors();

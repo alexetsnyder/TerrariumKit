@@ -19,8 +19,8 @@ void Player::move(InputDirection direction)
 {
 	double deltaTime = SysTK::Time::deltaTime();
 
-	IGameActor* pointer = dynamic_cast<IGameActor*>(camera_);
-	CmdTK::MoveCommand(pointer, direction).execute();
+	//IGameActor* pointer = dynamic_cast<IGameActor*>(camera_);
+	//CmdTK::MoveCommand(pointer, direction).execute();
 
 	glm::vec3 cameraPos = camera_->position();
 	position_ = glm::vec3(cameraPos.x, cameraPos.y - height, cameraPos.z);
