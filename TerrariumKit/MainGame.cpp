@@ -7,6 +7,7 @@
 #include "RotateCameraCommand.h"
 #include "ShaderProgram.h"
 #include "TopDownCamera.h"
+#include "TransformComponent.h"
 #include "World.h"
 #include "ZoomCameraCommand.h"
 
@@ -154,13 +155,15 @@ void MainGame::createCamera()
 	glm::vec3 cameraPos = glm::vec3(8.0f, 120.0f, 8.0f);
 	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	float yaw = -90.0f;
-	float pitch = 0.0f;
+	float pitch = -80.0f;
 	float speed = 8.0f;
 	float sensititvity = 0.1f;
 	float zoom = 45.0f;
 
+	CompTK::TransformComponent cameraTransform{ cameraPos, worldUp, yaw, pitch };
+
 	//camera_ = new FlyingCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
-	camera_ = new FirstPersonCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
+	camera_ = new FirstPersonCamera{ cameraTransform, speed, sensititvity, zoom };
 	//camera_ = new TopDownCamera{ cameraPos, worldUp, speed, zoom };
 }
 

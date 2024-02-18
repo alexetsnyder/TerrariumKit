@@ -7,22 +7,20 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-FirstPersonCamera::FirstPersonCamera(glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch, 
-	                                 float speed, float sensitivity, float zoom)
-	: position_(position), velocity_{ 0.0f }, worldUp_(worldUp), yaw_(yaw), pitch_(pitch),
-	  speed_(speed), sensitivity_(sensitivity), zoom_(zoom)
+FirstPersonCamera::FirstPersonCamera(CompTK::TransformComponent transform, float speed, float sensitivity, float zoom)
+	: transform_{ transform }, velocity_{ 0.0f }, speed_{ speed }, sensitivity_{ sensitivity }, zoom_{ zoom }
 {
-	updateVectors();
+	transform_.clampPitch(-89.0f, 89.0f);
 }
 
 glm::vec3 FirstPersonCamera::position() const
 {
-	return position_;
+	return transform_.position();
 }
 
 glm::mat4 FirstPersonCamera::viewMatrix() const
 {
-	return glm::lookAt(position_, position_ + front_, up_);
+	return glm::lookAt(transform_.position(), transform_.position() + transform_.front(), transform_.up());
 }
 
 float FirstPersonCamera::zoom() const
@@ -32,7 +30,7 @@ float FirstPersonCamera::zoom() const
 
 void FirstPersonCamera::translate(glm::vec3 translation)
 {
-	position_ += translation;
+	transform_.translate(translation);
 }
 
 void FirstPersonCamera::rotate(float xOffset, float yOffset)
@@ -40,19 +38,7 @@ void FirstPersonCamera::rotate(float xOffset, float yOffset)
 	xOffset *= sensitivity_;
 	yOffset *= sensitivity_;
 
-	yaw_ += xOffset;
-	pitch_ += yOffset;
-
-	if (pitch_ > 89.0f)
-	{
-		pitch_ = 89.0f;
-	}
-	else if (pitch_ < -89.0f)
-	{
-		pitch_ = -89.0f;
-	}
-
-	updateVectors();
+	transform_.rotate(xOffset, yOffset);
 }
 
 void FirstPersonCamera::zoom(float yOffset)
@@ -83,32 +69,20 @@ void FirstPersonCamera::update()
 
 	if (SysTK::Input::getKey(SysTK::Keybindings::upKey))
 	{
-		velocity_ += front_ * speed;
+		velocity_ += transform_.front() * speed;
 	}
 	if (SysTK::Input::getKey(SysTK::Keybindings::downKey))
 	{
-		velocity_ += -front_ * speed;
+		velocity_ += -transform_.front() * speed;
 	}
 	if (SysTK::Input::getKey(SysTK::Keybindings::leftKey))
 	{
-		velocity_ += -right_ * speed;
+		velocity_ += -transform_.right() * speed;
 	}
 	if (SysTK::Input::getKey(SysTK::Keybindings::rightKey))
 	{
-		velocity_ += right_ * speed;
+		velocity_ += transform_.right() * speed;
 	}
 
 	translate(velocity_);
-}
-
-void FirstPersonCamera::updateVectors()
-{
-	glm::vec3 front{};
-	front.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-	front.y = sin(glm::radians(pitch_));
-	front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-	front_ = glm::normalize(front);
-
-	right_ = glm::normalize(glm::cross(front_, worldUp_));
-	up_ = glm::normalize(glm::cross(right_, front_));
 }
