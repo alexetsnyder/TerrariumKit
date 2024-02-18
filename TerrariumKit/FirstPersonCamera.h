@@ -12,13 +12,12 @@ class FirstPersonCamera : public ICamera
 						  float speed, float sensitivity, float zoom);
 		~FirstPersonCamera() {};
 
-		void translate(glm::vec3 translation);
-
 		//From ICamera
 		glm::vec3 position() const override;
 		glm::mat4 viewMatrix() const override;
 		float zoom() const override;
 
+		void translate(glm::vec3 translation) override;
 		void rotate(float xOffset, float yOffset) override;
 		void zoom(float yOffset) override;
 		void update() override;

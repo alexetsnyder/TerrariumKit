@@ -9,6 +9,7 @@ class ICamera
 		virtual glm::mat4 viewMatrix() const = 0;
 		virtual float zoom() const = 0;
 
+		virtual void translate(glm::vec3 translation) = 0;
 		virtual void rotate(float xOffset, float yOffset) = 0;
 		virtual void zoom(float yOffset) = 0;
 

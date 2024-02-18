@@ -15,11 +15,6 @@ FirstPersonCamera::FirstPersonCamera(glm::vec3 position, glm::vec3 worldUp, floa
 	updateVectors();
 }
 
-void FirstPersonCamera::translate(glm::vec3 translation)
-{
-	position_ += translation;
-}
-
 glm::vec3 FirstPersonCamera::position() const
 {
 	return position_;
@@ -33,6 +28,11 @@ glm::mat4 FirstPersonCamera::viewMatrix() const
 float FirstPersonCamera::zoom() const
 {
 	return zoom_;
+}
+
+void FirstPersonCamera::translate(glm::vec3 translation)
+{
+	position_ += translation;
 }
 
 void FirstPersonCamera::rotate(float xOffset, float yOffset)
