@@ -16,7 +16,7 @@ namespace SysTK
 			static void update();
 
 		private:
-			static std::chrono::duration<double> _deltaTime;
-			static std::chrono::high_resolution_clock::time_point _lastFrame;
+			static std::chrono::duration<double> deltaTime_;
+			static std::chrono::high_resolution_clock::time_point lastFrame_;
 	};
 }

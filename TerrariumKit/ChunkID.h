@@ -28,7 +28,7 @@ namespace ProcGenTK
 			void setID(float x, float y, float z);
 			void setPosition(const glm::vec3& worldPos);
 
-			ChunkSize _chunkSize;
-			std::array<float, 3> _id;
+			ChunkSize chunkSize_;
+			std::array<float, 3> id_;
 	};
 }

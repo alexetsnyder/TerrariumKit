@@ -3,42 +3,42 @@
 namespace ProcGenTK
 {
 	ChunkID::ChunkID(ChunkSize chunkSize, float x, float y, float z)
-		: _chunkSize{ chunkSize }
+		: chunkSize_{ chunkSize }
 	{
 		setID(x, y, z);
 	}
 
 	ChunkID::ChunkID(ChunkSize chunkSize, const glm::vec3& worldPos)
-		: _chunkSize{ chunkSize }
+		: chunkSize_{ chunkSize }
 	{
 		setPosition(worldPos);
 	}
 
 	float ChunkID::x() const
 	{
-		return _id[0];
+		return id_[0];
 	}
 
 	float ChunkID::y() const
 	{
-		return _id[1];
+		return id_[1];
 	}
 
 	float ChunkID::z() const
 	{
-		return _id[2];
+		return id_[2];
 	}
 
 	std::array<float, 3> ChunkID::id() const
 	{
-		return _id;
+		return id_;
 	}
 
 	glm::vec3 ChunkID::position() const
 	{
-		float x = _id[0] * _chunkSize.xWidth;
-		float y = _id[1] * _chunkSize.height;
-		float z = _id[2] * _chunkSize.zWidth;
+		float x = id_[0] * chunkSize_.xWidth;
+		float y = id_[1] * chunkSize_.height;
+		float z = id_[2] * chunkSize_.zWidth;
 
 		return glm::vec3{ x, y, z };
 	}
@@ -49,23 +49,23 @@ namespace ProcGenTK
 		float y = floor(worldPos.y);
 		float z = floor(worldPos.z);
 
-		x -= _id[0] * _chunkSize.xWidth;
-		y -= _id[1] * _chunkSize.height;
-		z -= _id[2] * _chunkSize.zWidth;
+		x -= id_[0] * chunkSize_.xWidth;
+		y -= id_[1] * chunkSize_.height;
+		z -= id_[2] * chunkSize_.zWidth;
 
 		return glm::vec3{ x, y, z };
 	}
 
 	bool ChunkID::Equals(const ChunkID& rhs)
 	{
-		return _id[0] == rhs._id[0] && _id[1] == rhs._id[1] && _id[2] == rhs._id[2];
+		return id_[0] == rhs.id_[0] && id_[1] == rhs.id_[1] && id_[2] == rhs.id_[2];
 	}
 
 	void ChunkID::setID(float x, float y, float z)
 	{
-		_id[0] = x;
-		_id[1] = y;
-		_id[2] = z;
+		id_[0] = x;
+		id_[1] = y;
+		id_[2] = z;
 	}
 
 	void ChunkID::setPosition(const glm::vec3& worldPos)
@@ -74,9 +74,9 @@ namespace ProcGenTK
 		float y = floor(worldPos.y);
 		float z = floor(worldPos.z);
 
-		float chunkX = floor(x / _chunkSize.xWidth);
-		float chunkY = floor(y / _chunkSize.height);
-		float chunkZ = floor(z / _chunkSize.zWidth);
+		float chunkX = floor(x / chunkSize_.xWidth);
+		float chunkY = floor(y / chunkSize_.height);
+		float chunkZ = floor(z / chunkSize_.zWidth);
 
 		setID(chunkX, chunkY, chunkZ);
 	}
