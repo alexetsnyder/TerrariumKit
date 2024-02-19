@@ -8,7 +8,7 @@
 class FirstPersonCamera : public ICamera
 {
 	public:
-		FirstPersonCamera(CompTK::TransformComponent transform, float speed, float sensitivity, float zoom);
+		FirstPersonCamera(CompTK::TransformComponent transform, float speed, float zoom);
 		~FirstPersonCamera() {};
 
 		//From ICamera
@@ -26,6 +26,5 @@ class FirstPersonCamera : public ICamera
 		glm::vec3 velocity_;
 
 		float speed_;
-		float sensitivity_;
 		float zoom_;
 };

@@ -30,6 +30,7 @@ namespace SysTK
 			static void processMouseMotion(SDL_Event event);
 
 		private:
+			static float mouseSensitivity_;
 			static float xRel_;
 			static float yRel_;
 			static float yWheel_;

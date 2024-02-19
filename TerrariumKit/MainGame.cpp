@@ -163,7 +163,7 @@ void MainGame::createCamera()
 	CompTK::TransformComponent cameraTransform{ cameraPos, worldUp, yaw, pitch };
 
 	//camera_ = new FlyingCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
-	camera_ = new FirstPersonCamera{ cameraTransform, speed, sensititvity, zoom };
+	camera_ = new FirstPersonCamera{ cameraTransform, speed, zoom };
 	//camera_ = new TopDownCamera{ cameraPos, worldUp, speed, zoom };
 }
 

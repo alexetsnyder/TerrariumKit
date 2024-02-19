@@ -7,8 +7,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-FirstPersonCamera::FirstPersonCamera(CompTK::TransformComponent transform, float speed, float sensitivity, float zoom)
-	: transform_{ transform }, velocity_{ 0.0f }, speed_{ speed }, sensitivity_{ sensitivity }, zoom_{ zoom }
+FirstPersonCamera::FirstPersonCamera(CompTK::TransformComponent transform, float speed, float zoom)
+	: transform_{ transform }, velocity_{ 0.0f }, speed_{ speed }, zoom_{ zoom }
 {
 	transform_.clampPitch(-89.0f, 89.0f);
 }
@@ -35,9 +35,6 @@ void FirstPersonCamera::translate(glm::vec3 translation)
 
 void FirstPersonCamera::rotate(float xOffset, float yOffset)
 {
-	xOffset *= sensitivity_;
-	yOffset *= sensitivity_;
-
 	transform_.rotate(xOffset, yOffset);
 }
 

@@ -2,9 +2,10 @@
 
 namespace SysTK
 {
-	float Input::xRel_;
-	float Input::yRel_;
-	float Input::yWheel_;
+	float Input::mouseSensitivity_{ 0.1f };
+	float Input::xRel_{ 0.0f };
+	float Input::yRel_{ 0.0f };
+	float Input::yWheel_{ 0.0f };
 	std::unordered_map<SDL_Keycode, bool> Input::keys_{};
 
 	bool Input::getKey(SDL_Keycode key)
@@ -25,10 +26,10 @@ namespace SysTK
 		switch (axis)
 		{
 			case MouseAxis::X_AXIS:
-				retValue = xRel_;
+				retValue = mouseSensitivity_ * xRel_;
 				break;
 			case MouseAxis::Y_AXIS:
-				retValue = yRel_;
+				retValue = mouseSensitivity_ * yRel_;
 				break;
 		}
 
