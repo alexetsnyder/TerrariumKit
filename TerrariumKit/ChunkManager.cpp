@@ -4,12 +4,12 @@ namespace ProcGenTK
 {
     ChunkManager::ChunkManager(const World* world, bool useThreading)
     {
-        _world = world;
+        world_ = world;
         _useThreading = useThreading;
 
         float minHeight{ 32.0f };
         float varyHeight{ 16.0f };
-        _terrainGen = new TerrainGen(_world->chunkSize(), minHeight, varyHeight);
+        terrainGen_ = new TerrainGen(world_->chunkSize(), minHeight, varyHeight);
 
         queueChunks();
     }
@@ -18,38 +18,38 @@ namespace ProcGenTK
     {
         cleanUpChunkThreads();
 
-        for (auto& pair : _activeChunkMap)
+        for (auto& pair : activeChunkMap_)
         {
             delete pair.second;
         }
 
-        for (auto& pair : _inactiveChunkMap)
+        for (auto& pair : inactiveChunkMap_)
         {
             delete pair.second;
         }
 
-        delete _terrainGen;
+        delete terrainGen_;
     }
 
     void ChunkManager::queueChunks()
     {
-        if (!_activeChunkMap.empty())
+        if (!activeChunkMap_.empty())
         {
-            for (const auto& pair : _activeChunkMap)
+            for (const auto& pair : activeChunkMap_)
             {
-                _inactiveChunkMap.emplace(pair.first, pair.second);
+                inactiveChunkMap_.emplace(pair.first, pair.second);
             }
 
-            for (const auto& pair : _inactiveChunkMap)
+            for (const auto& pair : inactiveChunkMap_)
             {
-                _activeChunkMap.erase(pair.first);
+                activeChunkMap_.erase(pair.first);
             }
         }
 
-        ChunkID currentChunkId = _world->currentChunkID();
+        ChunkID currentChunkId = world_->currentChunkID();
         float startY = 0.0f;
-        float endY = static_cast<float>(_world->worldHeight() / _world->chunkSize().height);
-        int viewDistanceInChunks = _world->worldSize();
+        float endY = static_cast<float>(world_->worldHeight() / world_->chunkSize().height);
+        int viewDistanceInChunks = world_->worldSize();
         float startX = currentChunkId.x() - viewDistanceInChunks;
         float endX = currentChunkId.x() + viewDistanceInChunks;
         float startZ = currentChunkId.z() - viewDistanceInChunks;
@@ -61,18 +61,18 @@ namespace ProcGenTK
             {
                 for (float z = startZ; z < endZ + 1; z++)
                 {
-                    ChunkID chunkId{ _world->chunkSize(), x, y, z };
-                    auto mapIter = _inactiveChunkMap.find(chunkId.id());
-                    if (mapIter != _inactiveChunkMap.end())
+                    ChunkID chunkId{ world_->chunkSize(), x, y, z };
+                    auto mapIter = inactiveChunkMap_.find(chunkId.id());
+                    if (mapIter != inactiveChunkMap_.end())
                     {
-                        _activeChunkMap.emplace(mapIter->first, mapIter->second);
-                        _inactiveChunkMap.erase(mapIter);
+                        activeChunkMap_.emplace(mapIter->first, mapIter->second);
+                        inactiveChunkMap_.erase(mapIter);
                     }
                     else
                     {
-                        Chunk* chunkPointer{ new Chunk{ this, _terrainGen, chunkId.position(), _world->chunkSize() } };
-                        _activeChunkMap.emplace(chunkId.id(), chunkPointer);
-                        _chunkCreateQueue.push(chunkPointer);
+                        Chunk* chunkPointer{ new Chunk{ this, terrainGen_, chunkId.position(), world_->chunkSize() } };
+                        activeChunkMap_.emplace(chunkId.id(), chunkPointer);
+                        chunkCreateQueue_.push(chunkPointer);
                     }
                 }
             }
@@ -82,10 +82,10 @@ namespace ProcGenTK
     void ChunkManager::createChunks(int n)
     {
         int count = 0;
-        while (!_chunkCreateQueue.empty() && count++ < n)
+        while (!chunkCreateQueue_.empty() && count++ < n)
         {
-            Chunk* chunk{ _chunkCreateQueue.front() };
-            _chunkCreateQueue.pop();
+            Chunk* chunk{ chunkCreateQueue_.front() };
+            chunkCreateQueue_.pop();
 
             createChunk(chunk);
         }
@@ -94,34 +94,34 @@ namespace ProcGenTK
     void ChunkManager::createChunkThreads(int n)
     {
         int count = 0;
-        while (!_chunkCreateQueue.empty() && count++ < n)
+        while (!chunkCreateQueue_.empty() && count++ < n)
         {
-            Chunk* chunk{ _chunkCreateQueue.front() };
-            _chunkCreateQueue.pop();
+            Chunk* chunk{ chunkCreateQueue_.front() };
+            chunkCreateQueue_.pop();
 
             std::thread chunkThread{ &ChunkManager::createChunk, this, chunk };
-            _threadQueue.push(std::move(chunkThread));
+            threadQueue_.push(std::move(chunkThread));
         }
     }
 
     void ChunkManager::joinChunkThreads(int n)
     {
         int count = 0;
-        while (!_threadQueue.empty() && count++ < n)
+        while (!threadQueue_.empty() && count++ < n)
         {
-            _threadQueue.front().join();
-            _threadQueue.pop();
+            threadQueue_.front().join();
+            threadQueue_.pop();
         }
     }
 
     void ChunkManager::sendChunkData(int n)
     {
         int count = 0;
-        while (!_chunkMeshInfoQueue.empty() && count++ < n)
+        while (!chunkMeshInfoQueue_.empty() && count++ < n)
         {
-            std::lock_guard<std::mutex> lock(_chunkMeshInfoAccess);
-            ChunkMeshInfo chunkMeshInfo{ _chunkMeshInfoQueue.front() };
-            _chunkMeshInfoQueue.pop();
+            std::lock_guard<std::mutex> lock(chunkMeshInfoAccess_);
+            ChunkMeshInfo chunkMeshInfo{ chunkMeshInfoQueue_.front() };
+            chunkMeshInfoQueue_.pop();
 
             if (chunkMeshInfo.chunkMesh.getIndices().empty())
             {
@@ -147,7 +147,7 @@ namespace ProcGenTK
         }
         sendChunkData(4);
 
-        if (_world->isInfinite() && _world->hasCurrentChunkIdChanged())
+        if (world_->isInfinite() && world_->hasCurrentChunkIdChanged())
         {
             queueChunks();
         }
@@ -155,7 +155,7 @@ namespace ProcGenTK
 
     void ChunkManager::draw(const ShaderProgram& program)
     {
-        for (auto& pair : _activeChunkMap)
+        for (auto& pair : activeChunkMap_)
         {
             pair.second->draw(program);
         }
@@ -164,27 +164,27 @@ namespace ProcGenTK
     bool ChunkManager::hasSolidVoxel(const glm::vec3& worldPos) const
     {
         //isOutsideWorld can only return true if no infinite terrain generation
-        if (_world->isOutsideWorld(worldPos))
+        if (world_->isOutsideWorld(worldPos))
         {
             return false;
         }
 
-        if (worldPos.y < 0 || worldPos.y > _world->worldHeight() - 1)
+        if (worldPos.y < 0 || worldPos.y > world_->worldHeight() - 1)
         {
             return false;
         }
 
-        ChunkID chunkId{ _world->chunkSize(), worldPos };
+        ChunkID chunkId{ world_->chunkSize(), worldPos };
         glm::vec3 voxelPos{ chunkId.computeRelativeVoxelPosition(worldPos) };
 
-        const auto mapIter = _activeChunkMap.find(chunkId.id());
-        if (mapIter != _activeChunkMap.end() && mapIter->second->hasPopulatedVoxelMap())
+        const auto mapIter = activeChunkMap_.find(chunkId.id());
+        if (mapIter != activeChunkMap_.end() && mapIter->second->hasPopulatedVoxelMap())
         {
-            return _terrainGen->getVoxelType(mapIter->second->getVoxelByte(voxelPos)).isSolid();
+            return terrainGen_->getVoxelType(mapIter->second->getVoxelByte(voxelPos)).isSolid();
         }
         else
         {
-            return _terrainGen->getVoxelType(_terrainGen->getVoxel(worldPos)).isSolid();
+            return terrainGen_->getVoxelType(terrainGen_->getVoxel(worldPos)).isSolid();
         }
     }
 
@@ -197,16 +197,16 @@ namespace ProcGenTK
 
         chunk->createChunkMesh(chunkMeshInfo.chunkMesh);
 
-        std::lock_guard<std::mutex> lock(_chunkMeshInfoAccess);
-        _chunkMeshInfoQueue.push(chunkMeshInfo);
+        std::lock_guard<std::mutex> lock(chunkMeshInfoAccess_);
+        chunkMeshInfoQueue_.push(chunkMeshInfo);
     }
 
     void ChunkManager::cleanUpChunkThreads()
     {
-        while (!_threadQueue.empty())
+        while (!threadQueue_.empty())
         {
-            _threadQueue.front().join();
-            _threadQueue.pop();
+            threadQueue_.front().join();
+            threadQueue_.pop();
         }
     }
 }

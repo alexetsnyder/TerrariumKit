@@ -45,16 +45,16 @@ namespace ProcGenTK
 			void createChunk(Chunk* chunk);
 			void cleanUpChunkThreads();
 
-			const World* _world;
-			const ITerrainGen* _terrainGen;
-			std::queue<Chunk*> _chunkCreateQueue;
+			const World* world_;
+			const ITerrainGen* terrainGen_;
+			std::queue<Chunk*> chunkCreateQueue_;
 
 			bool _useThreading;
-			std::queue<std::thread> _threadQueue;
-			std::mutex _chunkMeshInfoAccess;
-			std::queue<ChunkMeshInfo> _chunkMeshInfoQueue;
+			std::queue<std::thread> threadQueue_;
+			std::mutex chunkMeshInfoAccess_;
+			std::queue<ChunkMeshInfo> chunkMeshInfoQueue_;
 
-			std::map<std::array<float, 3>, Chunk*> _activeChunkMap;
-			std::map<std::array<float, 3>, Chunk*> _inactiveChunkMap;
+			std::map<std::array<float, 3>, Chunk*> activeChunkMap_;
+			std::map<std::array<float, 3>, Chunk*> inactiveChunkMap_;
 	};
 }
