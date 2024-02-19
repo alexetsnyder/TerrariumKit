@@ -62,6 +62,7 @@ class MainGame
 		ProcGenTK::World* world_;
 		ProcGenTK::ChunkManager* chunkManager_;
 
+		float cameraSpeed_;
 		ICamera* camera_;
 		Player* player_;
 };

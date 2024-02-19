@@ -6,7 +6,7 @@
 #include <iostream>
 
 Player::Player(ICamera* camera)
-	: camera_{ camera }, position_{ camera->position() }
+	: camera_{ camera }, position_{ camera->transform().position() }
 {
 	position_.y -= height;
 }
@@ -22,7 +22,7 @@ void Player::move(InputDirection direction)
 	//IGameActor* pointer = dynamic_cast<IGameActor*>(camera_);
 	//CmdTK::MoveCommand(pointer, direction).execute();
 
-	glm::vec3 cameraPos = camera_->position();
+	glm::vec3 cameraPos = camera_->transform().position();
 	position_ = glm::vec3(cameraPos.x, cameraPos.y - height, cameraPos.z);
 }
 

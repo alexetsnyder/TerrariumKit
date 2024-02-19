@@ -1,15 +1,12 @@
 #include "MainGame.h"
 
+#include "Camera.h"
 #include "ErrorLog.h"
-#include "FirstPersonCamera.h"
-#include "FlyingCamera.h"
 #include "Input.h"
-#include "RotateCameraCommand.h"
+#include "Keybindings.h"
 #include "ShaderProgram.h"
-#include "TopDownCamera.h"
 #include "TransformComponent.h"
 #include "World.h"
-#include "ZoomCameraCommand.h"
 
 #include <SDL/SDL_image.h>
 #include <glad/glad.h>
@@ -156,15 +153,12 @@ void MainGame::createCamera()
 	glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	float yaw = -90.0f;
 	float pitch = -80.0f;
-	float speed = 8.0f;
-	float sensititvity = 0.1f;
+
+	cameraSpeed_ = 16.0f;
+	CompTK::TransformComponent cameraTransform{ cameraPos, worldUp, yaw, pitch };
 	float zoom = 45.0f;
 
-	CompTK::TransformComponent cameraTransform{ cameraPos, worldUp, yaw, pitch };
-
-	//camera_ = new FlyingCamera{ cameraPos, worldUp, yaw, pitch, speed, sensititvity, zoom };
-	camera_ = new FirstPersonCamera{ cameraTransform, speed, zoom };
-	//camera_ = new TopDownCamera{ cameraPos, worldUp, speed, zoom };
+	camera_ = new Camera{ cameraTransform, zoom };
 }
 
 void MainGame::createPlayer()
@@ -229,7 +223,6 @@ void MainGame::updateGame()
 	handleKeys();
 
 	player_->update();
-	camera_->update();
 	world_->update();
 	chunkManager_->update();
 
@@ -284,4 +277,34 @@ void MainGame::handleKeys()
 	{
 		gameState_ = GameState::EXIT;
 	}
+
+	float xRel = SysTK::Input::getMouseAxis(SysTK::MouseAxis::X_AXIS);
+	float yRel = SysTK::Input::getMouseAxis(SysTK::MouseAxis::Y_AXIS);
+	camera_->transform().rotate(xRel, -yRel);
+
+	float yWheel = SysTK::Input::getMouseWheel();
+	camera_->zoom(yWheel);
+
+	glm::vec3 velocity = glm::vec3{ 0.0f };
+	double deltaTime = SysTK::Time::deltaTime();
+	float speed = static_cast<float>(cameraSpeed_ * deltaTime);
+
+	if (SysTK::Input::getKey(SysTK::Keybindings::upKey))
+	{
+		velocity += camera_->transform().front() * speed;
+	}
+	if (SysTK::Input::getKey(SysTK::Keybindings::downKey))
+	{
+		velocity += -camera_->transform().front() * speed;
+	}
+	if (SysTK::Input::getKey(SysTK::Keybindings::leftKey))
+	{
+		velocity += -camera_->transform().right() * speed;
+	}
+	if (SysTK::Input::getKey(SysTK::Keybindings::rightKey))
+	{
+		velocity += camera_->transform().right() * speed;
+	}
+
+	camera_->transform().translate(velocity);
 }

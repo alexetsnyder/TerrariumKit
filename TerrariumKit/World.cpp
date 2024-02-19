@@ -86,7 +86,7 @@ namespace ProcGenTK
     void World::checkCurrentChunk()
     {
         _hasCurrentChunkIdChanged = false;
-        glm::vec3 cameraPos = _camera->position();
+        glm::vec3 cameraPos = _camera->transform().position();
 
         ChunkID chunkId{ _chunkSize, cameraPos };
 

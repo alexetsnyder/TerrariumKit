@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FlyingCamera.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Keybindings.cpp" />
@@ -162,6 +163,7 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="FlyingCamera.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Keybindings.h" />
