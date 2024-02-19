@@ -135,12 +135,10 @@
   <ItemGroup>
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="FlyingCamera.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Keybindings.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="VoxelType.cpp" />
-    <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="ChunkID.cpp" />
     <ClCompile Include="ChunkManager.cpp" />
@@ -154,7 +152,6 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureAtlas.cpp" />
     <ClCompile Include="Time.cpp" />
-    <ClCompile Include="TopDownCamera.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,13 +161,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="FlyingCamera.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Keybindings.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="VoxelType.h" />
     <ClInclude Include="Enums.h" />
-    <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="ChunkID.h" />
     <ClInclude Include="ChunkManager.h" />
@@ -191,7 +186,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureAtlas.h" />
     <ClInclude Include="Time.h" />
-    <ClInclude Include="TopDownCamera.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="ZoomCameraCommand.h" />
   </ItemGroup>

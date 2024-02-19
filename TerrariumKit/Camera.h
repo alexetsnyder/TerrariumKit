@@ -31,12 +31,6 @@ class Camera : public ICamera
 			return transform_;
 		}
 
-		//From ICamera unused
-		glm::vec3 position() const override { return transform_.position(); }
-		void translate(glm::vec3 translation) override {};
-		void rotate(float xOffset, float yOffset) override {};
-		void update() override {};
-
 	private:
 		CompTK::TransformComponent transform_;
 		float zoom_;
