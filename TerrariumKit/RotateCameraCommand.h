@@ -17,7 +17,7 @@ namespace CmdTK
 
 			void execute() override
 			{
-				_camera->rotate(_xRel, _yRel);
+				_camera->transform().rotate(_xRel, _yRel);
 			}
 
 		private:

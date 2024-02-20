@@ -166,7 +166,6 @@
     <ClInclude Include="Keybindings.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="VoxelType.h" />
-    <ClInclude Include="Enums.h" />
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="ChunkID.h" />
     <ClInclude Include="ChunkManager.h" />
@@ -174,11 +173,9 @@
     <ClInclude Include="ICamera.h" />
     <ClInclude Include="IChunkMediator.h" />
     <ClInclude Include="ICommand.h" />
-    <ClInclude Include="IGameActor.h" />
     <ClInclude Include="ITerrainGen.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RotateCameraCommand.h" />
     <ClInclude Include="ShaderProgram.h" />

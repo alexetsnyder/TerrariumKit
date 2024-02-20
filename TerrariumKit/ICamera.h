@@ -7,12 +7,13 @@
 class ICamera
 {
 	public:
+		virtual ~ICamera() {};
+
 		virtual glm::mat4 viewMatrix() const = 0;
 		virtual float zoom() const = 0;
+
 		virtual void zoom(float yOffset) = 0;
 
 		virtual const CompTK::TransformComponent& transform() const = 0;
-		virtual CompTK::TransformComponent& transform() = 0;
-		
-		virtual ~ICamera() {};
+		virtual CompTK::TransformComponent& transform() = 0;	
 };

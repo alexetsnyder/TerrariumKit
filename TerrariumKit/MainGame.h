@@ -9,7 +9,6 @@
 
 #include <SDL/SDL.h>
 #include <chrono>
-#include <list>
 
 enum GameState
 {
