@@ -13,6 +13,11 @@ glm::mat4 Camera::viewMatrix() const
 	return glm::lookAt(transform_.position(), transform_.position() + transform_.front(), transform_.up());
 }
 
+float Camera::zoom() const
+{
+	return zoom_;
+}
+
 void Camera::zoom(float yOffset)
 {
 	zoom_ -= yOffset;
@@ -24,4 +29,14 @@ void Camera::zoom(float yOffset)
 	{
 		zoom_ = 45.0f;
 	}
+}
+
+CompTK::TransformComponent& Camera::transform()
+{
+	return transform_;
+}
+
+const CompTK::TransformComponent& Camera::transform() const
+{
+	return transform_;
 }

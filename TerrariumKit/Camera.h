@@ -13,23 +13,12 @@ class Camera : public ICamera
 
 		//From ICamera
 		glm::mat4 viewMatrix() const override;
-
-		float zoom() const override
-		{
-			return zoom_;
-		}
+		float zoom() const override;
 
 		void zoom(float yOffset) override;
 
-		CompTK::TransformComponent& transform() override
-		{
-			return transform_;
-		}
-
-		const CompTK::TransformComponent& transform() const override
-		{
-			return transform_;
-		}
+		CompTK::TransformComponent& transform() override;
+		const CompTK::TransformComponent& transform() const override;
 
 	private:
 		CompTK::TransformComponent transform_;
