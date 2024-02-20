@@ -163,7 +163,9 @@ void MainGame::createCamera()
 
 void MainGame::createPlayer()
 {
-	player_ = new Player(camera_);
+	float walkSpeed = 16.0f;
+
+	player_ = new Player(camera_, walkSpeed);
 }
 
 void MainGame::createWorld()
@@ -220,13 +222,21 @@ void MainGame::pollEvents()
 
 void MainGame::updateGame()
 {
-	handleKeys();
+	handleInput();
 
 	player_->update();
 	world_->update();
 	chunkManager_->update();
 
 	SysTK::Input::update();
+}
+
+void MainGame::handleInput()
+{
+	if (SysTK::Input::getKey(SDLK_ESCAPE))
+	{
+		gameState_ = GameState::EXIT;
+	}
 }
 
 void MainGame::drawGame()
@@ -269,42 +279,4 @@ void MainGame::fatalError()
 	free();
 	terminate();
 	exit(EXIT_FAILURE);
-}
-
-void MainGame::handleKeys()
-{
-	if (SysTK::Input::getKey(SDLK_ESCAPE))
-	{
-		gameState_ = GameState::EXIT;
-	}
-
-	float xRel = SysTK::Input::getMouseAxis(SysTK::MouseAxis::X_AXIS);
-	float yRel = SysTK::Input::getMouseAxis(SysTK::MouseAxis::Y_AXIS);
-	camera_->transform().rotate(xRel, -yRel);
-
-	float yWheel = SysTK::Input::getMouseWheel();
-	camera_->zoom(yWheel);
-
-	glm::vec3 velocity = glm::vec3{ 0.0f };
-	double deltaTime = SysTK::Time::deltaTime();
-	float speed = static_cast<float>(cameraSpeed_ * deltaTime);
-
-	if (SysTK::Input::getKey(SysTK::Keybindings::upKey))
-	{
-		velocity += camera_->transform().front() * speed;
-	}
-	if (SysTK::Input::getKey(SysTK::Keybindings::downKey))
-	{
-		velocity += -camera_->transform().front() * speed;
-	}
-	if (SysTK::Input::getKey(SysTK::Keybindings::leftKey))
-	{
-		velocity += -camera_->transform().right() * speed;
-	}
-	if (SysTK::Input::getKey(SysTK::Keybindings::rightKey))
-	{
-		velocity += camera_->transform().right() * speed;
-	}
-
-	camera_->transform().translate(velocity);
 }

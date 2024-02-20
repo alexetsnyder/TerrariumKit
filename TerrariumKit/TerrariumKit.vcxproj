@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="IGameObject.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Keybindings.h" />
     <ClInclude Include="TransformComponent.h" />

@@ -1,27 +1,26 @@
 #pragma once
 
-#include "Enums.h"
 #include "ICamera.h"
-#include "IGameActor.h"
+#include "IGameObject.h"
 #include "ShaderProgram.h"
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
-class Player : public IGameActor
+class Player : public EngineTK::IGameObject
 {
 	public:
 		const float height{ 1.8f };
 
-		Player(ICamera* camera);
+		Player(ICamera* camera, float walkSpeed);
 		~Player();
 
-		//From IGameActor
-		void move(InputDirection direction) override;	
+		//From EngineTK::IGameObject
 		void update() override;
 		void draw(const ShaderProgram& program) override;
 
 	private:
 		ICamera* camera_;
-		glm::vec3 position_;
+		float walkSpeed_;
+		glm::vec3 velocity_;
 };
 

@@ -43,13 +43,12 @@ class MainGame
 		void gameLoop();
 		void pollEvents();
 		void updateGame();
+		void handleInput();
 		void drawGame();
 
 		void free();
 		void terminate();
 		void fatalError();
-
-		void handleKeys();
 
 		SDL_Window* window_;
 		int screenWidth_;
