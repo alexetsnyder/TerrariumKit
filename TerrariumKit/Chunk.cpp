@@ -293,24 +293,24 @@ namespace ProcGenTK
 
         switch (face)
         {
-        case 0:
-            faceName = voxelSides.frontTextureName;
-            break;
-        case 1:
-            faceName = voxelSides.backTextureName;
-            break;
-        case 2:
-            faceName = voxelSides.leftTextureName;
-            break;
-        case 3:
-            faceName = voxelSides.rightTextureName;
-            break;
-        case 4:
-            faceName = voxelSides.topTextureName;
-            break;
-        case 5:
-            faceName = voxelSides.bottomTextureName;
-            break;
+            case 0:
+                faceName = voxelSides.frontTextureName;
+                break;
+            case 1:
+                faceName = voxelSides.backTextureName;
+                break;
+            case 2:
+                faceName = voxelSides.leftTextureName;
+                break;
+            case 3:
+                faceName = voxelSides.rightTextureName;
+                break;
+            case 4:
+                faceName = voxelSides.topTextureName;
+                break;
+            case 5:
+                faceName = voxelSides.bottomTextureName;
+                break;
         }
 
         return faceName;
