@@ -1,12 +1,12 @@
 #pragma once 
 
-#include "VoxelType.h"
 #include "ITerrainGen.h"
 #include "Structs.h"
+#include "VoxelType.h"
 
 #include <FastNoise/FastNoiseLite.h>
-#include <glm/glm.hpp>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 #include <map>
 
@@ -23,12 +23,12 @@ namespace ProcGenTK
 		private:
 			void createVoxelByteLookUp();
 
-			ChunkSize _chunkSize;
-			std::map<GLubyte, VoxelType> _voxelTypeLookUp;
-			std::map<std::string, GLubyte> _voxelByteLookUp;
+			ChunkSize chunkSize_;
+			std::map<GLubyte, VoxelType> voxelTypeLookUp_;
+			std::map<std::string, GLubyte> voxelByteLookUp_;
 
-			FastNoiseLite _noise;
-			float _minHeight;
-			float _varyHeight;
+			FastNoiseLite noise_;
+			float minHeight_;
+			float varyHeight_;
 	};
 }

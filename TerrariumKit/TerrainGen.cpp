@@ -3,17 +3,17 @@
 namespace ProcGenTK
 {
 	TerrainGen::TerrainGen(ChunkSize chunkSize, float minHeight, float varyHeight)
-		: _chunkSize{ chunkSize }
+		: chunkSize_{ chunkSize }
 	{
-		_noise.SetSeed(42);
-		_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
-		_noise.SetFractalType(FastNoiseLite::FractalType_FBm);
+		noise_.SetSeed(42);
+		noise_.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+		noise_.SetFractalType(FastNoiseLite::FractalType_FBm);
 
-		_minHeight = minHeight;
-		_varyHeight = varyHeight;
+		minHeight_ = minHeight;
+		varyHeight_ = varyHeight;
 
 		VoxelSides voxelSides{};
-		_voxelTypeLookUp[0] = VoxelType("air", false, voxelSides);
+		voxelTypeLookUp_[0] = VoxelType("air", false, voxelSides);
 
 		voxelSides.frontTextureName = "bedrock";
 		voxelSides.backTextureName = "bedrock";
@@ -21,7 +21,7 @@ namespace ProcGenTK
 		voxelSides.rightTextureName = "bedrock";
 		voxelSides.topTextureName = "bedrock";
 		voxelSides.bottomTextureName = "bedrock";
-		_voxelTypeLookUp[1] = VoxelType("bedrock", true, voxelSides);
+		voxelTypeLookUp_[1] = VoxelType("bedrock", true, voxelSides);
 
 		voxelSides.frontTextureName = "stone";
 		voxelSides.backTextureName = "stone";
@@ -29,7 +29,7 @@ namespace ProcGenTK
 		voxelSides.rightTextureName = "stone";
 		voxelSides.topTextureName = "stone";
 		voxelSides.bottomTextureName = "stone";
-		_voxelTypeLookUp[2] = VoxelType("stone", true, voxelSides);
+		voxelTypeLookUp_[2] = VoxelType("stone", true, voxelSides);
 
 		voxelSides.frontTextureName = "dirt";
 		voxelSides.backTextureName = "dirt";
@@ -37,7 +37,7 @@ namespace ProcGenTK
 		voxelSides.rightTextureName = "dirt";
 		voxelSides.topTextureName = "dirt";
 		voxelSides.bottomTextureName = "dirt";
-		_voxelTypeLookUp[3] = VoxelType("dirt", true, voxelSides);
+		voxelTypeLookUp_[3] = VoxelType("dirt", true, voxelSides);
 
 		voxelSides.frontTextureName = "grassSide";
 		voxelSides.backTextureName = "grassSide";
@@ -45,7 +45,7 @@ namespace ProcGenTK
 		voxelSides.rightTextureName = "grassSide";
 		voxelSides.topTextureName = "grassTop";
 		voxelSides.bottomTextureName = "dirt";
-		_voxelTypeLookUp[4] = VoxelType("grass", true, voxelSides);
+		voxelTypeLookUp_[4] = VoxelType("grass", true, voxelSides);
 
 		createVoxelByteLookUp();
 	}
@@ -56,41 +56,41 @@ namespace ProcGenTK
 
 		if (y == 0)
 		{
-			return _voxelByteLookUp.at("bedrock");
+			return voxelByteLookUp_.at("bedrock");
 		}
 
 		/* TERRAIN GENERATION */
 
-		int height = static_cast<int>(floor(_noise.GetNoise(position.x, position.z) * _varyHeight + _minHeight));
+		int height = static_cast<int>(floor(noise_.GetNoise(position.x, position.z) * varyHeight_ + minHeight_));
 
 		if (y > height)
 		{
-			return _voxelByteLookUp.at("air");
+			return voxelByteLookUp_.at("air");
 		}
 		else if (y >= height)
 		{
-			return _voxelByteLookUp.at("grass");
+			return voxelByteLookUp_.at("grass");
 		}
 		else if (y >= height - 6)
 		{
-			return _voxelByteLookUp.at("dirt");
+			return voxelByteLookUp_.at("dirt");
 		}
 		else
 		{
-			return _voxelByteLookUp.at("stone");
+			return voxelByteLookUp_.at("stone");
 		}
 	}
 
 	VoxelType TerrainGen::getVoxelType(GLubyte byte) const
 	{
-		return _voxelTypeLookUp.at(byte);
+		return voxelTypeLookUp_.at(byte);
 	}
 
 	void TerrainGen::createVoxelByteLookUp()
 	{
-		for (const auto& pair : _voxelTypeLookUp)
+		for (const auto& pair : voxelTypeLookUp_)
 		{
-			_voxelByteLookUp[pair.second.getName()] = pair.first;
+			voxelByteLookUp_[pair.second.getName()] = pair.first;
 		}
 	}
 }
