@@ -28,9 +28,9 @@ MainGame::MainGame()
 	initSystems();
 
 	createCamera();
-	createPlayer();
 	createWorld();
 	createChunkManager();
+	createPlayer();
 }
 
 MainGame::~MainGame()
@@ -165,7 +165,7 @@ void MainGame::createPlayer()
 {
 	float walkSpeed = 16.0f;
 
-	player_ = new Player(camera_, walkSpeed);
+	player_ = new Player(camera_, chunkManager_, walkSpeed);
 }
 
 void MainGame::createWorld()

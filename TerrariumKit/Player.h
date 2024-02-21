@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ICamera.h"
+#include "IChunkMediator.h"
 #include "IGameObject.h"
 #include "ShaderProgram.h"
 
@@ -9,18 +10,31 @@
 class Player : public EngineTK::IGameObject
 {
 	public:
-		const float height{ 1.8f };
+		const float cameraHeight{ 1.8f };
+		const float height{ 2.0f };
+		const float radius{ 0.15f };
+		const float gravity{ -9.8f };
 
-		Player(ICamera* camera, float walkSpeed);
+		Player(ICamera* camera, const ProcGenTK::IChunkMediator* mediator, float walkSpeed);
 		~Player();
+
+		glm::vec3 position() const;
 
 		//From EngineTK::IGameObject
 		void update() override;
 		void draw(const ShaderProgram& program) override;
 
 	private:
+		void calculateVelocity();
+		void checkForCollision();
+		bool yCollision(float dy);
+		bool xCollision(float dx);
+		bool zCollision(float dz);
+
 		ICamera* camera_;
+		const ProcGenTK::IChunkMediator* chunkMediator_;
 		float walkSpeed_;
 		glm::vec3 velocity_;
+		float verticalVelocity_;
 };
 
