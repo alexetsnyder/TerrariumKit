@@ -27,13 +27,13 @@ namespace ProcGenTK
 		private:
 			void checkCurrentChunk();
 
-			int _worldSize;
-			int _worldHeight;
-			bool _isInfinite;
-			ChunkSize _chunkSize;
-			const ICamera* _camera;
-			ChunkID _currentChunkId;
-			bool _hasCurrentChunkIdChanged;
+			int worldSize_;
+			int worldHeight_;
+			bool isInfinite_;
+			ChunkSize chunkSize_;
+			const ICamera* camera_;
+			ChunkID currentChunkId_;
+			bool hasCurrentChunkIdChanged_;
 	};
 }
 

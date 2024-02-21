@@ -10,6 +10,7 @@ namespace ProcGenTK
 	class ITerrainGen
 	{
 		public:
+			virtual ~ITerrainGen() {};
 			virtual GLubyte getVoxel(const glm::vec3& position) const = 0;
 			virtual VoxelType getVoxelType(GLubyte byte) const = 0;
 	};

@@ -4,7 +4,7 @@ namespace ProcGenTK
 {
 	VoxelType::VoxelType()
 	{
-		_isSolid = false;
+		isSolid_ = false;
 	}
 
 	VoxelType::VoxelType(const std::string& name, bool isSolid, const std::vector<std::string>& voxelSidesVct)
@@ -23,32 +23,32 @@ namespace ProcGenTK
 
 	bool VoxelType::isSolid() const
 	{
-		return _isSolid;
+		return isSolid_;
 	}
 
 	std::string VoxelType::getName() const
 	{
-		return _name;
+		return name_;
 	}
 
 	VoxelSides VoxelType::getVoxelSides() const
 	{
-		return _voxelSides;
+		return voxelSides_;
 	}
 
 	void VoxelType::setIsSolid(bool isSolid)
 	{
-		_isSolid = isSolid;
+		isSolid_ = isSolid;
 	}
 
 	void VoxelType::setName(const std::string& name)
 	{
-		_name = name;
+		name_ = name;
 	}
 
 	void VoxelType::setVoxelSides(VoxelSides voxelSides)
 	{
-		_voxelSides = voxelSides;
+		voxelSides_ = voxelSides;
 	}
 
 	void VoxelType::setVoxelSides(const std::vector<std::string>& voxelSidesVct)

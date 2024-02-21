@@ -9,44 +9,44 @@
 namespace ProcGenTK
 {
     World::World(const ICamera* camera, int worldSize, int worldHeight, ChunkSize chunkSize, bool isInfinite)
-        : _currentChunkId{ chunkSize, 0.0f, 4.0f, 0.0f }
+        : currentChunkId_{ chunkSize, 0.0f, 4.0f, 0.0f }
     {
-        _camera = camera;
-        _worldSize = worldSize;
-        _worldHeight = worldHeight;
-        _isInfinite = isInfinite;
-        _chunkSize = chunkSize;
-        _hasCurrentChunkIdChanged = false;
+        camera_ = camera;
+        worldSize_ = worldSize;
+        worldHeight_ = worldHeight;
+        isInfinite_ = isInfinite;
+        chunkSize_ = chunkSize;
+        hasCurrentChunkIdChanged_ = false;
     }
 
     int World::worldSize() const
     {
-        return _worldSize;
+        return worldSize_;
     }
 
     int World::worldHeight() const
     {
-        return _worldHeight;
+        return worldHeight_;
     }
 
     ChunkSize World::chunkSize() const
     {
-        return _chunkSize;
+        return chunkSize_;
     }
 
     ChunkID World::currentChunkID() const
     {
-        return _currentChunkId;
+        return currentChunkId_;
     }
 
     bool World::isInfinite() const
     {
-        return _isInfinite;
+        return isInfinite_;
     }
 
     bool World::hasCurrentChunkIdChanged() const
     {
-        return _hasCurrentChunkIdChanged;
+        return hasCurrentChunkIdChanged_;
     }
 
     bool World::isOutsideWorld(const glm::vec3& worldPos) const
@@ -54,14 +54,14 @@ namespace ProcGenTK
         if (!isInfinite())
         {
             //# of chunks per side depending on the world size
-            int dim = _worldSize + _worldSize + 1;
+            int dim = worldSize_ + worldSize_ + 1;
 
-            int boundY = _worldHeight - 1;
+            int boundY = worldHeight_ - 1;
 
-            int lowerBoundX = -(dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;
-            int lowerBoundZ = -(dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
-            int upperBoundX = (dim * _chunkSize.xWidth) / 2 + _chunkSize.xWidth / 2;
-            int upperBoundZ = (dim * _chunkSize.zWidth) / 2 + _chunkSize.zWidth / 2;
+            int lowerBoundX = -(dim * chunkSize_.xWidth) / 2 + chunkSize_.xWidth / 2;
+            int lowerBoundZ = -(dim * chunkSize_.zWidth) / 2 + chunkSize_.zWidth / 2;
+            int upperBoundX = (dim * chunkSize_.xWidth) / 2 + chunkSize_.xWidth / 2;
+            int upperBoundZ = (dim * chunkSize_.zWidth) / 2 + chunkSize_.zWidth / 2;
 
             int x = static_cast<int>(floor(worldPos.x));
             int y = static_cast<int>(floor(worldPos.y));
@@ -85,17 +85,17 @@ namespace ProcGenTK
 
     void World::checkCurrentChunk()
     {
-        _hasCurrentChunkIdChanged = false;
-        glm::vec3 cameraPos = _camera->transform().position();
+        hasCurrentChunkIdChanged_ = false;
+        glm::vec3 cameraPos = camera_->transform().position();
 
-        ChunkID chunkId{ _chunkSize, cameraPos };
+        ChunkID chunkId{ chunkSize_, cameraPos };
 
-        if (chunkId.x() != _currentChunkId.x() || chunkId.z() != _currentChunkId.z())
+        if (chunkId.x() != currentChunkId_.x() || chunkId.z() != currentChunkId_.z())
         {
-            _hasCurrentChunkIdChanged = true;
+            hasCurrentChunkIdChanged_ = true;
 
             std::cout << "X: " << chunkId.x() << " Y: " << chunkId.y() << " Z: " << chunkId.z() << std::endl;
-            _currentChunkId = chunkId;
+            currentChunkId_ = chunkId;
         }
     }
 

@@ -36,8 +36,8 @@ namespace ProcGenTK
 			void setVoxelSides(VoxelSides voxelSides);
 			void setVoxelSides(const std::vector<std::string>& voxelSidesVct);
 
-			bool _isSolid;
-			std::string _name;
-			VoxelSides _voxelSides;
+			bool isSolid_;
+			std::string name_;
+			VoxelSides voxelSides_;
 	};
 }
