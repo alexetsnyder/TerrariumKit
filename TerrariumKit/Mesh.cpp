@@ -7,31 +7,20 @@ Mesh::Mesh()
 
 std::vector<Vertex>& Mesh::getVertices()
 {
-	return _vertices;
+	return vertices_;
 }
 
 std::vector<int>& Mesh::getIndices()
 {
-	return _indices;
-}
-
-void Mesh::setVertices(const std::vector<Vertex>& vertices)
-{
-	_vertices = vertices;
-}
-
-void Mesh::setIndices(const std::vector<int>& indices)
-{
-	_indices = indices;
+	return indices_;
 }
 
 void Mesh::addVertex(Vertex vertex)
 {
-	_vertices.push_back(vertex);
+	vertices_.push_back(vertex);
 }
 
 void Mesh::addIndex(int index)
 {
-	_indices.push_back(index);
+	indices_.push_back(index);
 }
-

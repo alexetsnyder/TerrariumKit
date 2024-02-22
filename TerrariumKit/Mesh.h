@@ -26,14 +26,11 @@ class Mesh
         std::vector<Vertex>& getVertices();
         std::vector<int>& getIndices();
 
-        void setVertices(const std::vector<Vertex>& vertices);
-        void setIndices(const std::vector<int>& indices);
-
         void addVertex(Vertex vertex);
         void addIndex(int index);
 
     private:
-        std::vector<Vertex> _vertices;
-        std::vector<int> _indices;
+        std::vector<Vertex> vertices_;
+        std::vector<int> indices_;
 };
 
