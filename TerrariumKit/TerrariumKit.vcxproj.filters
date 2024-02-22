@@ -111,6 +111,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="JobManager.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -198,6 +201,9 @@
     </ClInclude>
     <ClInclude Include="IGameObject.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JobManager.h">
+      <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

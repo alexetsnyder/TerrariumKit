@@ -136,6 +136,7 @@
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="JobManager.cpp" />
     <ClCompile Include="Keybindings.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="VoxelType.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="IGameObject.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="JobManager.h" />
     <ClInclude Include="Keybindings.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="VoxelType.h" />

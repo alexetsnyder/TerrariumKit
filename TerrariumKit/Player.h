@@ -14,6 +14,8 @@ class Player : public EngineTK::IGameObject
 		const float height{ 2.0f };
 		const float radius{ 0.15f };
 		const float gravity{ -9.8f };
+		const float jumpForce{ 5.0f };
+		const double jumpCooldown{ 0.2 };
 
 		Player(ICamera* camera, const ProcGenTK::IChunkMediator* mediator, float walkSpeed);
 		~Player();
@@ -30,11 +32,16 @@ class Player : public EngineTK::IGameObject
 		bool yCollision(float dy);
 		bool xCollision(float dx);
 		bool zCollision(float dz);
+		void jump();
+		void resetJump();
 
 		ICamera* camera_;
 		const ProcGenTK::IChunkMediator* chunkMediator_;
 		float walkSpeed_;
 		glm::vec3 velocity_;
+
 		float verticalVelocity_;
+		bool isGrounded_;
+		bool isReadyToJump_;
 };
 

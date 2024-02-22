@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "Input.h"
+#include "JobManager.h"
 #include "Keybindings.h"
 #include "Time.h"
 
@@ -8,6 +9,8 @@ Player::Player(ICamera* camera, const ProcGenTK::IChunkMediator* mediator, float
 	: camera_{ camera }, chunkMediator_{ mediator }, walkSpeed_{ walkSpeed }, velocity_{ 0.0f }
 {
 	verticalVelocity_ = 0.0f;
+	isGrounded_ = false;
+	isReadyToJump_ = true;
 }
 
 Player::~Player()
@@ -50,6 +53,11 @@ void Player::calculateVelocity()
 		verticalVelocity_ += gravity * static_cast<float>(SysTK::Time::deltaTime());
 	}
 
+	if (isGrounded_ && isReadyToJump_ && SysTK::Input::getKey(SysTK::Keybindings::jumpKey))
+	{
+		jump();
+	}
+
 	velocity_ += verticalVelocity_ * glm::vec3(0.0f, 1.0f, 0.0f);
 
 	float speed = walkSpeed_;
@@ -78,11 +86,19 @@ void Player::calculateVelocity()
 void Player::checkForCollision()
 {
 	float deltaTime = static_cast<float>(SysTK::Time::deltaTime());
-	if (velocity_.y > 0.0f && yCollision(height + velocity_.y * deltaTime))
+	if (velocity_.y < 0.0f)
 	{
-		velocity_.y = 0.0f;
+		if (yCollision(velocity_.y * deltaTime))
+		{
+			velocity_.y = 0.0f;
+			isGrounded_ = true;
+		}
+		else
+		{
+			isGrounded_ = false;
+		}
 	}
-	else if (velocity_.y < 0.0f && yCollision(velocity_.y * deltaTime))
+	else if (velocity_.y > 0.0f && yCollision(height + velocity_.y * deltaTime))
 	{
 		velocity_.y = 0.0f;
 	}
@@ -124,4 +140,19 @@ bool Player::zCollision(float dz)
 		   chunkMediator_->hasSolidVoxel(glm::vec3(position().x, position().y, position().z + dz))
 		|| chunkMediator_->hasSolidVoxel(glm::vec3(position().x, position().y + height, position().z + dz))
 	);
+}
+
+void Player::jump()
+{
+	isGrounded_ = false;
+	isReadyToJump_ = false;
+	verticalVelocity_ = jumpForce;
+
+	std::function<void()> reset = [this]() { resetJump(); };
+	SysTK::Invoke(reset, jumpCooldown);
+}
+
+void Player::resetJump()
+{
+	isReadyToJump_ = true;
 }

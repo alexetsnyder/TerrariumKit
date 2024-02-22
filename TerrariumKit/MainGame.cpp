@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "ErrorLog.h"
 #include "Input.h"
+#include "JobManager.h"
 #include "Keybindings.h"
 #include "ShaderProgram.h"
 #include "TransformComponent.h"
@@ -223,6 +224,8 @@ void MainGame::pollEvents()
 void MainGame::updateGame()
 {
 	handleInput();
+
+	SysTK::JobManager::update();
 
 	player_->update();
 	world_->update();

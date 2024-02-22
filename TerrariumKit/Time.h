@@ -8,6 +8,7 @@ namespace SysTK
 	{
 		public:
 			Time() = delete;
+			Time(const Time&) = delete;
 
 			static void start();
 
