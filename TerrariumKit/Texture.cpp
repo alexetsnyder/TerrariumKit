@@ -5,18 +5,18 @@
 
 Texture::Texture()
 {
-	_id = 0;
+	id_ = 0;
 }
 
 Texture::~Texture()
 {
-	glDeleteTextures(1, &_id);
+	glDeleteTextures(1, &id_);
 }
 
 void Texture::init(const char* filePath)
 {
-	glGenTextures(1, &_id);
-	glBindTexture(GL_TEXTURE_2D, _id);
+	glGenTextures(1, &id_);
+	glBindTexture(GL_TEXTURE_2D, id_);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -34,7 +34,7 @@ void Texture::init(const char* filePath)
 
 void Texture::bind() const
 {
-	glBindTexture(GL_TEXTURE_2D, _id);
+	glBindTexture(GL_TEXTURE_2D, id_);
 }
 
 SDL_Surface* Texture::loadImage(const char* filePath)

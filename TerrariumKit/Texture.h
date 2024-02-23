@@ -20,6 +20,6 @@ class Texture
 	private:
 		SDL_Surface* loadImage(const char* filePath);
 
-		GLuint _id;
+		GLuint id_;
 };
 

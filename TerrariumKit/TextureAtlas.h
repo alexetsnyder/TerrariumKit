@@ -16,10 +16,10 @@ class TextureAtlas
 	private:
 		std::vector<float> getTextureCoordinates(int index) const;
 
-		int _blockSize;
-		int _atlasWidth;
-		int _blockCount;
-		float _normalizedBlockSize;
-		std::map<std::string, int> _atlas;
+		int blockSize_;
+		int atlasWidth_;
+		int blockCount_;
+		float normalizedBlockSize_;
+		std::map<std::string, int> atlas_;
 };
 
