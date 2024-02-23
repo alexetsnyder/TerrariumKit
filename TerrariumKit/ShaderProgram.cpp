@@ -9,16 +9,16 @@
 
 ShaderProgram::ShaderProgram()
 {
-	_programID = 0;
-	_vertexID = 0;
-	_fragmentID = 0;
+	programID_ = 0;
+	vertexID_ = 0;
+	fragmentID_ = 0;
 }
 
 ShaderProgram::~ShaderProgram()
 {
-	if (_programID != 0)
+	if (programID_ != 0)
 	{
-		glDeleteProgram(_programID);
+		glDeleteProgram(programID_);
 	}
 }
 
@@ -39,13 +39,13 @@ bool ShaderProgram::setShader(const std::string shaderPath, int glShaderType)
 
 	if (glShaderType == GL_VERTEX_SHADER)
 	{
-		_vertexID = glCreateShader(glShaderType);
-		glShaderSource(_vertexID, 1, &shaderSource, NULL);
+		vertexID_ = glCreateShader(glShaderType);
+		glShaderSource(vertexID_, 1, &shaderSource, NULL);
 	}
 	else if (glShaderType == GL_FRAGMENT_SHADER)
 	{
-		_fragmentID = glCreateShader(glShaderType);
-		glShaderSource(_fragmentID, 1, &shaderSource, NULL);
+		fragmentID_ = glCreateShader(glShaderType);
+		glShaderSource(fragmentID_, 1, &shaderSource, NULL);
 	}
 	else
 	{
@@ -59,13 +59,13 @@ bool ShaderProgram::setShader(const std::string shaderPath, int glShaderType)
 bool ShaderProgram::compile()
 {
 	std::vector<GLchar> infoLog;
-	if (!compile(_vertexID, infoLog))
+	if (!compile(vertexID_, infoLog))
 	{
 		logError("ShaderProgram::compile(vertexShader)", &infoLog[0]);
 		return false;
 	}
 
-	if (!compile(_fragmentID, infoLog))
+	if (!compile(fragmentID_, infoLog))
 	{
 		logError("ShaderProgram::compile(fragmentShader)", &infoLog[0]);
 		return false;
@@ -78,43 +78,43 @@ bool ShaderProgram::link()
 {
 	bool success = true;
 
-	_programID = glCreateProgram();
-	glAttachShader(_programID, _vertexID);
-	glAttachShader(_programID, _fragmentID);
-	glLinkProgram(_programID);
+	programID_ = glCreateProgram();
+	glAttachShader(programID_, vertexID_);
+	glAttachShader(programID_, fragmentID_);
+	glLinkProgram(programID_);
 	
 	int isLinked;
-	glGetProgramiv(_programID, GL_LINK_STATUS, &isLinked);
+	glGetProgramiv(programID_, GL_LINK_STATUS, &isLinked);
 
 	if (!isLinked)
 	{
 		success = false;
 
 		GLint maxLength{ 0 };
-		glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &maxLength);
+		glGetProgramiv(programID_, GL_INFO_LOG_LENGTH, &maxLength);
 
 		std::vector<GLchar> infoLog(maxLength);
-		glGetProgramInfoLog(_programID, 512, NULL, &infoLog[0]);
+		glGetProgramInfoLog(programID_, 512, NULL, &infoLog[0]);
 
 		logError("ShaderProgram::link", &infoLog[0]);
 	}
 
-	glDetachShader(_programID, _vertexID);
-	glDetachShader(_programID, _fragmentID);
-	glDeleteShader(_vertexID);
-	glDeleteShader(_fragmentID);
+	glDetachShader(programID_, vertexID_);
+	glDetachShader(programID_, fragmentID_);
+	glDeleteShader(vertexID_);
+	glDeleteShader(fragmentID_);
 
 	return success;
 }
 
 void ShaderProgram::use() const
 {
-	glUseProgram(_programID);
+	glUseProgram(programID_);
 }
 
 void ShaderProgram::setUniform(const std::string& name, const glm::mat4& matrix) const
 {
-	GLuint mat4Loc = glGetUniformLocation(_programID, name.c_str());
+	GLuint mat4Loc = glGetUniformLocation(programID_, name.c_str());
 	glUniformMatrix4fv(mat4Loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 

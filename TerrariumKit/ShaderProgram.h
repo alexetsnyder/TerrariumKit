@@ -28,8 +28,8 @@ class ShaderProgram
 		std::string readFile(const std::string& filePath);
 		bool compile(GLuint shader, std::vector<GLchar>& infoLog);
 
-		GLuint _programID;
-		GLuint _vertexID;
-		GLuint _fragmentID;
+		GLuint programID_;
+		GLuint vertexID_;
+		GLuint fragmentID_;
 };
 

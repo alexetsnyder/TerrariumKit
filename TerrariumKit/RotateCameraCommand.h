@@ -10,19 +10,19 @@ namespace CmdTK
 		public:
 			RotateCameraCommand(ICamera* camera, float xRel, float yRel)
 			{
-				_camera = camera;
-				_xRel = xRel;
-				_yRel = yRel;
+				camera_ = camera;
+				xRel_ = xRel;
+				yRel_ = yRel;
 			}
 
 			void execute() override
 			{
-				_camera->transform().rotate(_xRel, _yRel);
+				camera_->transform().rotate(xRel_, yRel_);
 			}
 
 		private:
-			float _xRel;
-			float _yRel;
-			ICamera* _camera;
+			float xRel_;
+			float yRel_;
+			ICamera* camera_;
 	};
 }

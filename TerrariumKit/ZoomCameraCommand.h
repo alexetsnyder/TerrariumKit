@@ -10,17 +10,17 @@ namespace CmdTK
 		public:
 			ZoomCameraCommand(ICamera* camera, float yOffset)
 			{
-				_camera = camera;
-				_yOffset = yOffset;
+				camera_ = camera;
+				yOffset_ = yOffset;
 			}
 
 			void execute() override
 			{
-				_camera->zoom(_yOffset);
+				camera_->zoom(yOffset_);
 			}
 
 		private:
-			float _yOffset;
-			ICamera* _camera;
+			float yOffset_;
+			ICamera* camera_;
 	};
 }
