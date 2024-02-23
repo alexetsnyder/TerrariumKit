@@ -17,7 +17,7 @@ class Player : public EngineTK::IGameObject
 		const float jumpForce{ 5.0f };
 		const double jumpCooldown{ 0.2 };
 
-		Player(ICamera* camera, const ProcGenTK::IChunkMediator* mediator, float walkSpeed);
+		Player(ICamera* camera, const ProcGenTK::IChunkMediator* mediator, float walkSpeed, float runSpeed);
 		~Player();
 
 		glm::vec3 position() const;
@@ -38,6 +38,7 @@ class Player : public EngineTK::IGameObject
 		ICamera* camera_;
 		const ProcGenTK::IChunkMediator* chunkMediator_;
 		float walkSpeed_;
+		float runSpeed_;
 		glm::vec3 velocity_;
 
 		float verticalVelocity_;

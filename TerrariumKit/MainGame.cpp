@@ -164,9 +164,10 @@ void MainGame::createCamera()
 
 void MainGame::createPlayer()
 {
-	float walkSpeed = 16.0f;
+	float walkSpeed = 8.0f;
+	float runSpeed = 16.0f;
 
-	player_ = new Player(camera_, chunkManager_, walkSpeed);
+	player_ = new Player(camera_, chunkManager_, walkSpeed, runSpeed);
 }
 
 void MainGame::createWorld()

@@ -5,8 +5,8 @@
 #include "Keybindings.h"
 #include "Time.h"
 
-Player::Player(ICamera* camera, const ProcGenTK::IChunkMediator* mediator, float walkSpeed)
-	: camera_{ camera }, chunkMediator_{ mediator }, walkSpeed_{ walkSpeed }, velocity_{ 0.0f }
+Player::Player(ICamera* camera, const ProcGenTK::IChunkMediator* mediator, float walkSpeed, float runSpeed)
+	: camera_{ camera }, chunkMediator_{ mediator }, walkSpeed_{ walkSpeed }, runSpeed_{ runSpeed }, velocity_{ 0.0f }
 {
 	verticalVelocity_ = 0.0f;
 	isGrounded_ = false;
@@ -60,7 +60,12 @@ void Player::calculateVelocity()
 
 	velocity_ += verticalVelocity_ * glm::vec3(0.0f, 1.0f, 0.0f);
 
-	float speed = walkSpeed_;
+	float speed{ walkSpeed_ };
+	if (isGrounded_ && SysTK::Input::getKey(SysTK::Keybindings::runKey))
+	{
+		speed = runSpeed_;
+	}
+
 	if (SysTK::Input::getKey(SysTK::Keybindings::upKey))
 	{
 		glm::vec3 front = camera_->transform().front();
