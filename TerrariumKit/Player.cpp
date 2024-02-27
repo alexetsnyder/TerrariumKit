@@ -34,9 +34,9 @@ void Player::update()
 	float yWheel = SysTK::Input::getMouseWheel();
 	camera_->zoom(yWheel);
 
-	float deltaTime = static_cast<float>(SysTK::Time::deltaTime());
+	float fixedDeltaTime = static_cast<float>(SysTK::Time::fixedDeltaTime());
 	calculateVelocity();
-	camera_->transform().translate(velocity_ * deltaTime);
+	camera_->transform().translate(velocity_ * fixedDeltaTime);
 }
 
 void Player::draw(const ShaderProgram& program)
@@ -50,7 +50,7 @@ void Player::calculateVelocity()
 
 	if (verticalVelocity_ > gravity)
 	{
-		verticalVelocity_ += gravity * static_cast<float>(SysTK::Time::deltaTime());
+		verticalVelocity_ += gravity * static_cast<float>(SysTK::Time::fixedDeltaTime());
 	}
 
 	if (isGrounded_ && isReadyToJump_ && SysTK::Input::getKey(SysTK::Keybindings::jumpKey))
@@ -90,10 +90,10 @@ void Player::calculateVelocity()
 
 void Player::checkForCollision()
 {
-	float deltaTime = static_cast<float>(SysTK::Time::deltaTime());
+	float fixedDeltaTime = static_cast<float>(SysTK::Time::fixedDeltaTime());
 	if (velocity_.y < 0.0f)
 	{
-		if (yCollision(velocity_.y * deltaTime))
+		if (yCollision(velocity_.y * fixedDeltaTime))
 		{
 			velocity_.y = 0.0f;
 			isGrounded_ = true;
@@ -103,7 +103,7 @@ void Player::checkForCollision()
 			isGrounded_ = false;
 		}
 	}
-	else if (velocity_.y > 0.0f && yCollision(height + velocity_.y * deltaTime))
+	else if (velocity_.y > 0.0f && yCollision(height + velocity_.y * fixedDeltaTime))
 	{
 		velocity_.y = 0.0f;
 	}

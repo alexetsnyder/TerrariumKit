@@ -24,7 +24,7 @@ namespace SysTK
 		auto it = jobs_.begin();
 		while (it != jobs_.end())
 		{
-			it->jTimer -= Time::deltaTime();
+			it->jTimer -= Time::fixedDeltaTime();
 			if (it->jTimer <= 0.0)
 			{
 				it->jFunction();

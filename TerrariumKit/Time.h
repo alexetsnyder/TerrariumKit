@@ -13,11 +13,14 @@ namespace SysTK
 			static void start();
 
 			static double deltaTime();
+			static double fixedDeltaTime();
 
 			static void update();
 
 		private:
+			static double framesPerSecond_;
+			static double secPerFrame_;
 			static std::chrono::duration<double> deltaTime_;
-			static std::chrono::high_resolution_clock::time_point lastFrame_;
+			static std::chrono::steady_clock::time_point lastFrame_;
 	};
 }

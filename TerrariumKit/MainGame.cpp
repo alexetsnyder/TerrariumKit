@@ -192,14 +192,24 @@ void MainGame::createChunkManager()
 
 void MainGame::gameLoop()
 {
+	constexpr int maxUpdates{ 5 };
+
+	double lag{ 0.0 };
+
 	SysTK::Time::start();
 	while (gameState_ != GameState::EXIT)
 	{
 		SysTK::Time::update();
+		lag += SysTK::Time::deltaTime();	
 
 		pollEvents();
 
-		updateGame();
+		int updateCount{ 0 };
+		while (lag >= SysTK::Time::fixedDeltaTime() && updateCount++ < maxUpdates)
+		{
+			updateGame();
+			lag -= SysTK::Time::fixedDeltaTime();
+		}
 
 		drawGame();
 	}
