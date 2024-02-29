@@ -60,7 +60,7 @@ namespace SysTK
 		}
 	}
 
-	void Input::update()
+	void Input::reset()
 	{
 		yWheel_ = 0.0f;
 		xRel_ = 0.0f;

@@ -242,7 +242,7 @@ void MainGame::updateGame()
 	world_->update();
 	chunkManager_->update();
 
-	SysTK::Input::update();
+	SysTK::Input::reset();
 }
 
 void MainGame::handleInput()

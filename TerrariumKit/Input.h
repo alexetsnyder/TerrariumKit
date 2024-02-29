@@ -23,7 +23,7 @@ namespace SysTK
 			static float getMouseWheel();
 
 			static void processInput(SDL_Event event);
-			static void update();
+			static void reset();
 
 			static void addKey(SDL_Keycode key);
 			static void removeKey(SDL_Keycode key);
