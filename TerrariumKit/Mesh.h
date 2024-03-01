@@ -23,8 +23,8 @@ class Mesh
     public:
         Mesh();
 
-        std::vector<Vertex>& getVertices();
-        std::vector<int>& getIndices();
+        const std::vector<Vertex>& getVertices() const;
+        const std::vector<int>& getIndices() const;
 
         void addVertex(Vertex vertex);
         void addIndex(int index);

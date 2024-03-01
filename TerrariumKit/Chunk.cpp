@@ -1,8 +1,9 @@
 #include "Chunk.h"
 
-#include "Mesh.h"
-#include "VoxelType.h"
 #include "ErrorLog.h"
+#include "Mesh.h"
+#include "MeshRenderer.h"
+#include "VoxelType.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -74,20 +75,13 @@ namespace ProcGenTK
     };
 
     Chunk::Chunk(const IChunkMediator* chunkMediator, const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize)
-        : atlas_{ 256, 16 }, size_{ chunkSize }
+        : chunkMediator_{ chunkMediator}, terrainGen_{ terrainGen }, position_{ position}, size_{ chunkSize }, atlas_{ 256, 16 }
     {
-        hasPopulatedVoxelMap_ = false;
-        vao_ = 0;
-        vbo_ = 0;
-        ebo_ = 0;
-        chunkMediator_ = chunkMediator;
-        terrainGen_ = terrainGen;
-        position_ = position;
-        voxels_.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
-        indicesCount_ = 0;
         noDraw_ = false;
-
-        createTextureAtlas();
+        hasPopulatedVoxelMap_ = false;
+        voxels_.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
+        atlas_.createAtlas(voxelNames);
+        meshRenderer_ = new CompTK::MeshRenderer();
     }
 
     Chunk::~Chunk()
@@ -144,21 +138,7 @@ namespace ProcGenTK
 
     void Chunk::setChunkMesh(Mesh& chunkMesh)
     {
-        genAll();
-        bindAll();
-
-        indicesCount_ = static_cast<GLuint>(chunkMesh.getIndices().size());
-
-        glBufferData(GL_ARRAY_BUFFER, chunkMesh.getVertices().size() * sizeof(Vertex), &chunkMesh.getVertices().front(), GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-        glEnableVertexAttribArray(0);
-
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoordinate));
-        glEnableVertexAttribArray(1);
-
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, chunkMesh.getIndices().size() * sizeof(float), &chunkMesh.getIndices().front(), GL_STATIC_DRAW);
-
-        unbindAll();
+        meshRenderer_->sendData(chunkMesh);
     }
 
     bool Chunk::isOutsideChunk(glm::vec3 position) const
@@ -185,15 +165,7 @@ namespace ProcGenTK
     {
         if (!noDraw_)
         {
-            glm::mat4 model{ modelMatrix() };
-
-            shader.setUniform("model", model);
-
-            texture_.bind();
-
-            glBindVertexArray(vao_);
-            glDrawElements(GL_TRIANGLES, indicesCount_, GL_UNSIGNED_INT, 0);
-            glBindVertexArray(0);
+            meshRenderer_->draw(shader, position_);
         }
     }
 
@@ -242,49 +214,9 @@ namespace ProcGenTK
         return terrainGen_->getVoxelType(getVoxelByte(position)).isSolid();
     }
 
-    void Chunk::createTextureAtlas()
-    {
-        atlas_.createAtlas(voxelNames);
-        texture_.init("Assets/Textures/Atlas.png");
-    }
-
-    void Chunk::genAll()
-    {
-        glGenVertexArrays(1, &vao_);
-        glGenBuffers(1, &vbo_);
-        glGenBuffers(1, &ebo_);
-    }
-
     void Chunk::free()
     {
-        if (vao_ > 0)
-        {
-            glDeleteVertexArrays(1, &vao_);
-        }
-
-        if (vbo_ > 0)
-        {
-            glDeleteBuffers(1, &vbo_);
-        }
-
-        if (ebo_ > 0)
-        {
-            glDeleteBuffers(1, &ebo_);
-        }
-    }
-
-    void Chunk::bindAll()
-    {
-        glBindVertexArray(vao_);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
-    }
-
-    void Chunk::unbindAll()
-    {
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        delete meshRenderer_;
     }
 
     std::string Chunk::getFaceName(VoxelSides voxelSides, int face) const
@@ -314,13 +246,6 @@ namespace ProcGenTK
         }
 
         return faceName;
-    }
-
-    glm::mat4 Chunk::modelMatrix() const
-    {
-        glm::mat4 model{ 1.0f };
-        model = glm::translate(model, position_);
-        return model;
     }
 
     GLubyte Chunk::getVoxelByte(const glm::vec3& position) const
@@ -361,5 +286,3 @@ namespace ProcGenTK
         return index;
     }
 }
-
-

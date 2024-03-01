@@ -8,12 +8,9 @@
 class Texture
 {
 	public:
-		Texture();
+		Texture(const char* filePath);
 		~Texture();
 		Texture(const Texture&) = delete;
-		Texture& operator=(const Texture&) = delete;
-
-		void init(const char* filePath);
 
 		void bind() const;
 

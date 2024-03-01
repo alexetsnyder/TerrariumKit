@@ -5,12 +5,12 @@ Mesh::Mesh()
 
 }
 
-std::vector<Vertex>& Mesh::getVertices()
+const std::vector<Vertex>& Mesh::getVertices() const
 {
 	return vertices_;
 }
 
-std::vector<int>& Mesh::getIndices()
+const std::vector<int>& Mesh::getIndices() const
 {
 	return indices_;
 }

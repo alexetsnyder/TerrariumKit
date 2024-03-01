@@ -138,6 +138,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="JobManager.cpp" />
     <ClCompile Include="Keybindings.cpp" />
+    <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="VoxelType.cpp" />
     <ClCompile Include="Chunk.cpp" />
@@ -163,9 +164,11 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="IGameObject.h" />
+    <ClInclude Include="IMeshRenderer.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="JobManager.h" />
     <ClInclude Include="Keybindings.h" />
+    <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="VoxelType.h" />
     <ClInclude Include="Chunk.h" />

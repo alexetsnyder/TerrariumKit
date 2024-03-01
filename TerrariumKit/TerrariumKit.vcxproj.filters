@@ -114,6 +114,9 @@
     <ClCompile Include="JobManager.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="MeshRenderer.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -204,6 +207,12 @@
     </ClInclude>
     <ClInclude Include="JobManager.h">
       <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="IMeshRenderer.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

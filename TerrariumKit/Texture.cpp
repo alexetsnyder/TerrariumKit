@@ -3,17 +3,7 @@
 #include <glad/glad.h>
 #include <SDL/SDL_image.h>
 
-Texture::Texture()
-{
-	id_ = 0;
-}
-
-Texture::~Texture()
-{
-	glDeleteTextures(1, &id_);
-}
-
-void Texture::init(const char* filePath)
+Texture::Texture(const char* filePath)
 {
 	glGenTextures(1, &id_);
 	glBindTexture(GL_TEXTURE_2D, id_);
@@ -30,6 +20,11 @@ void Texture::init(const char* filePath)
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	SDL_FreeSurface(imageSurface);
+}
+
+Texture::~Texture()
+{
+	glDeleteTextures(1, &id_);
 }
 
 void Texture::bind() const
