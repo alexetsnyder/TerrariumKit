@@ -34,7 +34,7 @@ namespace ProcGenTK
 
 			void createChunkMesh(Mesh& chunkMesh);
 
-			void setChunkMesh(Mesh& chunkMesh);
+			void sendChunkMesh(Mesh& chunkMesh);
 
 			bool isOutsideChunk(glm::vec3 position) const;
 

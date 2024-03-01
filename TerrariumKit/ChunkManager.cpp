@@ -129,7 +129,7 @@ namespace ProcGenTK
             }
             else
             {
-                chunkMeshInfo.chunkPointer->setChunkMesh(chunkMeshInfo.chunkMesh);
+                chunkMeshInfo.chunkPointer->sendChunkMesh(chunkMeshInfo.chunkMesh);
             }
         }
     }

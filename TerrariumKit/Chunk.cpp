@@ -136,7 +136,7 @@ namespace ProcGenTK
         noDraw_ = noDraw;
     }
 
-    void Chunk::setChunkMesh(Mesh& chunkMesh)
+    void Chunk::sendChunkMesh(Mesh& chunkMesh)
     {
         meshRenderer_->sendData(chunkMesh);
     }
