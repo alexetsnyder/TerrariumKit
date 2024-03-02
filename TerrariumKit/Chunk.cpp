@@ -2,7 +2,6 @@
 
 #include "ErrorLog.h"
 #include "Mesh.h"
-#include "MeshRenderer.h"
 #include "VoxelType.h"
 
 #include <glad/glad.h>
@@ -74,19 +73,52 @@ namespace ProcGenTK
         "sand",
     };
 
-    Chunk::Chunk(const IChunkMediator* chunkMediator, const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize)
-        : chunkMediator_{ chunkMediator}, terrainGen_{ terrainGen }, position_{ position}, size_{ chunkSize }, atlas_{ 256, 16 }
+    Chunk::Chunk(const IChunkMediator* chunkMediator, 
+                 const ITerrainGen* terrainGen, 
+                 CompTK::IMeshRenderer* meshRenderer, 
+                 glm::vec3 position, ChunkSize chunkSize)
+        : chunkMediator_{ chunkMediator}, terrainGen_{ terrainGen }, meshRenderer_{ meshRenderer },
+          position_{ position}, size_{ chunkSize }, atlas_{ 256, 16, voxelNames }
     {
         noDraw_ = false;
         hasPopulatedVoxelMap_ = false;
         voxels_.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
-        atlas_.createAtlas(voxelNames);
-        meshRenderer_ = new CompTK::MeshRenderer();
     }
 
     Chunk::~Chunk()
     {
-        free();
+        delete meshRenderer_;
+    }
+
+    bool Chunk::hasPopulatedVoxelMap() const
+    {
+        return hasPopulatedVoxelMap_;
+    }
+
+    bool Chunk::isOutsideChunk(const glm::vec3& position) const
+    {
+        int xBound = size_.xWidth - 1;
+        int yBound = size_.height - 1;
+        int zBound = size_.zWidth - 1;
+
+        int x = static_cast<int>(floor(position.x));
+        int y = static_cast<int>(floor(position.y));
+        int z = static_cast<int>(floor(position.z));
+
+        if (x < 0 || x > xBound ||
+            z < 0 || z > zBound ||
+            y < 0 || y > yBound)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    GLubyte Chunk::getVoxelByte(const glm::vec3& position) const
+    {
+        int index = convertPositionToIndex(position);
+        return voxels_[index];
     }
 
     void Chunk::populateVoxelMap()
@@ -126,39 +158,14 @@ namespace ProcGenTK
         }
     }
 
-    std::vector<float> Chunk::getTextureCoordinates(VoxelSides voxelSides, int face) const
-    {
-        return atlas_.getTextureCoordinates(getFaceName(voxelSides, face));
-    }
-
-    void Chunk::setNoDraw(bool noDraw)
-    {
-        noDraw_ = noDraw;
-    }
-
     void Chunk::sendChunkMesh(Mesh& chunkMesh)
     {
         meshRenderer_->sendData(chunkMesh);
     }
 
-    bool Chunk::isOutsideChunk(glm::vec3 position) const
+    void Chunk::setNoDraw(bool noDraw)
     {
-        int xBound = size_.xWidth - 1;
-        int yBound = size_.height - 1;
-        int zBound = size_.zWidth - 1;
-
-        int x = static_cast<int>(floor(position.x));
-        int y = static_cast<int>(floor(position.y));
-        int z = static_cast<int>(floor(position.z));
-
-        if (x < 0 || x > xBound ||
-            z < 0 || z > zBound ||
-            y < 0 || y > yBound)
-        {
-            return true;
-        }
-
-        return false;
+        noDraw_ = noDraw;
     }
 
     void Chunk::draw(const ShaderProgram& shader) const
@@ -167,6 +174,11 @@ namespace ProcGenTK
         {
             meshRenderer_->draw(shader, position_);
         }
+    }
+
+    std::vector<float> Chunk::getTextureCoordinates(VoxelSides voxelSides, int face) const
+    {
+        return atlas_.getTextureCoordinates(getFaceName(voxelSides, face));
     }
 
     void Chunk::createVoxel(const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
@@ -214,11 +226,6 @@ namespace ProcGenTK
         return terrainGen_->getVoxelType(getVoxelByte(position)).isSolid();
     }
 
-    void Chunk::free()
-    {
-        delete meshRenderer_;
-    }
-
     std::string Chunk::getFaceName(VoxelSides voxelSides, int face) const
     {
         std::string faceName{};
@@ -246,17 +253,6 @@ namespace ProcGenTK
         }
 
         return faceName;
-    }
-
-    GLubyte Chunk::getVoxelByte(const glm::vec3& position) const
-    {
-        int index = convertPositionToIndex(position);
-        return voxels_[index];
-    }
-
-    bool Chunk::hasPopulatedVoxelMap() const
-    {
-        return hasPopulatedVoxelMap_;
     }
 
     int Chunk::convertPositionToIndex(const glm::vec3& position) const

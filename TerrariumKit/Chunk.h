@@ -19,31 +19,29 @@ namespace ProcGenTK
 	class Chunk
 	{
 		public:
-			Chunk(const IChunkMediator* chunkMediator, const ITerrainGen* terrainGen, glm::vec3 position, ChunkSize chunkSize);
+			Chunk(const IChunkMediator* chunkMediator, 
+				  const ITerrainGen* terrainGen, 
+				  CompTK::IMeshRenderer* meshRenderer, 
+				  glm::vec3 position, 
+				  ChunkSize chunkSize);
 			~Chunk();
 			Chunk(const Chunk&) = delete;
 
 			bool hasPopulatedVoxelMap() const;
-
+			bool isOutsideChunk(const glm::vec3& position) const;
 			GLubyte getVoxelByte(const glm::vec3& position) const;
-			std::vector<float> getTextureCoordinates(VoxelSides voxelSides, int face) const;
-
-			void setNoDraw(bool noDraw);
-
+			
 			void populateVoxelMap();
-
 			void createChunkMesh(Mesh& chunkMesh);
-
 			void sendChunkMesh(Mesh& chunkMesh);
-
-			bool isOutsideChunk(glm::vec3 position) const;
-
+		
+			void setNoDraw(bool noDraw);
 			void draw(const ShaderProgram& shader) const;
 
 		private:
+			std::vector<float> getTextureCoordinates(VoxelSides voxelSides, int face) const;
 			void createVoxel(const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
 			bool hasSolidVoxel(const glm::vec3& position) const;
-			void free();
 			std::string getFaceName(VoxelSides voxelSides, int face) const;
 			int convertPositionToIndex(const glm::vec3& position) const;
 
@@ -52,11 +50,11 @@ namespace ProcGenTK
 
 			const IChunkMediator* chunkMediator_;
 			const ITerrainGen* terrainGen_;
-			ChunkSize size_;
-			glm::vec3 position_;
-
-			bool noDraw_;
-			TextureAtlas atlas_;
 			CompTK::IMeshRenderer* meshRenderer_;
+			glm::vec3 position_;
+			ChunkSize size_;
+
+			TextureAtlas atlas_;
+			bool noDraw_;	
 	};
 }

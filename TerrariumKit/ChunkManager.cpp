@@ -1,5 +1,7 @@
 #include "ChunkManager.h"
 
+#include "MeshRenderer.h"
+
 namespace ProcGenTK
 {
     ChunkManager::ChunkManager(const World* world, bool useThreading)
@@ -70,7 +72,7 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ new Chunk{ this, terrainGen_, chunkId.position(), world_->chunkSize() } };
+                        Chunk* chunkPointer{ new Chunk{ this, terrainGen_, new CompTK::MeshRenderer(), chunkId.position(), world_->chunkSize() } };
                         activeChunkMap_.emplace(chunkId.id(), chunkPointer);
                         chunkCreateQueue_.push(chunkPointer);
                     }

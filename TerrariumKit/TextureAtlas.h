@@ -7,19 +7,18 @@
 class TextureAtlas
 {
 	public:
-		TextureAtlas(int width, int blockSize);
-
-		void createAtlas(std::vector<std::string> blockNames);
+		TextureAtlas(int width, int voxelSize, const std::vector<std::string>& voxelNames);
 
 		std::vector<float> getTextureCoordinates(std::string name) const;
 
 	private:
+		void createAtlas(std::vector<std::string> voxelNames);
 		std::vector<float> getTextureCoordinates(int index) const;
 
-		int blockSize_;
+		int voxelSize_;
 		int atlasWidth_;
-		int blockCount_;
-		float normalizedBlockSize_;
+		int voxelCount_;
+		float normalizedVoxelSize_;
 		std::map<std::string, int> atlas_;
 };
 

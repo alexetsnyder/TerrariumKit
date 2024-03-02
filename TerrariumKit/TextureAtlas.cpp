@@ -2,20 +2,13 @@
 
 #include <vector>
 
-TextureAtlas::TextureAtlas(int width, int blockSize)
+TextureAtlas::TextureAtlas(int width, int voxelSize, const std::vector<std::string>& voxelNames)
 {
-	blockSize_ = blockSize;
+	voxelSize_ = voxelSize;
 	atlasWidth_ = width;
-	blockCount_ = atlasWidth_ / blockSize_;
-	normalizedBlockSize_ = (float)blockSize_ / (float)atlasWidth_;
-}
-
-void TextureAtlas::createAtlas(std::vector<std::string> blockNames)
-{
-	for (int i = 0; i < blockNames.size(); i++)
-	{
-		atlas_[blockNames[i]] = i;
-	}
+	voxelCount_ = atlasWidth_ / voxelSize_;
+	normalizedVoxelSize_ = (float)voxelSize_ / (float)atlasWidth_;
+	createAtlas(voxelNames);
 }
 
 std::vector<float> TextureAtlas::getTextureCoordinates(std::string name) const
@@ -24,26 +17,34 @@ std::vector<float> TextureAtlas::getTextureCoordinates(std::string name) const
 	return getTextureCoordinates(index);
 }
 
+void TextureAtlas::createAtlas(std::vector<std::string> voxelNames)
+{
+	for (int i = 0; i < voxelNames.size(); i++)
+	{
+		atlas_[voxelNames[i]] = i;
+	}
+}
+
 std::vector<float> TextureAtlas::getTextureCoordinates(int index) const
 {
 	std::vector<float> textureCoordinates{};
 
-	float y = static_cast<float>(floor(static_cast<float>(index) / blockCount_));
-	float x = index - blockCount_ * y;
+	float y = static_cast<float>(floor(static_cast<float>(index) / voxelCount_));
+	float x = index - voxelCount_ * y;
 
-	y *= normalizedBlockSize_;
-	x *= normalizedBlockSize_;
+	y *= normalizedVoxelSize_;
+	x *= normalizedVoxelSize_;
 
 	textureCoordinates.push_back(x);
-	textureCoordinates.push_back(y + normalizedBlockSize_);
+	textureCoordinates.push_back(y + normalizedVoxelSize_);
 
-	textureCoordinates.push_back(x + normalizedBlockSize_);
-	textureCoordinates.push_back(y + normalizedBlockSize_);
+	textureCoordinates.push_back(x + normalizedVoxelSize_);
+	textureCoordinates.push_back(y + normalizedVoxelSize_);
 
 	textureCoordinates.push_back(x);
 	textureCoordinates.push_back(y);
 
-	textureCoordinates.push_back(x + normalizedBlockSize_);
+	textureCoordinates.push_back(x + normalizedVoxelSize_);
 	textureCoordinates.push_back(y);
 
 	return textureCoordinates;
