@@ -80,7 +80,6 @@ namespace ProcGenTK
         : chunkMediator_{ chunkMediator}, terrainGen_{ terrainGen }, meshRenderer_{ meshRenderer },
           position_{ position}, size_{ chunkSize }, atlas_{ 256, 16, voxelNames }
     {
-        noDraw_ = false;
         hasPopulatedVoxelMap_ = false;
         voxels_.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
     }
@@ -163,17 +162,15 @@ namespace ProcGenTK
         meshRenderer_->sendData(chunkMesh);
     }
 
-    void Chunk::setNoDraw(bool noDraw)
+    void Chunk::setMeshRenderer(CompTK::IMeshRenderer* meshRenderer)
     {
-        noDraw_ = noDraw;
+        delete meshRenderer_;
+        meshRenderer_ = meshRenderer;
     }
 
     void Chunk::draw(const ShaderProgram& shader) const
     {
-        if (!noDraw_)
-        {
-            meshRenderer_->draw(shader, position_);
-        }
+        meshRenderer_->draw(shader, position_);
     }
 
     std::vector<float> Chunk::getTextureCoordinates(VoxelSides voxelSides, int face) const

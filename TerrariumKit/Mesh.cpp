@@ -5,6 +5,11 @@ Mesh::Mesh()
 
 }
 
+const bool Mesh::empty()
+{
+	return (vertices_.empty() || indices_.empty());
+}
+
 const std::vector<Vertex>& Mesh::getVertices() const
 {
 	return vertices_;

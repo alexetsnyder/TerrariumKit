@@ -169,6 +169,7 @@
     <ClInclude Include="JobManager.h" />
     <ClInclude Include="Keybindings.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="NullMeshRenderer.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="VoxelType.h" />
     <ClInclude Include="Chunk.h" />

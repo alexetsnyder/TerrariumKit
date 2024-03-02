@@ -23,6 +23,7 @@ class Mesh
     public:
         Mesh();
 
+        const bool empty();
         const std::vector<Vertex>& getVertices() const;
         const std::vector<int>& getIndices() const;
 

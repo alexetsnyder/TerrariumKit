@@ -1,6 +1,7 @@
 #include "ChunkManager.h"
 
 #include "MeshRenderer.h"
+#include "NullMeshRenderer.h"
 
 namespace ProcGenTK
 {
@@ -72,7 +73,7 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ new Chunk{ this, terrainGen_, new CompTK::MeshRenderer("Assets/Textures/Atlas.png"), chunkId.position(), world_->chunkSize() } };
+                        Chunk* chunkPointer{ new Chunk{ this, terrainGen_, new CompTK::NullMeshRenderer(), chunkId.position(), world_->chunkSize()}};
                         activeChunkMap_.emplace(chunkId.id(), chunkPointer);
                         chunkCreateQueue_.push(chunkPointer);
                     }
@@ -122,15 +123,7 @@ namespace ProcGenTK
         while (!chunkMeshInfoQueue_.empty() && count++ < n)
         {
             ChunkMeshInfo chunkMeshInfo{ nextChunkMeshInfo() };
-
-            if (chunkMeshInfo.chunkMesh.getIndices().empty())
-            {
-                chunkMeshInfo.chunkPointer->setNoDraw(true);
-            }
-            else
-            {
-                chunkMeshInfo.chunkPointer->sendChunkMesh(chunkMeshInfo.chunkMesh);
-            }
+            chunkMeshInfo.chunkPointer->sendChunkMesh(chunkMeshInfo.chunkMesh);
         }
     }
 
@@ -204,6 +197,10 @@ namespace ProcGenTK
         chunkMeshInfo.chunkPointer = chunk;
 
         chunk->createChunkMesh(chunkMeshInfo.chunkMesh);
+        if (!chunkMeshInfo.chunkMesh.empty())
+        {
+            chunk->setMeshRenderer(new CompTK::MeshRenderer("Assets/Textures/Atlas.png"));
+        }
 
         std::lock_guard<std::mutex> lock(chunkMeshInfoAccess_);
         chunkMeshInfoQueue_.push(chunkMeshInfo);

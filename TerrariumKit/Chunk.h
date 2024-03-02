@@ -35,7 +35,7 @@ namespace ProcGenTK
 			void createChunkMesh(Mesh& chunkMesh);
 			void sendChunkMesh(Mesh& chunkMesh);
 		
-			void setNoDraw(bool noDraw);
+			void setMeshRenderer(CompTK::IMeshRenderer* meshRenderer);
 			void draw(const ShaderProgram& shader) const;
 
 		private:
@@ -53,8 +53,6 @@ namespace ProcGenTK
 			CompTK::IMeshRenderer* meshRenderer_;
 			glm::vec3 position_;
 			ChunkSize size_;
-
 			TextureAtlas atlas_;
-			bool noDraw_;	
 	};
 }
