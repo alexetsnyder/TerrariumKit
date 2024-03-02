@@ -50,7 +50,7 @@ namespace ProcGenTK
 			const ITerrainGen* terrainGen_;
 			std::queue<Chunk*> chunkCreateQueue_;
 
-			bool _useThreading;
+			bool useThreading_;
 			std::queue<std::thread> threadQueue_;
 			std::mutex chunkMeshInfoAccess_;
 			std::queue<ChunkMeshInfo> chunkMeshInfoQueue_;

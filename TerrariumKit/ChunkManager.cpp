@@ -8,7 +8,7 @@ namespace ProcGenTK
     ChunkManager::ChunkManager(const World* world, bool useThreading)
     {
         world_ = world;
-        _useThreading = useThreading;
+        useThreading_ = useThreading;
 
         float minHeight{ 32.0f };
         float varyHeight{ 16.0f };
@@ -129,7 +129,7 @@ namespace ProcGenTK
 
     void ChunkManager::update()
     {
-        if (_useThreading)
+        if (useThreading_)
         {
             joinChunkThreads(16);
             createChunkThreads(16);
