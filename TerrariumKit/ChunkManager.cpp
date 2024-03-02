@@ -121,9 +121,7 @@ namespace ProcGenTK
         int count = 0;
         while (!chunkMeshInfoQueue_.empty() && count++ < n)
         {
-            std::lock_guard<std::mutex> lock(chunkMeshInfoAccess_);
-            ChunkMeshInfo chunkMeshInfo{ chunkMeshInfoQueue_.front() };
-            chunkMeshInfoQueue_.pop();
+            ChunkMeshInfo chunkMeshInfo{ nextChunkMeshInfo() };
 
             if (chunkMeshInfo.chunkMesh.getIndices().empty())
             {
@@ -188,6 +186,14 @@ namespace ProcGenTK
         {
             return terrainGen_->getVoxelType(terrainGen_->getVoxel(worldPos)).isSolid();
         }
+    }
+
+    ChunkMeshInfo ChunkManager::nextChunkMeshInfo()
+    {
+        std::lock_guard<std::mutex> lock(chunkMeshInfoAccess_);
+        ChunkMeshInfo chunkMeshInfo{ chunkMeshInfoQueue_.front() };
+        chunkMeshInfoQueue_.pop();
+        return chunkMeshInfo;
     }
 
     void ChunkManager::createChunk(Chunk* chunk)

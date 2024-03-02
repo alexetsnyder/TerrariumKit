@@ -42,6 +42,7 @@ namespace ProcGenTK
 			void draw(const ShaderProgram& program);
 
 		private:
+			ChunkMeshInfo nextChunkMeshInfo();
 			void createChunk(Chunk* chunk);
 			void cleanUpChunkThreads();
 
