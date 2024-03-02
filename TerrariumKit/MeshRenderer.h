@@ -12,7 +12,7 @@ namespace CompTK
 	class MeshRenderer : public IMeshRenderer
 	{
 		public:
-			MeshRenderer();
+			MeshRenderer(const char* textureFile);
 			~MeshRenderer();
 			MeshRenderer(const MeshRenderer&) = delete;
 

@@ -72,7 +72,7 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ new Chunk{ this, terrainGen_, new CompTK::MeshRenderer(), chunkId.position(), world_->chunkSize() } };
+                        Chunk* chunkPointer{ new Chunk{ this, terrainGen_, new CompTK::MeshRenderer("Assets/Textures/Atlas.png"), chunkId.position(), world_->chunkSize() } };
                         activeChunkMap_.emplace(chunkId.id(), chunkPointer);
                         chunkCreateQueue_.push(chunkPointer);
                     }

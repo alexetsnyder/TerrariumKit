@@ -5,8 +5,8 @@
 
 namespace CompTK
 {
-	MeshRenderer::MeshRenderer()
-        : vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 }, indicesCount_{ 0 }, texture_ { "Assets/Textures/Atlas.png" }
+	MeshRenderer::MeshRenderer(const char* textureFile)
+        : vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 }, indicesCount_{ 0 }, texture_ { textureFile }
 	{
 
 	}
