@@ -34,8 +34,18 @@ void Texture::bind() const
 
 SDL_Surface* Texture::loadImage(const char* filePath)
 {
-	SDL_Surface* sourceSurface = IMG_Load(filePath);
-	SDL_Rect imageFrame{ 0, 0, sourceSurface->w, sourceSurface->h };
+	SDL_Surface* srcSurface = IMG_Load(filePath);
+
+	SDL_Surface* targetSurface = convertSurfaceForOpenGL(srcSurface);
+
+	SDL_FreeSurface(srcSurface);
+
+	return targetSurface;
+}
+
+SDL_Surface* Texture::convertSurfaceForOpenGL(SDL_Surface* srcSurface)
+{
+	SDL_Rect srcRect{ 0, 0, srcSurface->w, srcSurface->h };
 
 	uint32_t redMask;
 	uint32_t greenMask;
@@ -54,11 +64,9 @@ SDL_Surface* Texture::loadImage(const char* filePath)
 	alphaMask = 0xff000000;
 #endif
 
-	SDL_Surface* targetSurface = SDL_CreateRGBSurface(0, imageFrame.w, imageFrame.h, 32, redMask, greenMask, blueMask, alphaMask);
+	SDL_Surface* destSurface = SDL_CreateRGBSurface(0, srcRect.w, srcRect.h, 32, redMask, greenMask, blueMask, alphaMask);
 
-	SDL_BlitSurface(sourceSurface, &imageFrame, targetSurface, &imageFrame);
+	SDL_BlitSurface(srcSurface, &srcRect, destSurface, &srcRect);
 
-	SDL_FreeSurface(sourceSurface);
-
-	return targetSurface;
+	return destSurface;
 }

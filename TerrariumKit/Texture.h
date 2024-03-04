@@ -16,6 +16,7 @@ class Texture
 
 	private:
 		SDL_Surface* loadImage(const char* filePath);
+		SDL_Surface* convertSurfaceForOpenGL(SDL_Surface* srcSurface);
 
 		GLuint id_;
 };
