@@ -1,7 +1,5 @@
 #include "GlyphAtlas.h"
 
-#include "ErrorLog.h"
-
 #include <assert.h>
 
 namespace TextTK
