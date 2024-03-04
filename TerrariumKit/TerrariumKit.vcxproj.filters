@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{86309c4f-0631-4fe8-a707-15949fb60e32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\TextRendering">
+      <UniqueIdentifier>{0b92d23f-dad4-4d9c-9217-5def4c37ae8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TextRendering">
+      <UniqueIdentifier>{29d771d1-c9f7-4e16-be3f-9b876b976413}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -117,12 +123,18 @@
     <ClCompile Include="MeshRenderer.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="GlyphAtlas.cpp">
+      <Filter>Source Files\TextRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
       <Filter>Dlls</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2_image.dll">
+      <Filter>Dlls</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\Dependencies\dlls\SDL2_ttf.dll">
       <Filter>Dlls</Filter>
     </CopyFileToFolders>
   </ItemGroup>
@@ -216,6 +228,9 @@
     </ClInclude>
     <ClInclude Include="NullMeshRenderer.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GlyphAtlas.h">
+      <Filter>Header Files\TextRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

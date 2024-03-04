@@ -10,6 +10,7 @@
 #include "World.h"
 
 #include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -74,7 +75,13 @@ void MainGame::initSDL()
 
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
-		logError("IMG_Init(IMG_INIT_PNG)", IMG_GetError());
+		logError("IMG_Init(IMG_INIT_PNG)", SDL_GetError());
+		fatalError();
+	}
+
+	if (TTF_Init() < 0)
+	{
+		logError("TTF_Init()", SDL_GetError());
 		fatalError();
 	}
 }
@@ -284,6 +291,7 @@ void MainGame::free()
 void MainGame::terminate()
 {
 	SDL_DestroyWindow(window_);
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
