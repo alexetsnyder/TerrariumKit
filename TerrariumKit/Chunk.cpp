@@ -81,7 +81,8 @@ namespace ProcGenTK
           position_{ position}, size_{ chunkSize }, atlas_{ 256, 16, voxelNames }
     {
         hasPopulatedVoxelMap_ = false;
-        voxels_.resize(chunkSize.xWidth * chunkSize.zWidth * chunkSize.height);
+        int size = chunkSize.xWidth * chunkSize.zWidth * chunkSize.height;
+        voxels_.resize(size);
     }
 
     Chunk::~Chunk()
@@ -220,7 +221,14 @@ namespace ProcGenTK
             return chunkMediator_->hasSolidVoxel(position_ + position);
         }
 
-        return terrainGen_->getVoxelType(getVoxelByte(position)).isSolid();
+        if (hasPopulatedVoxelMap_)
+        {
+            return terrainGen_->getVoxelType(getVoxelByte(position)).isSolid();
+        }
+        else
+        {
+            return terrainGen_->getVoxelType(terrainGen_->getVoxel(position_ + position)).isSolid();
+        }
     }
 
     std::string Chunk::getFaceName(VoxelSides voxelSides, int face) const
