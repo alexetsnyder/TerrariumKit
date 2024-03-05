@@ -118,6 +118,12 @@ void ShaderProgram::setUniform(const std::string& name, const glm::mat4& matrix)
 	glUniformMatrix4fv(mat4Loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+void ShaderProgram::setUniform(const std::string& name, const glm::vec3& vector)
+{
+	GLuint vectorLoc = glGetUniformLocation(programID_, name.c_str());
+	glUniform3f(vectorLoc, vector.x, vector.y, vector.z);
+}
+
 std::string ShaderProgram::readFile(const std::string& filePath)
 {
 	std::string fileStr = "";

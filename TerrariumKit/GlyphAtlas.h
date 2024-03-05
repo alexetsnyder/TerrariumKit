@@ -17,6 +17,8 @@ namespace TextTK
 			~GlyphAtlas();
 			GlyphAtlas(const GlyphAtlas&) = delete;
 
+			SDL_Surface* getSurface() const { return surface_; }
+
 		private:
 			void createAtlas(const char* filePath);
 			SDL_Color getColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);

@@ -8,11 +8,7 @@ Texture::Texture(const char* filePath)
 	glGenTextures(1, &id_);
 	glBindTexture(GL_TEXTURE_2D, id_);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	calibrateTexture();
 
 	SDL_Surface* imageSurface = loadImage(filePath);
 
@@ -20,6 +16,19 @@ Texture::Texture(const char* filePath)
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	SDL_FreeSurface(imageSurface);
+}
+
+Texture::Texture(SDL_Surface* surface)
+{
+	glGenTextures(1, &id_);
+	glBindTexture(GL_TEXTURE_2D, id_);
+
+	calibrateTexture();
+
+	SDL_Surface* convSurface = convertSurfaceForOpenGL(surface);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, convSurface->w, convSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, convSurface->pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 Texture::~Texture()
@@ -30,6 +39,15 @@ Texture::~Texture()
 void Texture::bind() const
 {
 	glBindTexture(GL_TEXTURE_2D, id_);
+}
+
+void Texture::calibrateTexture()
+{
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 SDL_Surface* Texture::loadImage(const char* filePath)

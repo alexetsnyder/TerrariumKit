@@ -22,6 +22,7 @@ class ShaderProgram
 		void use() const;
 
 		void setUniform(const std::string& name, const glm::mat4& matrix) const;
+		void setUniform(const std::string& name, const glm::vec3& vector);
 
 	private:
 		bool setShader(const std::string shaderPath, int glShader);

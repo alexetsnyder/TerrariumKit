@@ -2,6 +2,7 @@
 
 #include "ChunkManager.h"
 #include "ICamera.h"
+#include "IRenderer.h"
 #include "Player.h"
 #include "ShaderProgram.h"
 #include "Time.h"
@@ -32,18 +33,20 @@ class MainGame
 		void createGLContext();
 		void initGlad();
 		void setGLSettings();
-		void createShaderProgram();
+		void createShaderPrograms();
 
 		void createCamera();
 		void createPlayer();
 		void createWorld();
-		void createChunkManager();		
+		void createChunkManager();
+		void createTextRenderer();
 		
 		void gameLoop();
 		void pollEvents();
 		void updateGame();
 		void handleInput();
 		void drawGame();
+		void renderText();
 
 		void free();
 		void terminate();
@@ -55,6 +58,8 @@ class MainGame
 
 		GameState gameState_;
 		ShaderProgram shaderProgram_;
+		ShaderProgram textShaderProgram_;
+		TextTK::IRenderer* textRenderer_;
 
 		bool drawWireFrame_;
 		ProcGenTK::World* world_;

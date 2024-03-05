@@ -5,9 +5,8 @@
 #include "Input.h"
 #include "JobManager.h"
 #include "Keybindings.h"
-#include "ShaderProgram.h"
+#include "TextRenderer.h"
 #include "TransformComponent.h"
-#include "World.h"
 
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
@@ -17,7 +16,6 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <chrono>
 
 MainGame::MainGame()
 {
@@ -33,6 +31,7 @@ MainGame::MainGame()
 	createWorld();
 	createChunkManager();
 	createPlayer();
+	createTextRenderer();
 }
 
 MainGame::~MainGame()
@@ -60,7 +59,7 @@ void MainGame::initSystems()
 
 	setGLSettings();
 	
-	createShaderProgram();
+	createShaderPrograms();
 }
 
 void MainGame::initSDL()
@@ -138,18 +137,30 @@ void MainGame::setGLSettings()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	if (drawWireFrame_)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 }
 
-void MainGame::createShaderProgram()
+void MainGame::createShaderPrograms()
 {
 	if (!shaderProgram_.setVertexShader("Shaders/vertex.glsl") ||
 		!shaderProgram_.setFragmentShader("Shaders/fragment.glsl") ||
 		!shaderProgram_.compile() ||
 		!shaderProgram_.link())
+	{
+		fatalError();
+	}
+
+	if (!textShaderProgram_.setVertexShader("Shaders/textVertex.glsl") ||
+		!textShaderProgram_.setFragmentShader("Shaders/textFragment.glsl") ||
+		!textShaderProgram_.compile() ||
+		!textShaderProgram_.link())
 	{
 		fatalError();
 	}
@@ -195,6 +206,11 @@ void MainGame::createChunkManager()
 	bool useThreading = false;
 
 	chunkManager_ = new ProcGenTK::ChunkManager(world_, useThreading);
+}
+
+void MainGame::createTextRenderer()
+{
+	textRenderer_ = new TextTK::TextRenderer{};
 }
 
 void MainGame::gameLoop()
@@ -277,7 +293,18 @@ void MainGame::drawGame()
 	chunkManager_->draw(shaderProgram_);
 	player_->draw(shaderProgram_);
 
+	renderText();
+
 	SDL_GL_SwapWindow(window_);
+}
+
+void MainGame::renderText()
+{
+	textShaderProgram_.use();
+
+	textShaderProgram_.setUniform("textColor", glm::vec3(1.0f, 0.0f, 0.0f));
+
+	textRenderer_->draw(textShaderProgram_);
 }
 
 void MainGame::free()
@@ -286,6 +313,7 @@ void MainGame::free()
 	delete player_;
 	delete world_;
 	delete chunkManager_;
+	delete textRenderer_;
 }
 
 void MainGame::terminate()

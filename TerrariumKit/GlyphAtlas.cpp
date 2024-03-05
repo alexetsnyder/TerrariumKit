@@ -19,6 +19,7 @@ namespace TextTK
 	void GlyphAtlas::createAtlas(const char* filePath)
 	{
 		font_ = TTF_OpenFont(filePath, FONT_SIZE);
+		assert(font_ != nullptr);
 
 		surface_ = SDL_CreateRGBSurface(0, FONT_SURFACE_SIZE, FONT_SURFACE_SIZE, 32, 0, 0, 0, 0xff);
 
@@ -28,7 +29,6 @@ namespace TextTK
 		SDL_Color white{ getColor(0xff, 0xff, 0xff, 0xff) };
 		for (int i = 0; i < 128; i++)
 		{
-			//char c = static_cast<char>(i);
 			char c[2]
 			{
 				static_cast<char>(i),
