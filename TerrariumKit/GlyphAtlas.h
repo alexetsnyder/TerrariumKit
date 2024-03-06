@@ -11,7 +11,7 @@ namespace TextTK
 		public:
 			static const int FONT_SURFACE_SIZE{ 512 };
 			static const int MAX_GLYPHS{ 128 };
-			static const int FONT_SIZE{ 12 };
+			static const int FONT_SIZE{ 18 };
 
 			GlyphAtlas(const char* filePath);
 			~GlyphAtlas();

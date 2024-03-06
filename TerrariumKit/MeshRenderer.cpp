@@ -6,7 +6,9 @@
 namespace CompTK
 {
 	MeshRenderer::MeshRenderer(const char* textureFile)
-        : vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 }, indicesCount_{ 0 }, texture_ { textureFile }
+        : vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 }, 
+          indicesCount_{ 0 }, texture_{ textureFile, 
+          TextureSettings{ GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST } }
 	{
 
 	}

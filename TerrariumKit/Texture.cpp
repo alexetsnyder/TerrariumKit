@@ -3,12 +3,12 @@
 #include <glad/glad.h>
 #include <SDL/SDL_image.h>
 
-Texture::Texture(const char* filePath)
+Texture::Texture(const char* filePath, TextureSettings settings)
 {
 	glGenTextures(1, &id_);
 	glBindTexture(GL_TEXTURE_2D, id_);
 
-	calibrateTexture();
+	calibrateTexture(settings);
 
 	SDL_Surface* imageSurface = loadImage(filePath);
 
@@ -18,12 +18,12 @@ Texture::Texture(const char* filePath)
 	SDL_FreeSurface(imageSurface);
 }
 
-Texture::Texture(SDL_Surface* surface)
+Texture::Texture(SDL_Surface* surface, TextureSettings settings)
 {
 	glGenTextures(1, &id_);
 	glBindTexture(GL_TEXTURE_2D, id_);
 
-	calibrateTexture();
+	calibrateTexture(settings);
 
 	SDL_Surface* convSurface = convertSurfaceForOpenGL(surface);
 
@@ -41,13 +41,13 @@ void Texture::bind() const
 	glBindTexture(GL_TEXTURE_2D, id_);
 }
 
-void Texture::calibrateTexture()
+void Texture::calibrateTexture(TextureSettings settings)
 {
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, settings.sWrap);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, settings.tWrap);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, settings.minFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, settings.magFilter);
 }
 
 SDL_Surface* Texture::loadImage(const char* filePath)

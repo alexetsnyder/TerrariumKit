@@ -21,7 +21,10 @@ namespace TextTK
 	};
 
     TextRenderer::TextRenderer()
-        : atlas_{ "Assets/Fonts/Px437_IBM_VGA_8x14.ttf" }, textTexture_{ atlas_.getSurface() }, vao_{0}, vbo_{0}, ebo_{0}
+        : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 },
+          atlas_{ "Assets/Fonts/Px437_IBM_VGA_8x14.ttf" }, 
+          textTexture_{ atlas_.getSurface(), 
+                        TextureSettings{ GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR } }  
     {
         sendData();
     }

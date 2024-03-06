@@ -42,7 +42,7 @@ namespace TextTK
 			if (dest.x + dest.w >= FONT_SURFACE_SIZE)
 			{
 				dest.x = 0;
-				dest.y = dest.h + 1;
+				dest.y += dest.h + 1;
 
 				assert(dest.y + dest.h < FONT_SURFACE_SIZE);
 			}
