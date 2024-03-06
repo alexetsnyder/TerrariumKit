@@ -1,5 +1,9 @@
 #include "TextRenderer.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <iostream>
+
 namespace TextTK
 {
 	constexpr int VERTEX_COUNT{ 20 };
@@ -8,10 +12,10 @@ namespace TextTK
 	const float quadVertexArray[VERTEX_COUNT]
 	{
         //Positions           //Texture Coordinates
-		1.0f,  1.0f,  0.0f,   1.0f, 0.0f,
-	   -1.0f,  1.0f,  0.0f,   0.0f, 0.0f,
-		1.0f, -1.0f,  0.0f,   1.0f, 1.0f,
-	   -1.0f, -1.0f,  0.0f,   0.0f, 1.0f,
+		0.5f,  0.5f,  0.0f,   1.0f, 0.0f,
+	   -0.5f,  0.5f,  0.0f,   0.0f, 0.0f,
+		0.5f, -0.5f,  0.0f,   1.0f, 1.0f,
+	   -0.5f, -0.5f,  0.0f,   0.0f, 1.0f,
 	};
 
 	const int quadIndexArray[INDEX_COUNT]
@@ -20,18 +24,25 @@ namespace TextTK
 		2, 1, 3,
 	};
 
-    TextRenderer::TextRenderer()
-        : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 },
+    TextRenderer::TextRenderer(int width, int height)
+        : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 }, model_{ 1.0f },
           atlas_{ "Assets/Fonts/Px437_IBM_VGA_8x14.ttf" }, 
           textTexture_{ atlas_.getSurface(), 
                         TextureSettings{ GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR } }  
     {
         sendData();
+        calculateModel(width, height);
     }
 
     TextRenderer::~TextRenderer()
     {
 
+    }
+
+    void TextRenderer::calculateModel(int width, int height)
+    {
+        model_ = glm::translate(model_, glm::vec3(width / 2.0f + 10.0f, height / 2.0f, 0.0f));
+        model_ = glm::scale(model_, glm::vec3(width, height, 0.0f));
     }
 
     void TextRenderer::sendData()
@@ -54,6 +65,8 @@ namespace TextTK
     void TextRenderer::draw(const ShaderProgram& program) const
     {
         textTexture_.bind();
+
+        program.setUniform("model", model_);
 
         glBindVertexArray(vao_);
         glDrawElements(GL_TRIANGLES, INDEX_COUNT, GL_UNSIGNED_INT, 0);

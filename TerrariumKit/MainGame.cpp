@@ -210,7 +210,7 @@ void MainGame::createChunkManager()
 
 void MainGame::createTextRenderer()
 {
-	textRenderer_ = new TextTK::TextRenderer{};
+	textRenderer_ = new TextTK::TextRenderer{ screenWidth_, screenHeight_ };
 }
 
 void MainGame::gameLoop()
@@ -302,6 +302,9 @@ void MainGame::renderText()
 {
 	textShaderProgram_.use();
 
+	glm::mat4 projection{ glm::ortho(0.0f, static_cast<float>(screenWidth_), 0.0f, static_cast<float>(screenHeight_)) };
+
+	textShaderProgram_.setUniform("projection", projection);
 	textShaderProgram_.setUniform("textColor", glm::vec3(1.0f, 0.0f, 0.0f));
 
 	textRenderer_->draw(textShaderProgram_);

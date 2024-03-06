@@ -13,13 +13,14 @@ namespace TextTK
 	class TextRenderer : public IRenderer
 	{
 		public:
-			TextRenderer();
+			TextRenderer(int width, int height);
 			~TextRenderer();
 			TextRenderer(const TextRenderer&) = delete;
 
 			void draw(const ShaderProgram& program) const override;
 
 		private:
+			void calculateModel(int width, int height);
 			void sendData();
 			void generateAll();
 			void bindAll();
@@ -31,5 +32,6 @@ namespace TextTK
 			GLuint vao_;
 			GLuint vbo_;
 			GLuint ebo_;
+			glm::mat4 model_;
 	};
 }

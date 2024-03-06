@@ -27,7 +27,7 @@ namespace TextTK
 
 		SDL_Rect dest{};
 		SDL_Color white{ getColor(0xff, 0xff, 0xff, 0xff) };
-		for (int i = 0; i < 128; i++)
+		for (int i = 1; i < 128; i++)
 		{
 			char c[2]
 			{
