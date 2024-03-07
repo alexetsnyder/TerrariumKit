@@ -23,18 +23,19 @@ namespace TextTK
 			static const int FONT_SIZE{ 18 };
 			static const int FONT_MAX{ 24 };
 
-			GlyphAtlas(const char* filePath);
+			GlyphAtlas();
 			~GlyphAtlas();
 			GlyphAtlas(const GlyphAtlas&) = delete;
 
-			SDL_Surface* getSurface(int fontType) const { return surface_[fontType]; }
+			void addFont(int fontType, const char* filePath);
+
+			SDL_Surface* getSurface(int fontType) const { return surfaces_[fontType]; }
 
 		private:
-			void createAtlas(const char* filePath);
 			SDL_Color getColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-			TTF_Font* font_[FONT_MAX];
+			TTF_Font* fonts_[FONT_MAX];
 			SDL_Rect glyphs_[FONT_MAX][MAX_GLYPHS];
-			SDL_Surface* surface_[FONT_MAX];
+			SDL_Surface* surfaces_[FONT_MAX];
 	};
 }
