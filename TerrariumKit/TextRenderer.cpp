@@ -27,7 +27,7 @@ namespace TextTK
     TextRenderer::TextRenderer(int width, int height)
         : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 }, model_{ 1.0f },
           atlas_{ "Assets/Fonts/Px437_IBM_VGA_8x14.ttf" }, 
-          textTexture_{ atlas_.getSurface(), 
+          textTexture_{ atlas_.getSurface(0), 
                         TextureSettings{ GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR } }  
     {
         sendData();
