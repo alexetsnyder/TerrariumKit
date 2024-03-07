@@ -21,6 +21,8 @@ class Texture
 		~Texture();
 		Texture(const Texture&) = delete;
 
+		void updateTexture(SDL_Surface* newSurface);
+
 		void bind() const;
 
 	private:

@@ -1,5 +1,8 @@
 #include "TextRenderer.h"
 
+#include "Input.h"
+#include "Time.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
@@ -25,10 +28,12 @@ namespace TextTK
 	};
 
     TextRenderer::TextRenderer(int width, int height)
-        : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 }, model_{ 1.0f }, atlas_{}, 
-          textTexture_{ atlas_.getSurface(FontType::Px437_IBM_VGA_8x14), 
+        : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 }, model_{ 1.0f }, atlas_{}, fontType_{ FontType::Px437_IBM_VGA_8x14 },
+          textTexture_{ atlas_.getSurface(FontType::Px437_IBM_VGA_8x14),
                         TextureSettings{ GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR } }  
     {
+        coolDown_ = 0.0;
+        coolDownTime_ = 0.5;
         sendData();
         calculateModel(width, height);
     }
@@ -59,6 +64,24 @@ namespace TextTK
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadIndexArray), quadIndexArray, GL_STATIC_DRAW);
 
         unbindAll();
+    }
+
+    void TextRenderer::update()
+    {
+        if (coolDown_ > 0.0)
+        {
+            coolDown_ -= SysTK::Time::fixedDeltaTime();
+        }
+        
+        if (SysTK::Input::getKey(SDLK_f) && coolDown_ <= 0.0)
+        {
+            coolDown_ = coolDownTime_;
+            if (++fontType_ > 3)
+            {
+                fontType_ = 0;
+            }
+            textTexture_.updateTexture(atlas_.getSurface(fontType_));
+        }
     }
 
     void TextRenderer::draw(const ShaderProgram& program) const

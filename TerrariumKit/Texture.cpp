@@ -29,11 +29,25 @@ Texture::Texture(SDL_Surface* surface, TextureSettings settings)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, convSurface->w, convSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, convSurface->pixels);
 	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SDL_FreeSurface(convSurface);
 }
 
 Texture::~Texture()
 {
 	glDeleteTextures(1, &id_);
+}
+
+void Texture::updateTexture(SDL_Surface* newSurface)
+{
+	glBindTexture(GL_TEXTURE_2D, id_);
+
+	SDL_Surface* convSurface = convertSurfaceForOpenGL(newSurface);
+
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, convSurface->w, convSurface->h, GL_RGBA, GL_UNSIGNED_BYTE, convSurface->pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SDL_FreeSurface(convSurface);
 }
 
 void Texture::bind() const

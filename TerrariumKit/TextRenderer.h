@@ -17,6 +17,7 @@ namespace TextTK
 			~TextRenderer();
 			TextRenderer(const TextRenderer&) = delete;
 
+			void update() override;
 			void draw(const ShaderProgram& program) const override;
 
 		private:
@@ -33,5 +34,9 @@ namespace TextTK
 			GLuint vbo_;
 			GLuint ebo_;
 			glm::mat4 model_;
+
+			int fontType_;
+			double coolDownTime_;
+			double coolDown_;
 	};
 }

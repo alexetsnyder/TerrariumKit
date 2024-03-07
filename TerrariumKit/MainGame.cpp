@@ -265,6 +265,8 @@ void MainGame::updateGame()
 	world_->update();
 	chunkManager_->update();
 
+	textRenderer_->update();
+
 	SysTK::Input::reset();
 }
 
