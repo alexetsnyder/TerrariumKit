@@ -33,6 +33,16 @@ Texture::Texture(SDL_Surface* surface, TextureSettings settings)
 	SDL_FreeSurface(convSurface);
 }
 
+Texture::Texture(int width, int height, TextureSettings settings)
+{
+	glGenTextures(1, &id_);
+	glBindTexture(GL_TEXTURE_2D, id_);
+
+	calibrateTexture(settings);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+}
+
 Texture::~Texture()
 {
 	glDeleteTextures(1, &id_);

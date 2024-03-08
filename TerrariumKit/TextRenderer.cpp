@@ -29,9 +29,10 @@ namespace TextTK
 
     TextRenderer::TextRenderer(int width, int height)
         : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 }, model_{ 1.0f }, atlas_{}, fontType_{ FontType::Px437_IBM_VGA_8x14 },
-          textTexture_{ atlas_.getSurface(FontType::Px437_IBM_VGA_8x14),
+          textTexture_{ GlyphAtlas::FONT_SURFACE_SIZE, GlyphAtlas::FONT_SURFACE_SIZE,
                         TextureSettings{ GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR } }  
     {
+        textTexture_.updateTexture(atlas_.getSurface(fontType_));
         coolDown_ = 0.0;
         coolDownTime_ = 0.5;
         sendData();

@@ -18,6 +18,7 @@ class Texture
 	public:
 		Texture(const char* filePath, TextureSettings settings);
 		Texture(SDL_Surface* surface, TextureSettings settings);
+		Texture(int width, int height, TextureSettings settings);
 		~Texture();
 		Texture(const Texture&) = delete;
 
