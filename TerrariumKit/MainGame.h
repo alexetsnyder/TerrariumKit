@@ -9,7 +9,6 @@
 #include "World.h"
 
 #include <SDL/SDL.h>
-#include <chrono>
 
 enum GameState
 {
