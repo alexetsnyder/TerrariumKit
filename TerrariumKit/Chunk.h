@@ -32,16 +32,16 @@ namespace ProcGenTK
 			GLubyte getVoxelByte(const glm::vec3& position) const;
 			
 			void populateVoxelMap();
-			void createChunkMesh(Mesh& chunkMesh);
-			void sendChunkMesh(Mesh& chunkMesh);
+			void createChunkMesh(RenderTK::Mesh& chunkMesh);
+			void sendChunkMesh(RenderTK::Mesh& chunkMesh);
 		
 			void setMeshRenderer(CompTK::IMeshRenderer* meshRenderer);
-			void draw(const ShaderProgram& shader) const;
+			void draw(const RenderTK::ShaderProgram& shader) const;
 
 		private:
-			void create(Mesh& mesh);
+			void create(RenderTK::Mesh& mesh);
 			std::vector<float> getTextureCoordinates(VoxelSides voxelSides, int face) const;
-			void createVoxel(const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount);
+			void createVoxel(const glm::vec3& voxelPosition, RenderTK::Mesh& chunkMesh, int& vertexCount);
 			bool hasSolidVoxel(const glm::vec3& position) const;
 			std::string getFaceName(VoxelSides voxelSides, int face) const;
 			int convertPositionToIndex(const glm::vec3& position) const;
@@ -54,6 +54,6 @@ namespace ProcGenTK
 			CompTK::IMeshRenderer* meshRenderer_;
 			glm::vec3 position_;
 			ChunkSize size_;
-			TextureAtlas atlas_;
+			RenderTK::TextureAtlas atlas_;
 	};
 }

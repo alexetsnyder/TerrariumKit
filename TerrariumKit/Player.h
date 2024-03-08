@@ -24,7 +24,7 @@ class Player : public EngineTK::IGameObject
 
 		//From EngineTK::IGameObject
 		void update() override;
-		void draw(const ShaderProgram& program) override;
+		void draw(const RenderTK::ShaderProgram& program) override;
 
 	private:
 		void calculateVelocity();

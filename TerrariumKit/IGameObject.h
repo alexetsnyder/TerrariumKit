@@ -9,6 +9,6 @@ namespace EngineTK
 		public:
 			virtual ~IGameObject() {};
 			virtual void update() = 0;
-			virtual void draw(const ShaderProgram& program) = 0;
+			virtual void draw(const RenderTK::ShaderProgram& program) = 0;
 	};
 }

@@ -11,7 +11,7 @@ namespace CompTK
 			~NullMeshRenderer() {};
 
 			//From CompTK::IMeshRenderer
-			void sendData(const Mesh& mesh) override {};
-			void draw(const ShaderProgram& program, const glm::vec3& position) const override {};
+			void sendData(const RenderTK::Mesh& mesh) override {};
+			void draw(const RenderTK::ShaderProgram& program, const glm::vec3& position) const override {};
 	};
 }

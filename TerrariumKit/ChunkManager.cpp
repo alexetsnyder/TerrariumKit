@@ -146,7 +146,7 @@ namespace ProcGenTK
         }
     }
 
-    void ChunkManager::draw(const ShaderProgram& program)
+    void ChunkManager::draw(const RenderTK::ShaderProgram& program)
     {
         for (auto& pair : activeChunkMap_)
         {

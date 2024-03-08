@@ -2,7 +2,7 @@
 
 #include "ShaderProgram.h"
 
-namespace TextTK
+namespace RenderTK
 {
 	class IRenderer
 	{

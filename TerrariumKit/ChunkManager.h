@@ -21,7 +21,7 @@ namespace ProcGenTK
 	struct ChunkMeshInfo
 	{
 		Chunk* chunkPointer;
-		Mesh chunkMesh;
+		RenderTK::Mesh chunkMesh;
 	};
 
 	class ChunkManager : public IChunkMediator
@@ -39,7 +39,7 @@ namespace ProcGenTK
 			void sendChunkData(int n);
 
 			void update();
-			void draw(const ShaderProgram& program);
+			void draw(const RenderTK::ShaderProgram& program);
 
 		private:
 			ChunkMeshInfo nextChunkMeshInfo();

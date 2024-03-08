@@ -57,9 +57,9 @@ class MainGame
 		int screenHeight_;
 
 		GameState gameState_;
-		ShaderProgram shaderProgram_;
-		ShaderProgram textShaderProgram_;
-		TextTK::IRenderer* textRenderer_;
+		RenderTK::ShaderProgram shaderProgram_;
+		RenderTK::ShaderProgram textShaderProgram_;
+		RenderTK::IRenderer* textRenderer_;
 
 		bool drawWireFrame_;
 		ProcGenTK::World* world_;

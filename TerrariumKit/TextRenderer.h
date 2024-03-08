@@ -10,7 +10,7 @@
 
 namespace TextTK
 {
-	class TextRenderer : public IRenderer
+	class TextRenderer : public RenderTK::IRenderer
 	{
 		public:
 			TextRenderer(int width, int height);
@@ -18,7 +18,7 @@ namespace TextTK
 			TextRenderer(const TextRenderer&) = delete;
 
 			void update() override;
-			void draw(const ShaderProgram& program) const override;
+			void draw(const RenderTK::ShaderProgram& program) const override;
 
 		private:
 			void calculateModel(int width, int height);
@@ -29,7 +29,7 @@ namespace TextTK
 			void free() const;
 
 			GlyphAtlas atlas_;
-			Texture textTexture_;
+			RenderTK::Texture textTexture_;
 			GLuint vao_;
 			GLuint vbo_;
 			GLuint ebo_;

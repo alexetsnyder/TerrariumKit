@@ -39,7 +39,7 @@ void Player::update()
 	camera_->transform().translate(velocity_ * fixedDeltaTime);
 }
 
-void Player::draw(const ShaderProgram& program)
+void Player::draw(const RenderTK::ShaderProgram& program)
 {
 
 }

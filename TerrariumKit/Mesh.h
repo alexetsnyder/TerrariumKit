@@ -2,36 +2,38 @@
 
 #include <vector>
 
-struct Vertex
+namespace RenderTK
 {
-    struct Position
+    struct Vertex
     {
-        float x;
-        float y;
-        float z;
-    } position;
+        struct Position
+        {
+            float x;
+            float y;
+            float z;
+        } position;
 
-    struct TextureCoordinate
+        struct TextureCoordinate
+        {
+            float u;
+            float v;
+        } textureCoordinate;
+    };
+
+    class Mesh
     {
-        float u;
-        float v;
-    } textureCoordinate;
-};
+        public:
+            Mesh();
 
-class Mesh
-{
-    public:
-        Mesh();
+            const bool empty();
+            const std::vector<Vertex>& getVertices() const;
+            const std::vector<int>& getIndices() const;
 
-        const bool empty();
-        const std::vector<Vertex>& getVertices() const;
-        const std::vector<int>& getIndices() const;
+            void addVertex(Vertex vertex);
+            void addIndex(int index);
 
-        void addVertex(Vertex vertex);
-        void addIndex(int index);
-
-    private:
-        std::vector<Vertex> vertices_;
-        std::vector<int> indices_;
-};
-
+        private:
+            std::vector<Vertex> vertices_;
+            std::vector<int> indices_;
+    };
+}

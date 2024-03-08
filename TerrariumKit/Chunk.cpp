@@ -139,7 +139,7 @@ namespace ProcGenTK
         hasPopulatedVoxelMap_ = true;
     }
 
-    void Chunk::createChunkMesh(Mesh& chunkMesh)
+    void Chunk::createChunkMesh(RenderTK::Mesh& chunkMesh)
     {
         int vertexCount = 0;
         for (int y = 0; y < size_.height; y++)
@@ -158,7 +158,7 @@ namespace ProcGenTK
         }
     }
 
-    void Chunk::sendChunkMesh(Mesh& chunkMesh)
+    void Chunk::sendChunkMesh(RenderTK::Mesh& chunkMesh)
     {
         meshRenderer_->sendData(chunkMesh);
     }
@@ -169,7 +169,7 @@ namespace ProcGenTK
         meshRenderer_ = meshRenderer;
     }
 
-    void Chunk::draw(const ShaderProgram& shader) const
+    void Chunk::draw(const RenderTK::ShaderProgram& shader) const
     {
         meshRenderer_->draw(shader, position_);
     }
@@ -179,7 +179,7 @@ namespace ProcGenTK
         return atlas_.getTextureCoordinates(getFaceName(voxelSides, face));
     }
 
-    void Chunk::createVoxel(const glm::vec3& voxelPosition, Mesh& chunkMesh, int& vertexCount)
+    void Chunk::createVoxel(const glm::vec3& voxelPosition, RenderTK::Mesh& chunkMesh, int& vertexCount)
     {
         for (int face = 0; face < 6; face++)
         {
@@ -189,7 +189,7 @@ namespace ProcGenTK
                 std::vector<float> textureCoordinates{ getTextureCoordinates(voxelType.getVoxelSides(), face) };
                 for (int vertex = 0; vertex < 4; vertex++)
                 {
-                    Vertex newVertex{};
+                    RenderTK::Vertex newVertex{};
 
                     //3 components in 1 vertex, and 4 vertex in a face: 3 * 4 = 12
                     newVertex.position.x = voxelPosition.x + voxelVertices[12 * face + 3 * vertex] + 0.5f;
