@@ -20,12 +20,14 @@ namespace TextTK
 		public:
 			static const int FONT_SURFACE_SIZE{ 512 };
 			static const int MAX_GLYPHS{ 128 };
-			static const int FONT_SIZE{ 18 };
+			static const int FONT_SIZE{ 26 };
 			static const int FONT_MAX{ 24 };
 
 			GlyphAtlas();
 			~GlyphAtlas();
 			GlyphAtlas(const GlyphAtlas&) = delete;
+
+			SDL_Rect getGlyph(int fontType, int character) const; 
 
 			void addFont(int fontType, const char* filePath);
 

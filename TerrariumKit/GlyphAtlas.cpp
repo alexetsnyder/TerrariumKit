@@ -22,6 +22,11 @@ namespace TextTK
 		}
 	}
 
+	SDL_Rect GlyphAtlas::getGlyph(int fontType, int character) const
+	{
+		return glyphs_[fontType][character];
+	}
+
 	void GlyphAtlas::addFont(int fontType, const char* filePath)
 	{
 		fonts_[fontType] = TTF_OpenFont(filePath, FONT_SIZE);

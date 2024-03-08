@@ -3,21 +3,25 @@
 #include "GlyphAtlas.h"
 #include "IRenderer.h"
 #include "Texture.h"
-
 #include "ShaderProgram.h"
 
 #include <glad/glad.h>
+
+#include <string>
+#include <string_view>
 
 namespace TextTK
 {
 	class TextRenderer : public RenderTK::IRenderer
 	{
 		public:
-			TextRenderer(int width, int height);
+			TextRenderer(std::string text, int fontType, int width, int height);
 			~TextRenderer();
 			TextRenderer(const TextRenderer&) = delete;
 
-			void update() override;
+			SDL_Surface* drawText(std::string_view text, int x, int y, int width, int height);
+
+			//From RenderTK::IRenderer
 			void draw(const RenderTK::ShaderProgram& program) const override;
 
 		private:
@@ -33,10 +37,10 @@ namespace TextTK
 			GLuint vao_;
 			GLuint vbo_;
 			GLuint ebo_;
-			glm::mat4 model_;
 
+			glm::mat4 model_;
+			std::string& text_;
 			int fontType_;
-			double coolDownTime_;
-			double coolDown_;
+
 	};
 }

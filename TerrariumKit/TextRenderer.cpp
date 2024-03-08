@@ -27,14 +27,13 @@ namespace TextTK
 		2, 1, 3,
 	};
 
-    TextRenderer::TextRenderer(int width, int height)
-        : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 }, model_{ 1.0f }, atlas_{}, fontType_{ FontType::Px437_IBM_VGA_8x14 },
-          textTexture_{ GlyphAtlas::FONT_SURFACE_SIZE, GlyphAtlas::FONT_SURFACE_SIZE,
-                        RenderTK::TextureSettings{ GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR } }
+    TextRenderer::TextRenderer(std::string text, int fontType, int width, int height)
+        : vao_{ 0 }, vbo_{ 0 }, ebo_{ 0 }, model_{ 1.0f }, atlas_{}, fontType_{ fontType },
+          textTexture_{ width, height,
+                        RenderTK::TextureSettings{ GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR } },
+          text_{ text }
     {
-        textTexture_.updateTexture(atlas_.getSurface(fontType_));
-        coolDown_ = 0.0;
-        coolDownTime_ = 0.5;
+        textTexture_.updateTexture(drawText(text_, 0, 10, width, height));
         sendData();
         calculateModel(width, height);
     }
@@ -42,6 +41,30 @@ namespace TextTK
     TextRenderer::~TextRenderer()
     {
 
+    }
+
+    SDL_Surface* TextRenderer::drawText(std::string_view text, int x, int y, int width, int height)
+    {
+        SDL_Surface* dstSurface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0xff);
+
+        for (const auto& c : text)
+        {
+            SDL_Rect srcRect{ atlas_.getGlyph(fontType_, static_cast<int>(c)) };
+
+            SDL_Rect dstRect
+            {
+                x,
+                y,
+                srcRect.w,
+                srcRect.h
+            };
+
+            SDL_BlitSurface(atlas_.getSurface(fontType_), &srcRect, dstSurface, &dstRect);
+
+            x += srcRect.w;
+        }
+
+        return dstSurface;
     }
 
     void TextRenderer::calculateModel(int width, int height)
@@ -65,24 +88,6 @@ namespace TextTK
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadIndexArray), quadIndexArray, GL_STATIC_DRAW);
 
         unbindAll();
-    }
-
-    void TextRenderer::update()
-    {
-        if (coolDown_ > 0.0)
-        {
-            coolDown_ -= SysTK::Time::fixedDeltaTime();
-        }
-        
-        if (SysTK::Input::getKey(SDLK_f) && coolDown_ <= 0.0)
-        {
-            coolDown_ = coolDownTime_;
-            if (++fontType_ > 3)
-            {
-                fontType_ = 0;
-            }
-            textTexture_.updateTexture(atlas_.getSurface(fontType_));
-        }
     }
 
     void TextRenderer::draw(const RenderTK::ShaderProgram& program) const

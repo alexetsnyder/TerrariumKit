@@ -8,7 +8,6 @@ namespace RenderTK
 	{
 		public:
 			virtual ~IRenderer() {};
-			virtual void update() = 0;
 			virtual void draw(const ShaderProgram& program) const = 0;
 	};
 }

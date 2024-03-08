@@ -2,6 +2,7 @@
 
 #include "Camera.h"
 #include "ErrorLog.h"
+#include "GlyphAtlas.h"
 #include "Input.h"
 #include "JobManager.h"
 #include "Keybindings.h"
@@ -210,7 +211,10 @@ void MainGame::createChunkManager()
 
 void MainGame::createTextRenderer()
 {
-	textRenderer_ = new TextTK::TextRenderer{ screenWidth_, screenHeight_ };
+	std::string displayStr{ "Hello World! And here are more words to make this string long!!!" };
+	displayStr += " And another thing!!!";
+
+	textRenderer_ = new TextTK::TextRenderer{ displayStr, TextTK::FontType::Px437_IBM_VGA_8x14, screenWidth_, screenHeight_};
 }
 
 void MainGame::gameLoop()
@@ -264,8 +268,6 @@ void MainGame::updateGame()
 	player_->update();
 	world_->update();
 	chunkManager_->update();
-
-	textRenderer_->update();
 
 	SysTK::Input::reset();
 }
