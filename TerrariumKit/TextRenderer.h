@@ -18,7 +18,8 @@ namespace TextTK
 			~TextRenderer();
 			TextRenderer(const TextRenderer&) = delete;
 
-			SDL_Surface* drawText(std::string_view text, int x, int y, int width, int height);
+			void drawTextLine(std::string_view line, SDL_Surface* dstSurface, int x, int y);
+			void drawTextWrapped(std::string_view text, int x, int y, int maxWidth, int maxHeight);
 
 			//From RenderTK::IRenderer
 			void draw(const RenderTK::ShaderProgram& program) const override;
