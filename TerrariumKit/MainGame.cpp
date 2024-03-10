@@ -32,7 +32,7 @@ MainGame::MainGame()
 	createWorld();
 	createChunkManager();
 	createPlayer();
-	createTextRenderer();
+	createTextElement();
 }
 
 MainGame::~MainGame()
@@ -208,12 +208,16 @@ void MainGame::createChunkManager()
 	chunkManager_ = new ProcGenTK::ChunkManager(world_, useThreading);
 }
 
-void MainGame::createTextRenderer()
+void MainGame::createTextElement()
 {
 	std::string displayStr{ "Hello World! And here are more words to make this string long!!!" };
 	displayStr += " And another thing!!!";
 
-	textRenderer_ = new TextTK::TextRenderer{ displayStr, TextTK::FontType::Px437_IBM_VGA_8x14, screenWidth_, screenHeight_};
+	int fontType = TextTK::FontType::Px437_IBM_VGA_8x14;
+	SDL_Rect bounds{ screenWidth_ / 2.0f, screenHeight_ / 2.0f, screenWidth_, screenHeight_ };
+
+	TextTK::TextRenderer* textRenderer =  new TextTK::TextRenderer{ fontType, bounds };
+	textElement_ = new TextTK::TextElement{ displayStr, textRenderer };
 }
 
 void MainGame::gameLoop()
@@ -310,7 +314,7 @@ void MainGame::renderText()
 	textShaderProgram_.setUniform("projection", projection);
 	textShaderProgram_.setUniform("textColor", glm::vec3(1.0f, 0.0f, 0.0f));
 
-	textRenderer_->draw(textShaderProgram_);
+	textElement_->draw(textShaderProgram_);
 }
 
 void MainGame::free()
@@ -319,7 +323,7 @@ void MainGame::free()
 	delete player_;
 	delete world_;
 	delete chunkManager_;
-	delete textRenderer_;
+	delete textElement_;
 }
 
 void MainGame::terminate()

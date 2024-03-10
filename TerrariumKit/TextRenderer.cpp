@@ -9,18 +9,39 @@
 
 namespace TextTK
 {
-    TextRenderer::TextRenderer(std::string text, int fontType, int width, int height)
-        : fontType_{ fontType }, text_{ text }, atlas_{},
-          textTexture_{ width, height,
+    TextRenderer::TextRenderer(int fontType, const SDL_Rect& bounds)
+        : fontType_{ fontType }, bounds_{ bounds }, atlas_ {},
+          textTexture_{ bounds.w, bounds.h,
                         RenderTK::TextureSettings{ GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR } },
-          quad_{ glm::vec3(width / 2.0f + 10.0f, height / 2.0f, 0.0f), width,  height }
+          quad_{ glm::vec3(bounds.x, bounds.y, 0.0f), bounds.w,  bounds.h }
     {
-        drawTextWrapped(text, 0, 5, width, height);
+        
     }
 
     TextRenderer::~TextRenderer()
     {
         
+    }
+
+    void TextRenderer::drawTextLine(std::string_view line, int x, int y)
+    {
+        SDL_Surface* dstSurface = SDL_CreateRGBSurface(0, bounds_.w, bounds_.h, 32, 0, 0, 0, 0xff);
+
+        drawTextLine(line, dstSurface, x, y);
+
+        textTexture_.updateTexture(dstSurface);
+        SDL_FreeSurface(dstSurface);
+    }
+
+    void TextRenderer::drawTextWrapped(std::string_view text, int x, int y)
+    {
+        drawTextWrapped(text, x, y, bounds_.w, bounds_.h);
+    }
+
+    void TextRenderer::draw(const RenderTK::ShaderProgram& program) const
+    {
+        textTexture_.bind();
+        quad_.draw(program);
     }
 
     void TextRenderer::drawTextLine(std::string_view line, SDL_Surface* dstSurface, int x, int y)
@@ -96,11 +117,5 @@ namespace TextTK
 
         textTexture_.updateTexture(dstSurface);
         SDL_FreeSurface(dstSurface);
-    }
-
-    void TextRenderer::draw(const RenderTK::ShaderProgram& program) const
-    {
-        textTexture_.bind();
-        quad_.draw(program);
     }
 }

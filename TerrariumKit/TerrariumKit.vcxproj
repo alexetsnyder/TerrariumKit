@@ -141,6 +141,7 @@
     <ClCompile Include="Keybindings.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="QuadRenderer.cpp" />
+    <ClCompile Include="TextElement.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="VoxelType.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="NullMeshRenderer.h" />
     <ClInclude Include="QuadRenderer.h" />
+    <ClInclude Include="TextElement.h" />
     <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="VoxelType.h" />

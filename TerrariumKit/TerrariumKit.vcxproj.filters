@@ -138,6 +138,9 @@
     <ClCompile Include="QuadRenderer.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="TextElement.cpp">
+      <Filter>Source Files\TextRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -252,6 +255,9 @@
     </ClInclude>
     <ClInclude Include="QuadRenderer.h">
       <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="TextElement.h">
+      <Filter>Header Files\TextRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

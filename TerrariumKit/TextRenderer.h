@@ -14,19 +14,22 @@ namespace TextTK
 	class TextRenderer : public RenderTK::IRenderer
 	{
 		public:
-			TextRenderer(std::string text, int fontType, int width, int height);
+			TextRenderer(int fontType, const SDL_Rect& bounds);
 			~TextRenderer();
 			TextRenderer(const TextRenderer&) = delete;
 
-			void drawTextLine(std::string_view line, SDL_Surface* dstSurface, int x, int y);
-			void drawTextWrapped(std::string_view text, int x, int y, int maxWidth, int maxHeight);
-
+			void drawTextLine(std::string_view line, int x, int y);
+			void drawTextWrapped(std::string_view text, int x, int y);
+			
 			//From RenderTK::IRenderer
 			void draw(const RenderTK::ShaderProgram& program) const override;
 
 		private:
+			void drawTextLine(std::string_view line, SDL_Surface* dstSurface, int x, int y);
+			void drawTextWrapped(std::string_view text, int x, int y, int maxWidth, int maxHeight);
+
 			int fontType_;
-			std::string& text_;
+			SDL_Rect bounds_;
 			GlyphAtlas atlas_;
 			RenderTK::Texture textTexture_;
 			RenderTK::QuadRenderer quad_;

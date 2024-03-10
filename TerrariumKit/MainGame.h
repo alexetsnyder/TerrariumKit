@@ -2,7 +2,7 @@
 
 #include "ChunkManager.h"
 #include "ICamera.h"
-#include "IRenderer.h"
+#include "TextElement.h"
 #include "Player.h"
 #include "ShaderProgram.h"
 #include "Time.h"
@@ -38,7 +38,7 @@ class MainGame
 		void createPlayer();
 		void createWorld();
 		void createChunkManager();
-		void createTextRenderer();
+		void createTextElement();
 		
 		void gameLoop();
 		void pollEvents();
@@ -57,8 +57,9 @@ class MainGame
 
 		GameState gameState_;
 		RenderTK::ShaderProgram shaderProgram_;
+
 		RenderTK::ShaderProgram textShaderProgram_;
-		RenderTK::IRenderer* textRenderer_;
+		TextTK::TextElement* textElement_;
 
 		bool drawWireFrame_;
 		ProcGenTK::World* world_;
