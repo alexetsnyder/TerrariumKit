@@ -214,7 +214,8 @@ void MainGame::createTextElement()
 	displayStr += " And another thing!!!";
 
 	int fontType = TextTK::FontType::Px437_IBM_VGA_8x14;
-	SDL_Rect bounds{ screenWidth_ / 2.0f, screenHeight_ / 2.0f, screenWidth_, screenHeight_ };
+	glm::vec3 position{ screenWidth_ / 2.0f, screenHeight_ / 2.0f, 0.0f };
+	TextTK::Bounds bounds{ position, screenWidth_, screenHeight_ };
 
 	TextTK::TextRenderer* textRenderer =  new TextTK::TextRenderer{ fontType, bounds };
 	textElement_ = new TextTK::TextElement{ displayStr, textRenderer };

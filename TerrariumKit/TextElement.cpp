@@ -2,7 +2,7 @@
 
 namespace TextTK
 {
-	TextElement::TextElement(std::string text, ITextRenderer* textRenderer)
+	TextElement::TextElement(const std::string& text, ITextRenderer* textRenderer)
 		: text_{ text }, textRenderer_{ textRenderer }
 	{
 		textRenderer_->drawTextWrapped(text, 5, 5);

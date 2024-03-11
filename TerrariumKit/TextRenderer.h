@@ -6,14 +6,23 @@
 #include "Texture.h"
 #include "ShaderProgram.h"
 
+#include <glm/glm.hpp>
+
 #include <string_view>
 
 namespace TextTK
 {
+	struct Bounds
+	{
+		glm::vec3 position;
+		int width;
+		int height;
+	};
+
 	class TextRenderer : public ITextRenderer
 	{
 		public:
-			TextRenderer(int fontType, const SDL_Rect& bounds);
+			TextRenderer(int fontType, const Bounds& bounds);
 			~TextRenderer();
 			TextRenderer(const TextRenderer&) = delete;
 
@@ -27,7 +36,7 @@ namespace TextTK
 			void drawTextWrapped(std::string_view text, int x, int y, int maxWidth, int maxHeight);
 
 			int fontType_;
-			SDL_Rect bounds_;
+			Bounds bounds_;
 			GlyphAtlas atlas_;
 			RenderTK::Texture textTexture_;
 			RenderTK::QuadRenderer quad_;

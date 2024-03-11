@@ -12,7 +12,7 @@ namespace TextTK
 	class TextElement
 	{
 		public:
-			TextElement(std::string text, ITextRenderer* textRenderer);
+			TextElement(const std::string& text, ITextRenderer* textRenderer);
 			~TextElement();
 			TextElement(const TextElement&) = delete;
 
