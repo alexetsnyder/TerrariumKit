@@ -1,6 +1,7 @@
 #include "MainGame.h"
 
 #include "Camera.h"
+#include "ChunkID.h"
 #include "ErrorLog.h"
 #include "GlyphAtlas.h"
 #include "Input.h"
@@ -210,15 +211,18 @@ void MainGame::createChunkManager()
 
 void MainGame::createTextElement()
 {
-	std::string displayStr{ "Hello World! And here are more words to make this string long!!!" };
-	displayStr += " And another thing!!!";
+	std::string displayStr{ "DEBUG INFO:\n" };
+	ProcGenTK::ChunkID chunkId{ world_->currentChunkID() };
+	displayStr += "X: " + std::to_string(chunkId.x()) + "\n";
+	displayStr += "Y: " + std::to_string(chunkId.y()) + "\n";
+	displayStr += "Z: " + std::to_string(chunkId.z()) + "\n";
 
 	int fontType = TextTK::FontType::Px437_IBM_VGA_8x14;
 	glm::vec3 position{ screenWidth_ / 2.0f, screenHeight_ / 2.0f, 0.0f };
 	TextTK::Bounds bounds{ position, screenWidth_, screenHeight_ };
 
 	TextTK::TextRenderer* textRenderer =  new TextTK::TextRenderer{ fontType, bounds };
-	textElement_ = new TextTK::TextElement{ displayStr, textRenderer };
+	debugText_ = new TextTK::TextElement{ displayStr, textRenderer };
 }
 
 void MainGame::gameLoop()
@@ -272,6 +276,7 @@ void MainGame::updateGame()
 	player_->update();
 	world_->update();
 	chunkManager_->update();
+	updateText();
 
 	SysTK::Input::reset();
 }
@@ -282,6 +287,17 @@ void MainGame::handleInput()
 	{
 		gameState_ = GameState::EXIT;
 	}
+}
+
+void MainGame::updateText()
+{
+	std::string displayStr{ "DEBUG INFO:\n" };
+	ProcGenTK::ChunkID chunkId{ world_->currentChunkID() };
+	displayStr += "X: " + std::to_string(chunkId.x()) + "\n";
+	displayStr += "Y: " + std::to_string(chunkId.y()) + "\n";
+	displayStr += "Z: " + std::to_string(chunkId.z()) + "\n";
+
+	debugText_->updateStr(displayStr);
 }
 
 void MainGame::drawGame()
@@ -315,7 +331,7 @@ void MainGame::renderText()
 	textShaderProgram_.setUniform("projection", projection);
 	textShaderProgram_.setUniform("textColor", glm::vec3(1.0f, 0.0f, 0.0f));
 
-	textElement_->draw(textShaderProgram_);
+	debugText_->draw(textShaderProgram_);
 }
 
 void MainGame::free()
@@ -324,7 +340,7 @@ void MainGame::free()
 	delete player_;
 	delete world_;
 	delete chunkManager_;
-	delete textElement_;
+	delete debugText_;
 }
 
 void MainGame::terminate()

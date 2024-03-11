@@ -16,6 +16,7 @@ namespace TextTK
 			~TextElement();
 			TextElement(const TextElement&) = delete;
 
+			void updateStr(const std::string& newStr);
 			void draw(const RenderTK::ShaderProgram& program);
 
 		private:

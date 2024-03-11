@@ -44,6 +44,7 @@ class MainGame
 		void pollEvents();
 		void updateGame();
 		void handleInput();
+		void updateText();
 		void drawGame();
 		void renderText();
 
@@ -59,7 +60,7 @@ class MainGame
 		RenderTK::ShaderProgram shaderProgram_;
 
 		RenderTK::ShaderProgram textShaderProgram_;
-		TextTK::TextElement* textElement_;
+		TextTK::TextElement* debugText_;
 
 		bool drawWireFrame_;
 		ProcGenTK::World* world_;
