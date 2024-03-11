@@ -172,6 +172,7 @@
     <ClInclude Include="IMeshRenderer.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IRenderer.h" />
+    <ClInclude Include="ITextRenderer.h" />
     <ClInclude Include="JobManager.h" />
     <ClInclude Include="Keybindings.h" />
     <ClInclude Include="MeshRenderer.h" />

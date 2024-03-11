@@ -1,27 +1,25 @@
 #pragma once
 
 #include "GlyphAtlas.h"
-#include "IRenderer.h"
+#include "ITextRenderer.h"
 #include "QuadRenderer.h"
 #include "Texture.h"
 #include "ShaderProgram.h"
 
-#include <string>
 #include <string_view>
 
 namespace TextTK
 {
-	class TextRenderer : public RenderTK::IRenderer
+	class TextRenderer : public ITextRenderer
 	{
 		public:
 			TextRenderer(int fontType, const SDL_Rect& bounds);
 			~TextRenderer();
 			TextRenderer(const TextRenderer&) = delete;
 
-			void drawTextLine(std::string_view line, int x, int y);
-			void drawTextWrapped(std::string_view text, int x, int y);
-			
-			//From RenderTK::IRenderer
+			//From TextTK::ITextRenderer
+			void drawTextLine(std::string_view line, int x, int y) override;
+			void drawTextWrapped(std::string_view text, int x, int y) override;
 			void draw(const RenderTK::ShaderProgram& program) const override;
 
 		private:

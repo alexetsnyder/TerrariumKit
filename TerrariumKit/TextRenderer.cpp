@@ -1,11 +1,6 @@
 #include "TextRenderer.h"
 
-#include "Input.h"
-#include "Time.h"
-
 #include <glm/gtc/matrix_transform.hpp>
-
-#include <iostream>
 
 namespace TextTK
 {

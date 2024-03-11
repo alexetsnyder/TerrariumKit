@@ -259,6 +259,9 @@
     <ClInclude Include="TextElement.h">
       <Filter>Header Files\TextRendering</Filter>
     </ClInclude>
+    <ClInclude Include="ITextRenderer.h">
+      <Filter>Header Files\TextRendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\fragment.glsl">

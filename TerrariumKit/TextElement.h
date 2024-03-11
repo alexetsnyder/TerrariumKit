@@ -1,7 +1,7 @@
 #pragma once
 
+#include "ITextRenderer.h"
 #include "ShaderProgram.h"
-#include "TextRenderer.h"
 
 #include <SDL/SDL.h>
 
@@ -12,7 +12,7 @@ namespace TextTK
 	class TextElement
 	{
 		public:
-			TextElement(std::string text, TextRenderer* textRenderer);
+			TextElement(std::string text, ITextRenderer* textRenderer);
 			~TextElement();
 			TextElement(const TextElement&) = delete;
 
@@ -20,6 +20,6 @@ namespace TextTK
 
 		private:
 			std::string text_;
-			TextRenderer* textRenderer_;
+			ITextRenderer* textRenderer_;
 	};
 }
