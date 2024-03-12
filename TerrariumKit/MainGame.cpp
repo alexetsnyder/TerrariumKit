@@ -211,11 +211,7 @@ void MainGame::createChunkManager()
 
 void MainGame::createTextElement()
 {
-	std::string displayStr{ "DEBUG INFO:\n" };
-	ProcGenTK::ChunkID chunkId{ world_->currentChunkID() };
-	displayStr += "X: " + std::to_string(chunkId.x()) + "\n";
-	displayStr += "Y: " + std::to_string(chunkId.y()) + "\n";
-	displayStr += "Z: " + std::to_string(chunkId.z()) + "\n";
+	std::string displayStr{ getDebugStr() };
 
 	int fontType = TextTK::FontType::Px437_IBM_VGA_8x14;
 	glm::vec3 position{ screenWidth_ / 2.0f, screenHeight_ / 2.0f, 0.0f };
@@ -291,13 +287,19 @@ void MainGame::handleInput()
 
 void MainGame::updateText()
 {
-	std::string displayStr{ "DEBUG INFO:\n" };
+	debugText_->updateStr(getDebugStr());
+}
+
+std::string MainGame::getDebugStr()
+{
 	ProcGenTK::ChunkID chunkId{ world_->currentChunkID() };
+
+	std::string displayStr{ "DEBUG INFO:\n" };
 	displayStr += "X: " + std::to_string(chunkId.x()) + "\n";
 	displayStr += "Y: " + std::to_string(chunkId.y()) + "\n";
 	displayStr += "Z: " + std::to_string(chunkId.z()) + "\n";
 
-	debugText_->updateStr(displayStr);
+	return displayStr;
 }
 
 void MainGame::drawGame()

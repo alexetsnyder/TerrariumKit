@@ -45,6 +45,7 @@ class MainGame
 		void updateGame();
 		void handleInput();
 		void updateText();
+		std::string getDebugStr();
 		void drawGame();
 		void renderText();
 
