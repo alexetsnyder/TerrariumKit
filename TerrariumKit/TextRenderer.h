@@ -34,6 +34,8 @@ namespace TextTK
 		private:
 			void drawTextLine(std::string_view line, SDL_Surface* dstSurface, int x, int y);
 			void drawTextWrapped(std::string_view text, int x, int y, int maxWidth, int maxHeight);
+			void nextLine(std::string& line, int& lineWidth, int& y, int height, int maxHeight);
+			void addWord(std::string& line, int& lineWidth, std::string& word, int& wordWidth);
 
 			int fontType_;
 			Bounds bounds_;

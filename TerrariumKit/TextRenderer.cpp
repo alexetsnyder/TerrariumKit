@@ -85,23 +85,25 @@ namespace TextTK
                 if (lineWidth + wordWidth >= maxWidth)
                 {
                     drawTextLine(line, dstSurface, x, y);
+                    nextLine(line, lineWidth, y, glyph.h, maxHeight);
 
-                    line = "";
-                    lineWidth = 0;
-
-                    y += glyph.h;
-                    assert(y + glyph.h <= maxHeight);
+                    addWord(line, lineWidth, word, wordWidth);
                 }
-                else if (lineWidth > 0)
+                else
                 {
-                    line += " ";
+                    if (lineWidth > 0)
+                    {
+                        line += " ";
+                    }
+
+                    addWord(line, lineWidth, word, wordWidth);
+                    
+                    if (c == '\n')
+                    {
+                        drawTextLine(line, dstSurface, x, y);
+                        nextLine(line, lineWidth, y, glyph.h, maxHeight);
+                    }
                 }
-
-                line += word;
-                lineWidth += wordWidth;
-
-                word = "";
-                wordWidth = 0;
             }
         }
 
@@ -112,5 +114,23 @@ namespace TextTK
 
         textTexture_.updateTexture(dstSurface);
         SDL_FreeSurface(dstSurface);
+    }
+
+    void TextRenderer::nextLine(std::string& line, int& lineWidth, int& y, int height, int maxHeight)
+    {
+        line = "";
+        lineWidth = 0;
+
+        y += height;
+        assert(y + height <= maxHeight);
+    }
+
+    void TextRenderer::addWord(std::string& line, int& lineWidth, std::string& word, int& wordWidth)
+    {
+        line += word;
+        lineWidth += wordWidth;
+
+        word = "";
+        wordWidth = 0;
     }
 }
