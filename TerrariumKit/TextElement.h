@@ -16,10 +16,14 @@ namespace TextTK
 			~TextElement();
 			TextElement(const TextElement&) = delete;
 
+			void setVisible(bool isVisible);
+			void toggleVisible();
+
 			void updateStr(const std::string& newStr);
 			void draw(const RenderTK::ShaderProgram& program);
 
 		private:
+			bool isVisible_;
 			std::string text_;
 			ITextRenderer* textRenderer_;
 	};

@@ -257,6 +257,10 @@ void MainGame::pollEvents()
 				gameState_ = GameState::EXIT;
 				break;
 			default:
+				if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3)
+				{
+					debugText_->toggleVisible();
+				}
 				SysTK::Input::processInput(event);
 				break;
 		}
