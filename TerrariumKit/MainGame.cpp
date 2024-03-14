@@ -297,11 +297,22 @@ void MainGame::updateText()
 std::string MainGame::getDebugStr()
 {
 	ProcGenTK::ChunkID chunkId{ world_->currentChunkID() };
+	int chunkX{ static_cast<int>(chunkId.x()) };
+	int chunkY{ static_cast<int>(chunkId.y()) };
+	int chunkZ{ static_cast<int>(chunkId.z()) };
+	glm::vec3 position = player_->position();
 
 	std::string displayStr{ "DEBUG INFO:\n" };
-	displayStr += "X: " + std::to_string(chunkId.x()) + "\n";
-	displayStr += "Y: " + std::to_string(chunkId.y()) + "\n";
-	displayStr += "Z: " + std::to_string(chunkId.z()) + "\n";
+	displayStr += "\n";
+
+	displayStr += "ChunkID: (XYZ): (" + std::to_string(chunkX) + " ";
+	displayStr += std::to_string(chunkY) + " " + std::to_string(chunkZ) + ")\n";
+	displayStr += "\n";
+
+	displayStr += "Player Position:\n";
+	displayStr += "X: " + std::to_string(position.x) + "\n";
+	displayStr += "Y: " + std::to_string(position.y) + "\n";
+	displayStr += "Z: " + std::to_string(position.z) + "\n";
 
 	return displayStr;
 }
