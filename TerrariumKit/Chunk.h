@@ -39,7 +39,6 @@ namespace ProcGenTK
 			void draw(const RenderTK::ShaderProgram& shader) const;
 
 		private:
-			void create(RenderTK::Mesh& mesh);
 			std::vector<float> getTextureCoordinates(VoxelSides voxelSides, int face) const;
 			void createVoxel(const glm::vec3& voxelPosition, RenderTK::Mesh& chunkMesh, int& vertexCount);
 			bool hasSolidVoxel(const glm::vec3& position) const;
