@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="..\Dependencies\CFiles\glad.c" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ChunkPool.cpp" />
     <ClCompile Include="GlyphAtlas.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="JobManager.cpp" />
@@ -167,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChunkPool.h" />
     <ClInclude Include="GlyphAtlas.h" />
     <ClInclude Include="IGameObject.h" />
     <ClInclude Include="IMeshRenderer.h" />

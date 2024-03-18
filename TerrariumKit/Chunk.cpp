@@ -73,14 +73,22 @@ namespace ProcGenTK
         "sand",
     };
 
-    Chunk::Chunk(const IChunkMediator* chunkMediator, 
+    Chunk::Chunk()
+        : chunkMediator_{ nullptr }, terrainGen_{ nullptr }, meshRenderer_{ nullptr },
+          position_{ glm::vec3(0.0f) }, size_{ ChunkSize{ 0, 0, 0 } }, 
+          atlas_{ 256, 16, voxelNames }, inUse_{ false }, hasPopulatedVoxelMap_{ false }
+    {
+
+    }
+
+    Chunk::Chunk(const IChunkMediator* chunkMediator,
                  const ITerrainGen* terrainGen, 
                  CompTK::IMeshRenderer* meshRenderer, 
                  glm::vec3 position, ChunkSize chunkSize)
         : chunkMediator_{ chunkMediator}, terrainGen_{ terrainGen }, meshRenderer_{ meshRenderer },
-          position_{ position}, size_{ chunkSize }, atlas_{ 256, 16, voxelNames }
+          position_{ position }, size_{ chunkSize }, atlas_{ 256, 16, voxelNames }, 
+          inUse_{ true }, hasPopulatedVoxelMap_{ false }
     {
-        hasPopulatedVoxelMap_ = false;
         int size = chunkSize.xWidth * chunkSize.zWidth * chunkSize.height;
         voxels_.resize(size);
     }
@@ -88,6 +96,28 @@ namespace ProcGenTK
     Chunk::~Chunk()
     {
         delete meshRenderer_;
+    }
+
+    void Chunk::init(const IChunkMediator* chunkMediator, 
+                     const ITerrainGen* terrainGen, 
+                     CompTK::IMeshRenderer* meshRenderer, 
+                     glm::vec3 position, ChunkSize chunkSize)
+    {
+        chunkMediator_ = chunkMediator;
+        terrainGen_ = terrainGen;
+        meshRenderer_ = meshRenderer;
+        position_ = position;
+        size_ = chunkSize;
+        hasPopulatedVoxelMap_ = false;
+        inUse_ = true;
+
+        int size = chunkSize.xWidth * chunkSize.zWidth * chunkSize.height;
+        voxels_.resize(size);
+    }
+
+    bool Chunk::isInUse() const
+    {
+        return inUse_;
     }
 
     bool Chunk::hasPopulatedVoxelMap() const
@@ -119,6 +149,11 @@ namespace ProcGenTK
     {
         int index = convertPositionToIndex(position);
         return voxels_[index];
+    }
+
+    void Chunk::setInUse(bool inUse)
+    {
+        inUse_ = inUse;
     }
 
     void Chunk::populateVoxelMap()

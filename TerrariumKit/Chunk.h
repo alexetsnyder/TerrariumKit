@@ -19,6 +19,7 @@ namespace ProcGenTK
 	class Chunk
 	{
 		public:
+			Chunk();
 			Chunk(const IChunkMediator* chunkMediator, 
 				  const ITerrainGen* terrainGen, 
 				  CompTK::IMeshRenderer* meshRenderer, 
@@ -27,10 +28,18 @@ namespace ProcGenTK
 			~Chunk();
 			Chunk(const Chunk&) = delete;
 
+			void init(const IChunkMediator* chunkMediator,
+					  const ITerrainGen* terrainGen,
+					  CompTK::IMeshRenderer* meshRenderer,
+					  glm::vec3 position,
+					  ChunkSize chunkSize);
+
+			bool isInUse() const;
 			bool hasPopulatedVoxelMap() const;
 			bool isOutsideChunk(const glm::vec3& position) const;
 			GLubyte getVoxelByte(const glm::vec3& position) const;
 			
+			void setInUse(bool inUse);
 			void populateVoxelMap();
 			void createChunkMesh(RenderTK::Mesh& chunkMesh);
 			void sendChunkMesh(RenderTK::Mesh& chunkMesh);
@@ -54,5 +63,7 @@ namespace ProcGenTK
 			glm::vec3 position_;
 			ChunkSize size_;
 			RenderTK::TextureAtlas atlas_;
+
+			bool inUse_;
 	};
 }

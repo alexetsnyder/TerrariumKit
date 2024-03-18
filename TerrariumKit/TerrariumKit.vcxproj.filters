@@ -141,6 +141,9 @@
     <ClCompile Include="TextElement.cpp">
       <Filter>Source Files\TextRendering</Filter>
     </ClCompile>
+    <ClCompile Include="ChunkPool.cpp">
+      <Filter>Source Files\TerrainGen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -261,6 +264,9 @@
     </ClInclude>
     <ClInclude Include="ITextRenderer.h">
       <Filter>Header Files\TextRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkPool.h">
+      <Filter>Header Files\TerrainGen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
