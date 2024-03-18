@@ -5,10 +5,9 @@
 
 namespace ProcGenTK
 {
-    ChunkManager::ChunkManager(const World* world, bool useThreading)
+    ChunkManager::ChunkManager(const World* world)
     {
         world_ = world;
-        useThreading_ = useThreading;
 
         float minHeight{ 32.0f };
         float varyHeight{ 16.0f };
@@ -19,8 +18,6 @@ namespace ProcGenTK
 
     ChunkManager::~ChunkManager()
     {
-        cleanUpChunkThreads();
-
         for (auto& pair : activeChunkMap_)
         {
             delete pair.second;
@@ -94,29 +91,6 @@ namespace ProcGenTK
         }
     }
 
-    void ChunkManager::createChunkThreads(int n)
-    {
-        int count = 0;
-        while (!chunkCreateQueue_.empty() && count++ < n)
-        {
-            Chunk* chunk{ chunkCreateQueue_.front() };
-            chunkCreateQueue_.pop();
-
-            std::thread chunkThread{ &ChunkManager::createChunk, this, chunk };
-            threadQueue_.push(std::move(chunkThread));
-        }
-    }
-
-    void ChunkManager::joinChunkThreads(int n)
-    {
-        int count = 0;
-        while (!threadQueue_.empty() && count++ < n)
-        {
-            threadQueue_.front().join();
-            threadQueue_.pop();
-        }
-    }
-
     void ChunkManager::sendChunkData(int n)
     {
         int count = 0;
@@ -129,21 +103,13 @@ namespace ProcGenTK
 
     void ChunkManager::update()
     {
-        if (useThreading_)
-        {
-            joinChunkThreads(16);
-            createChunkThreads(16);
-        }
-        else
-        {
-            createChunks(4);
-        }
-        sendChunkData(4);
-
         if (world_->isInfinite() && world_->hasCurrentChunkIdChanged())
         {
             queueChunks();
         }
+
+        createChunks(4);
+        sendChunkData(4);
     }
 
     void ChunkManager::draw(const RenderTK::ShaderProgram& program)
@@ -183,7 +149,6 @@ namespace ProcGenTK
 
     ChunkMeshInfo ChunkManager::nextChunkMeshInfo()
     {
-        std::lock_guard<std::mutex> lock(chunkMeshInfoAccess_);
         ChunkMeshInfo chunkMeshInfo{ chunkMeshInfoQueue_.front() };
         chunkMeshInfoQueue_.pop();
         return chunkMeshInfo;
@@ -202,16 +167,6 @@ namespace ProcGenTK
             chunk->setMeshRenderer(new CompTK::MeshRenderer("Assets/Textures/Atlas.png"));
         }
 
-        std::lock_guard<std::mutex> lock(chunkMeshInfoAccess_);
         chunkMeshInfoQueue_.push(chunkMeshInfo);
-    }
-
-    void ChunkManager::cleanUpChunkThreads()
-    {
-        while (!threadQueue_.empty())
-        {
-            threadQueue_.front().join();
-            threadQueue_.pop();
-        }
     }
 }

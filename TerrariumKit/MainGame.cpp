@@ -204,9 +204,7 @@ void MainGame::createWorld()
 
 void MainGame::createChunkManager()
 {
-	bool useThreading = false;
-
-	chunkManager_ = new ProcGenTK::ChunkManager(world_, useThreading);
+	chunkManager_ = new ProcGenTK::ChunkManager(world_);
 }
 
 void MainGame::createTextElement()

@@ -27,15 +27,13 @@ namespace ProcGenTK
 	class ChunkManager : public IChunkMediator
 	{
 		public:
-			ChunkManager(const World* world, bool useThreading);
+			ChunkManager(const World* world);
 			~ChunkManager();
 
 			bool hasSolidVoxel(const glm::vec3& worldPos) const override;
 
 			void queueChunks();
 			void createChunks(int n);
-			void createChunkThreads(int n);
-			void joinChunkThreads(int n);
 			void sendChunkData(int n);
 
 			void update();
@@ -44,15 +42,11 @@ namespace ProcGenTK
 		private:
 			ChunkMeshInfo nextChunkMeshInfo();
 			void createChunk(Chunk* chunk);
-			void cleanUpChunkThreads();
 
 			const World* world_;
 			const ITerrainGen* terrainGen_;
 			std::queue<Chunk*> chunkCreateQueue_;
 
-			bool useThreading_;
-			std::queue<std::thread> threadQueue_;
-			std::mutex chunkMeshInfoAccess_;
 			std::queue<ChunkMeshInfo> chunkMeshInfoQueue_;
 
 			std::map<std::array<float, 3>, Chunk*> activeChunkMap_;
