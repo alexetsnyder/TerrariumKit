@@ -76,7 +76,8 @@ namespace ProcGenTK
     Chunk::Chunk()
         : chunkMediator_{ nullptr }, terrainGen_{ nullptr }, meshRenderer_{ nullptr },
           position_{ glm::vec3(0.0f) }, size_{ ChunkSize{ 0, 0, 0 } }, 
-          atlas_{ 256, 16, voxelNames }, inUse_{ false }, hasPopulatedVoxelMap_{ false }
+          atlas_{ 256, 16, voxelNames }, hasPopulatedVoxelMap_{ false },
+          next_{ nullptr }
     {
 
     }
@@ -87,7 +88,7 @@ namespace ProcGenTK
                  glm::vec3 position, ChunkSize chunkSize)
         : chunkMediator_{ chunkMediator}, terrainGen_{ terrainGen }, meshRenderer_{ meshRenderer },
           position_{ position }, size_{ chunkSize }, atlas_{ 256, 16, voxelNames }, 
-          inUse_{ true }, hasPopulatedVoxelMap_{ false }
+          hasPopulatedVoxelMap_{ false }, next_{ nullptr }
     {
         int size = chunkSize.xWidth * chunkSize.zWidth * chunkSize.height;
         voxels_.resize(size);
@@ -105,19 +106,19 @@ namespace ProcGenTK
     {
         chunkMediator_ = chunkMediator;
         terrainGen_ = terrainGen;
+        delete meshRenderer_;
         meshRenderer_ = meshRenderer;
         position_ = position;
         size_ = chunkSize;
         hasPopulatedVoxelMap_ = false;
-        inUse_ = true;
 
         int size = chunkSize.xWidth * chunkSize.zWidth * chunkSize.height;
         voxels_.resize(size);
     }
 
-    bool Chunk::isInUse() const
+    Chunk* Chunk::next() const
     {
-        return inUse_;
+        return next_;
     }
 
     bool Chunk::hasPopulatedVoxelMap() const
@@ -151,9 +152,9 @@ namespace ProcGenTK
         return voxels_[index];
     }
 
-    void Chunk::setInUse(bool inUse)
+    void Chunk::setNext(Chunk* chunk)
     {
-        inUse_ = inUse;
+        next_ = chunk;
     }
 
     void Chunk::populateVoxelMap()

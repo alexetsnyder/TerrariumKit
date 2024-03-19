@@ -20,6 +20,8 @@ namespace ProcGenTK
 			void deleteChunk(Chunk* chunk);
 
 		private:
+			int chunkCount_;
+			Chunk* firstAvailable_;
 			Chunk* chunks_;
 	};
 }

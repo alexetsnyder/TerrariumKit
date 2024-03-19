@@ -2,13 +2,13 @@
 
 #include "MeshRenderer.h"
 #include "NullMeshRenderer.h"
+#include "TerrainGen.h"
 
 namespace ProcGenTK
 {
     ChunkManager::ChunkManager(const World* world)
+        : world_{ world }, pool_{}
     {
-        world_ = world;
-
         float minHeight{ 32.0f };
         float varyHeight{ 16.0f };
         terrainGen_ = new TerrainGen(world_->chunkSize(), minHeight, varyHeight);
@@ -18,33 +18,12 @@ namespace ProcGenTK
 
     ChunkManager::~ChunkManager()
     {
-        for (auto& pair : activeChunkMap_)
-        {
-            delete pair.second;
-        }
-
-        for (auto& pair : inactiveChunkMap_)
-        {
-            delete pair.second;
-        }
-
         delete terrainGen_;
     }
 
     void ChunkManager::queueChunks()
     {
-        if (!activeChunkMap_.empty())
-        {
-            for (const auto& pair : activeChunkMap_)
-            {
-                inactiveChunkMap_.emplace(pair.first, pair.second);
-            }
-
-            for (const auto& pair : inactiveChunkMap_)
-            {
-                activeChunkMap_.erase(pair.first);
-            }
-        }
+        setAllInactive();
 
         ChunkID currentChunkId = world_->currentChunkID();
         float startY = 0.0f;
@@ -70,7 +49,7 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ new Chunk{ this, terrainGen_, new CompTK::NullMeshRenderer(), chunkId.position(), world_->chunkSize()}};
+                        Chunk* chunkPointer{ pool_.newChunk(this, terrainGen_, new CompTK::NullMeshRenderer(), chunkId.position(), world_->chunkSize()) };
                         activeChunkMap_.emplace(chunkId.id(), chunkPointer);
                         chunkCreateQueue_.push(chunkPointer);
                     }
@@ -168,5 +147,18 @@ namespace ProcGenTK
         }
 
         chunkMeshInfoQueue_.push(chunkMeshInfo);
+    }
+
+    void ChunkManager::setAllInactive()
+    {
+        if (!activeChunkMap_.empty())
+        {
+            for (const auto& pair : activeChunkMap_)
+            {
+                inactiveChunkMap_.emplace(pair.first, pair.second);
+            }
+
+            activeChunkMap_.clear();
+        }
     }
 }

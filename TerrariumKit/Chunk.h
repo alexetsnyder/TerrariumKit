@@ -34,12 +34,12 @@ namespace ProcGenTK
 					  glm::vec3 position,
 					  ChunkSize chunkSize);
 
-			bool isInUse() const;
+			Chunk* next() const;
 			bool hasPopulatedVoxelMap() const;
 			bool isOutsideChunk(const glm::vec3& position) const;
 			GLubyte getVoxelByte(const glm::vec3& position) const;
 			
-			void setInUse(bool inUse);
+			void setNext(Chunk* chunk);
 			void populateVoxelMap();
 			void createChunkMesh(RenderTK::Mesh& chunkMesh);
 			void sendChunkMesh(RenderTK::Mesh& chunkMesh);
@@ -64,6 +64,6 @@ namespace ProcGenTK
 			ChunkSize size_;
 			RenderTK::TextureAtlas atlas_;
 
-			bool inUse_;
+			Chunk* next_;
 	};
 }

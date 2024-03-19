@@ -1,10 +1,18 @@
 #include "ChunkPool.h"
 
+#include <assert.h>
+
 namespace ProcGenTK
 {
 	ChunkPool::ChunkPool()
+		: chunkCount_{ 0 }
 	{
 		chunks_ = new Chunk[POOL_SIZE];
+		firstAvailable_ = &chunks_[0];
+		for (int i = 0; i < POOL_SIZE - 1; i++)
+		{
+			chunks_[i].setNext(&chunks_[i + 1]);
+		}
 	}
 
 	ChunkPool::~ChunkPool()
@@ -17,20 +25,20 @@ namespace ProcGenTK
 							   CompTK::IMeshRenderer* meshRenderer, 
 							   glm::vec3 position, ChunkSize chunkSize)
 	{
-		for (int i = 0; i < POOL_SIZE; i++)
-		{
-			if (!chunks_[i].isInUse())
-			{
-				chunks_[i].init(chunkMediator, terrainGen, meshRenderer, position, chunkSize);
-				return &chunks_[i];
-			}
-		}
+		assert(firstAvailable_ != nullptr);
+		chunkCount_++;
 
-		return nullptr;
+		Chunk* newChunk{ firstAvailable_ };
+		firstAvailable_ = newChunk->next();
+
+		newChunk->init(chunkMediator, terrainGen, meshRenderer, position, chunkSize);
+		return newChunk;
 	}
 
 	void ChunkPool::deleteChunk(Chunk* chunk)
 	{
-		chunk->setInUse(false);
+		chunkCount_--;
+		chunk->setNext(firstAvailable_);
+		firstAvailable_ = chunk;
 	}
 }

@@ -2,19 +2,18 @@
 
 #include "Chunk.h"
 #include "ChunkID.h"
+#include "ChunkPool.h"
 #include "IChunkMediator.h"
+#include "IMeshRenderer.h"
 #include "ITerrainGen.h"
 #include "ShaderProgram.h"
-#include "TerrainGen.h"
 #include "World.h"
 
 #include <glm/glm.hpp>
 
 #include <array>
 #include <map>
-#include <mutex>
 #include <queue>
-#include <thread>
 
 namespace ProcGenTK
 {
@@ -42,6 +41,10 @@ namespace ProcGenTK
 		private:
 			ChunkMeshInfo nextChunkMeshInfo();
 			void createChunk(Chunk* chunk);
+			void setAllInactive();
+
+			//const CompTK::IMeshRenderer* nullRenderer_;
+			ChunkPool pool_;
 
 			const World* world_;
 			const ITerrainGen* terrainGen_;
