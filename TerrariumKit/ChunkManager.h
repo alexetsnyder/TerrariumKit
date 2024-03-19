@@ -41,7 +41,8 @@ namespace ProcGenTK
 		private:
 			ChunkMeshInfo nextChunkMeshInfo();
 			void createChunk(Chunk* chunk);
-			void setAllInactive();
+			void setAllChunksInactive();
+			void deleteInactiveChunks();
 
 			//const CompTK::IMeshRenderer* nullRenderer_;
 			ChunkPool pool_;

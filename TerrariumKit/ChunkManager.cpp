@@ -23,7 +23,7 @@ namespace ProcGenTK
 
     void ChunkManager::queueChunks()
     {
-        setAllInactive();
+        setAllChunksInactive();
 
         ChunkID currentChunkId = world_->currentChunkID();
         float startY = 0.0f;
@@ -56,6 +56,8 @@ namespace ProcGenTK
                 }
             }
         }
+
+        deleteInactiveChunks();
     }
 
     void ChunkManager::createChunks(int n)
@@ -149,7 +151,7 @@ namespace ProcGenTK
         chunkMeshInfoQueue_.push(chunkMeshInfo);
     }
 
-    void ChunkManager::setAllInactive()
+    void ChunkManager::setAllChunksInactive()
     {
         if (!activeChunkMap_.empty())
         {
@@ -160,5 +162,15 @@ namespace ProcGenTK
 
             activeChunkMap_.clear();
         }
+    }
+
+    void ChunkManager::deleteInactiveChunks()
+    {
+        for (auto& pair : inactiveChunkMap_)
+        {
+            pool_.deleteChunk(pair.second);
+        }
+
+        inactiveChunkMap_.clear();
     }
 }
