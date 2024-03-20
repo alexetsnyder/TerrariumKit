@@ -7,7 +7,7 @@
 namespace ProcGenTK
 {
     ChunkManager::ChunkManager(const World* world)
-        : world_{ world }, pool_{}
+        : world_{ world }, pool_{ world->chunkSize() }
     {
         float minHeight{ 32.0f };
         float varyHeight{ 16.0f };
@@ -49,7 +49,7 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ pool_.newChunk(this, terrainGen_, new CompTK::NullMeshRenderer(), chunkId.position(), world_->chunkSize()) };
+                        Chunk* chunkPointer{ pool_.newChunk(this, terrainGen_, new CompTK::NullMeshRenderer(), chunkId.position()) };
                         activeChunkMap_.emplace(chunkId.id(), chunkPointer);
                         chunkCreateQueue_.push(chunkPointer);
                     }

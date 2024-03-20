@@ -12,8 +12,6 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include <vector>
-
 namespace ProcGenTK
 {
 	class Chunk
@@ -28,11 +26,11 @@ namespace ProcGenTK
 			~Chunk();
 			Chunk(const Chunk&) = delete;
 
+			void allocate(const ChunkSize& chunkSize);
 			void init(const IChunkMediator* chunkMediator,
 					  const ITerrainGen* terrainGen,
 					  CompTK::IMeshRenderer* meshRenderer,
-					  glm::vec3 position,
-					  ChunkSize chunkSize);
+					  glm::vec3 position);
 
 			Chunk* next() const;
 			bool hasPopulatedVoxelMap() const;
@@ -54,7 +52,8 @@ namespace ProcGenTK
 			std::string getFaceName(VoxelSides voxelSides, int face) const;
 			int convertPositionToIndex(const glm::vec3& position) const;
 
-			std::vector<GLubyte> voxels_;
+			GLubyte* voxels_;
+			int voxelsSize_;
 			bool hasPopulatedVoxelMap_;
 
 			const IChunkMediator* chunkMediator_;

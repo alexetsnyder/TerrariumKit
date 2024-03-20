@@ -9,14 +9,14 @@ namespace ProcGenTK
 		public:
 			static const int POOL_SIZE{ 600 };
 
-			ChunkPool();
+			ChunkPool(const ChunkSize& chunkSize);
 			~ChunkPool();
 			ChunkPool(const ChunkPool&) = delete;
 
 			Chunk* newChunk(const IChunkMediator* chunkMediator,
 							const ITerrainGen* terrainGen,
 							CompTK::IMeshRenderer* meshRenderer,
-							glm::vec3 position, ChunkSize chunkSize);
+							glm::vec3 position);
 			void deleteChunk(Chunk* chunk);
 
 		private:

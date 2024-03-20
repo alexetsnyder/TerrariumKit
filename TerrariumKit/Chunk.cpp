@@ -8,8 +8,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <vector>
-
 namespace ProcGenTK
 {
     const float voxelVertices[] 
@@ -75,9 +73,9 @@ namespace ProcGenTK
 
     Chunk::Chunk()
         : chunkMediator_{ nullptr }, terrainGen_{ nullptr }, meshRenderer_{ nullptr },
-          position_{ glm::vec3(0.0f) }, size_{ ChunkSize{ 0, 0, 0 } }, 
+          position_{ glm::vec3(0.0f) }, size_{ ChunkSize{ 0, 0, 0 } },
           atlas_{ 256, 16, voxelNames }, hasPopulatedVoxelMap_{ false },
-          next_{ nullptr }
+          next_{ nullptr }, voxels_{ nullptr }, voxelsSize_{ 0 }
     {
 
     }
@@ -87,33 +85,36 @@ namespace ProcGenTK
                  CompTK::IMeshRenderer* meshRenderer, 
                  glm::vec3 position, ChunkSize chunkSize)
         : chunkMediator_{ chunkMediator}, terrainGen_{ terrainGen }, meshRenderer_{ meshRenderer },
-          position_{ position }, size_{ chunkSize }, atlas_{ 256, 16, voxelNames }, 
+          position_{ position }, atlas_{ 256, 16, voxelNames }, 
           hasPopulatedVoxelMap_{ false }, next_{ nullptr }
     {
-        int size = chunkSize.xWidth * chunkSize.zWidth * chunkSize.height;
-        voxels_.resize(size);
+        allocate(chunkSize);
     }
 
     Chunk::~Chunk()
     {
         delete meshRenderer_;
+        delete[] voxels_;
     }
 
-    void Chunk::init(const IChunkMediator* chunkMediator, 
+    void Chunk::allocate(const ChunkSize& chunkSize)
+    {
+        size_ = chunkSize;
+        voxelsSize_ = chunkSize.xWidth * chunkSize.zWidth * chunkSize.height;
+        voxels_ = new GLubyte[voxelsSize_];
+    }
+
+    void Chunk::init(const IChunkMediator* chunkMediator,
                      const ITerrainGen* terrainGen, 
                      CompTK::IMeshRenderer* meshRenderer, 
-                     glm::vec3 position, ChunkSize chunkSize)
+                     glm::vec3 position)
     {
         chunkMediator_ = chunkMediator;
         terrainGen_ = terrainGen;
         delete meshRenderer_;
         meshRenderer_ = meshRenderer;
         position_ = position;
-        size_ = chunkSize;
         hasPopulatedVoxelMap_ = false;
-
-        int size = chunkSize.xWidth * chunkSize.zWidth * chunkSize.height;
-        voxels_.resize(size);
     }
 
     Chunk* Chunk::next() const
@@ -304,10 +305,10 @@ namespace ProcGenTK
 
         int index = y * size_.xWidth * size_.zWidth + x * size_.zWidth + z;
 
-        if (index < 0 || index >= voxels_.size())
+        if (index < 0 || index >= voxelsSize_)
         {
             std::string errorMsg{ "" };
-            std::size_t blocksSize = voxels_.size();
+            std::size_t blocksSize = voxelsSize_;
             if (blocksSize == 0)
             {
                 errorMsg += "Blocks vector has size zero";
