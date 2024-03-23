@@ -13,7 +13,7 @@
 
 #include <array>
 #include <map>
-#include <queue>
+#include <list>
 
 namespace ProcGenTK
 {
@@ -45,13 +45,13 @@ namespace ProcGenTK
 			void deleteInactiveChunks();
 
 			//const CompTK::IMeshRenderer* nullRenderer_;
-			ChunkPool pool_;
 
+			ChunkPool pool_;
 			const World* world_;
 			const ITerrainGen* terrainGen_;
-			std::queue<Chunk*> chunkCreateQueue_;
 
-			std::queue<ChunkMeshInfo> chunkMeshInfoQueue_;
+			std::list<Chunk*> chunkCreateQueue_;
+			std::list<ChunkMeshInfo> chunkMeshInfoQueue_;
 
 			std::map<std::array<float, 3>, Chunk*> activeChunkMap_;
 			std::map<std::array<float, 3>, Chunk*> inactiveChunkMap_;

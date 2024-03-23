@@ -51,7 +51,7 @@ namespace ProcGenTK
                     {
                         Chunk* chunkPointer{ pool_.newChunk(this, terrainGen_, new CompTK::NullMeshRenderer(), chunkId.position()) };
                         activeChunkMap_.emplace(chunkId.id(), chunkPointer);
-                        chunkCreateQueue_.push(chunkPointer);
+                        chunkCreateQueue_.push_back(chunkPointer);
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace ProcGenTK
         while (!chunkCreateQueue_.empty() && count++ < n)
         {
             Chunk* chunk{ chunkCreateQueue_.front() };
-            chunkCreateQueue_.pop();
+            chunkCreateQueue_.pop_front();
 
             createChunk(chunk);
         }
@@ -131,7 +131,7 @@ namespace ProcGenTK
     ChunkMeshInfo ChunkManager::nextChunkMeshInfo()
     {
         ChunkMeshInfo chunkMeshInfo{ chunkMeshInfoQueue_.front() };
-        chunkMeshInfoQueue_.pop();
+        chunkMeshInfoQueue_.pop_front();
         return chunkMeshInfo;
     }
 
@@ -148,7 +148,7 @@ namespace ProcGenTK
             chunk->setMeshRenderer(new CompTK::MeshRenderer("Assets/Textures/Atlas.png"));
         }
 
-        chunkMeshInfoQueue_.push(chunkMeshInfo);
+        chunkMeshInfoQueue_.push_back(chunkMeshInfo);
     }
 
     void ChunkManager::setAllChunksInactive()
@@ -168,6 +168,29 @@ namespace ProcGenTK
     {
         for (auto& pair : inactiveChunkMap_)
         {
+            bool isFound{ false };
+            for (auto& chunkP : chunkCreateQueue_)
+            {
+                if (chunkP == pair.second)
+                {
+                    chunkCreateQueue_.remove(chunkP);
+                    isFound = true;
+                    break;
+                }
+            }
+
+            if (!isFound)
+            {
+                for (auto meshInfoIter{ chunkMeshInfoQueue_.begin() }; meshInfoIter != chunkMeshInfoQueue_.end(); meshInfoIter++)
+                {
+                    if (meshInfoIter->chunkPointer == pair.second)
+                    {
+                        chunkMeshInfoQueue_.erase(meshInfoIter);
+                        break;
+                    }
+                }
+            }
+
             pool_.deleteChunk(pair.second);
         }
 
