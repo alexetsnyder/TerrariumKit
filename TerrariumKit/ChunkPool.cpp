@@ -27,7 +27,7 @@ namespace ProcGenTK
 
 	Chunk* ChunkPool::newChunk(const IChunkMediator* chunkMediator, 
 							   const ITerrainGen* terrainGen, 
-							   CompTK::IMeshRenderer* meshRenderer, 
+							   CompTK::MeshRenderer* meshRenderer, 
 							   glm::vec3 position)
 	{
 		assert(firstAvailable_ != nullptr);

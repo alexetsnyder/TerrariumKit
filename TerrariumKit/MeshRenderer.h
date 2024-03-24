@@ -12,9 +12,18 @@ namespace CompTK
 	class MeshRenderer : public IMeshRenderer
 	{
 		public:
+			MeshRenderer();
 			MeshRenderer(const glm::vec3& position);
 			~MeshRenderer();
 			MeshRenderer(const MeshRenderer&) = delete;
+
+			void init(const glm::vec3& position);
+			void free() const;
+
+			MeshRenderer* next();
+
+			void setNext(MeshRenderer* next);
+			void setPosition(const glm::vec3& position);
 
 			//From CompTK::IMeshRenderer
 			void sendData(const RenderTK::Mesh& mesh) override;
@@ -23,14 +32,14 @@ namespace CompTK
 		private:
 			void generateAll();
 			void bindAll();
-			void unbindAll();
-			void free() const;
+			void unbindAll();	
 
 			glm::vec3 position_;
 
 			GLuint vao_;
 			GLuint vbo_;
 			GLuint ebo_;
-			GLuint indicesCount_;			
+			GLuint indicesCount_;	
+			MeshRenderer* next_;
 	};
 }

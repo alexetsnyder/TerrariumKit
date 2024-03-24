@@ -5,10 +5,18 @@
 
 namespace CompTK
 {
-	MeshRenderer::MeshRenderer(const glm::vec3& position)
-        : position_{ position },
+    MeshRenderer::MeshRenderer()
+        : position_{ glm::vec3(0.0f) },
+          vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 },
+          indicesCount_{ 0 }, next_{ nullptr }
+    {
+
+    }
+
+    MeshRenderer::MeshRenderer(const glm::vec3& position)
+        : position_{ position }, 
           vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 }, 
-          indicesCount_{ 0 }
+          indicesCount_{ 0 }, next_{ nullptr }
 	{
 
 	}
@@ -17,6 +25,30 @@ namespace CompTK
 	{
 		free();
 	}
+
+    void MeshRenderer::init(const glm::vec3& position)
+    {
+        setPosition(position);
+        vao_ = 0;
+        ebo_ = 0;
+        vbo_ = 0;
+        indicesCount_ = 0;
+    }
+
+    MeshRenderer* MeshRenderer::next()
+    {
+        return next_;
+    }
+
+    void MeshRenderer::setNext(MeshRenderer* next)
+    {
+        next_ = next;
+    }
+
+    void MeshRenderer::setPosition(const glm::vec3& position)
+    {
+        position_ = position;
+    }
 
 	void MeshRenderer::sendData(const RenderTK::Mesh& mesh)
 	{

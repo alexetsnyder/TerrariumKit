@@ -144,6 +144,9 @@
     <ClCompile Include="ChunkPool.cpp">
       <Filter>Source Files\TerrainGen</Filter>
     </ClCompile>
+    <ClCompile Include="MeshRendererPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\Dependencies\dlls\SDL2.dll">
@@ -267,6 +270,9 @@
     </ClInclude>
     <ClInclude Include="ChunkPool.h">
       <Filter>Header Files\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRendererPool.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

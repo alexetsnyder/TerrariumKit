@@ -7,7 +7,7 @@
 namespace ProcGenTK
 {
     ChunkManager::ChunkManager(const World* world)
-        : world_{ world }, pool_{ world->chunkSize() },
+        : world_{ world }, pool_{ world->chunkSize() }, rendererPool_{},
           chunkTexture_{ "Assets/Textures/Atlas.png",
           RenderTK::TextureSettings{ GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST } }
     {
@@ -51,7 +51,7 @@ namespace ProcGenTK
                     }
                     else
                     {
-                        Chunk* chunkPointer{ pool_.newChunk(this, terrainGen_, new CompTK::NullMeshRenderer(), chunkId.position()) };
+                        Chunk* chunkPointer{ pool_.newChunk(this, terrainGen_, nullptr, chunkId.position()) };
                         activeChunkMap_.emplace(chunkId.id(), chunkPointer);
                         chunkCreateQueue_.push_back(chunkPointer);
                     }
@@ -149,7 +149,7 @@ namespace ProcGenTK
         chunk->createChunkMesh(chunkMeshInfo.chunkMesh);
         if (!chunkMeshInfo.chunkMesh.empty())
         {
-            chunk->setMeshRenderer(new CompTK::MeshRenderer(chunk->position()));
+            chunk->setMeshRenderer(rendererPool_.newMeshRenderer(chunk->position()));
         }
 
         chunkMeshInfoQueue_.push_back(chunkMeshInfo);
@@ -195,6 +195,10 @@ namespace ProcGenTK
                 }
             }
 
+            if (pair.second->meshRenderer() != nullptr)
+            {
+                rendererPool_.deleteMeshRenderer(pair.second->meshRenderer());
+            }
             pool_.deleteChunk(pair.second);
         }
 

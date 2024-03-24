@@ -82,7 +82,7 @@ namespace ProcGenTK
 
     Chunk::Chunk(const IChunkMediator* chunkMediator,
                  const ITerrainGen* terrainGen, 
-                 CompTK::IMeshRenderer* meshRenderer, 
+                 CompTK::MeshRenderer* meshRenderer, 
                  glm::vec3 position, ChunkSize chunkSize)
         : chunkMediator_{ chunkMediator}, terrainGen_{ terrainGen }, meshRenderer_{ meshRenderer },
           position_{ position }, atlas_{ 256, 16, voxelNames }, 
@@ -93,7 +93,6 @@ namespace ProcGenTK
 
     Chunk::~Chunk()
     {
-        delete meshRenderer_;
         delete[] voxels_;
     }
 
@@ -106,12 +105,11 @@ namespace ProcGenTK
 
     void Chunk::init(const IChunkMediator* chunkMediator,
                      const ITerrainGen* terrainGen, 
-                     CompTK::IMeshRenderer* meshRenderer, 
+                     CompTK::MeshRenderer* meshRenderer, 
                      glm::vec3 position)
     {
         chunkMediator_ = chunkMediator;
         terrainGen_ = terrainGen;
-        delete meshRenderer_;
         meshRenderer_ = meshRenderer;
         position_ = position;
         hasPopulatedVoxelMap_ = false;
@@ -125,6 +123,11 @@ namespace ProcGenTK
     glm::vec3 Chunk::position()
     {
         return position_;
+    }
+
+    CompTK::MeshRenderer* Chunk::meshRenderer()
+    {
+        return meshRenderer_;
     }
 
     bool Chunk::hasPopulatedVoxelMap() const
@@ -202,18 +205,23 @@ namespace ProcGenTK
 
     void Chunk::sendChunkMesh(RenderTK::Mesh& chunkMesh)
     {
-        meshRenderer_->sendData(chunkMesh);
+        if (meshRenderer_ != nullptr)
+        {
+            meshRenderer_->sendData(chunkMesh);
+        }
     }
 
-    void Chunk::setMeshRenderer(CompTK::IMeshRenderer* meshRenderer)
+    void Chunk::setMeshRenderer(CompTK::MeshRenderer* meshRenderer)
     {
-        delete meshRenderer_;
         meshRenderer_ = meshRenderer;
     }
 
     void Chunk::draw(const RenderTK::ShaderProgram& shader) const
     {
-        meshRenderer_->draw(shader);
+        if (meshRenderer_ != nullptr)
+        {
+            meshRenderer_->draw(shader);
+        } 
     }
 
     std::vector<float> Chunk::getTextureCoordinates(VoxelSides voxelSides, int face) const

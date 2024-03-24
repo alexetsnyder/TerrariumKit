@@ -141,6 +141,7 @@
     <ClCompile Include="JobManager.cpp" />
     <ClCompile Include="Keybindings.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="MeshRendererPool.cpp" />
     <ClCompile Include="QuadRenderer.cpp" />
     <ClCompile Include="TextElement.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="JobManager.h" />
     <ClInclude Include="Keybindings.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="MeshRendererPool.h" />
     <ClInclude Include="NullMeshRenderer.h" />
     <ClInclude Include="QuadRenderer.h" />
     <ClInclude Include="TextElement.h" />

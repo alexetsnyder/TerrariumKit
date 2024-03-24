@@ -6,6 +6,7 @@
 #include "IChunkMediator.h"
 #include "IMeshRenderer.h"
 #include "ITerrainGen.h"
+#include "MeshRendererPool.h"
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "World.h"
@@ -44,6 +45,8 @@ namespace ProcGenTK
 			void createChunk(Chunk* chunk);
 			void setAllChunksInactive();
 			void deleteInactiveChunks();
+
+			MemTK::MeshRendererPool rendererPool_;
 
 			RenderTK::Texture chunkTexture_;
 

@@ -15,7 +15,7 @@ namespace ProcGenTK
 
 			Chunk* newChunk(const IChunkMediator* chunkMediator,
 							const ITerrainGen* terrainGen,
-							CompTK::IMeshRenderer* meshRenderer,
+							CompTK::MeshRenderer* meshRenderer,
 							glm::vec3 position);
 			void deleteChunk(Chunk* chunk);
 
