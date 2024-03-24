@@ -45,8 +45,6 @@ namespace ProcGenTK
 			void setAllChunksInactive();
 			void deleteInactiveChunks();
 
-			//const CompTK::IMeshRenderer* nullRenderer_;
-
 			RenderTK::Texture chunkTexture_;
 
 			ChunkPool pool_;

@@ -149,7 +149,7 @@ namespace ProcGenTK
         chunk->createChunkMesh(chunkMeshInfo.chunkMesh);
         if (!chunkMeshInfo.chunkMesh.empty())
         {
-            chunk->setMeshRenderer(new CompTK::MeshRenderer());
+            chunk->setMeshRenderer(new CompTK::MeshRenderer(chunk->position()));
         }
 
         chunkMeshInfoQueue_.push_back(chunkMeshInfo);

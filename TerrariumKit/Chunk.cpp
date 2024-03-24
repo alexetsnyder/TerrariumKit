@@ -122,6 +122,11 @@ namespace ProcGenTK
         return next_;
     }
 
+    glm::vec3 Chunk::position()
+    {
+        return position_;
+    }
+
     bool Chunk::hasPopulatedVoxelMap() const
     {
         return hasPopulatedVoxelMap_;
@@ -208,7 +213,7 @@ namespace ProcGenTK
 
     void Chunk::draw(const RenderTK::ShaderProgram& shader) const
     {
-        meshRenderer_->draw(shader, position_);
+        meshRenderer_->draw(shader);
     }
 
     std::vector<float> Chunk::getTextureCoordinates(VoxelSides voxelSides, int face) const

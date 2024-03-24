@@ -12,19 +12,21 @@ namespace CompTK
 	class MeshRenderer : public IMeshRenderer
 	{
 		public:
-			MeshRenderer();
+			MeshRenderer(const glm::vec3& position);
 			~MeshRenderer();
 			MeshRenderer(const MeshRenderer&) = delete;
 
 			//From CompTK::IMeshRenderer
 			void sendData(const RenderTK::Mesh& mesh) override;
-			void draw(const RenderTK::ShaderProgram& program, const glm::vec3& position) const override;
+			void draw(const RenderTK::ShaderProgram& program) const override;
 
 		private:
 			void generateAll();
 			void bindAll();
 			void unbindAll();
 			void free() const;
+
+			glm::vec3 position_;
 
 			GLuint vao_;
 			GLuint vbo_;

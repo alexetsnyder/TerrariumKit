@@ -5,8 +5,9 @@
 
 namespace CompTK
 {
-	MeshRenderer::MeshRenderer()
-        : vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 }, 
+	MeshRenderer::MeshRenderer(const glm::vec3& position)
+        : position_{ position },
+          vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 }, 
           indicesCount_{ 0 }
 	{
 
@@ -36,10 +37,10 @@ namespace CompTK
         unbindAll();
 	}
 
-	void MeshRenderer::draw(const RenderTK::ShaderProgram& program, const glm::vec3& position) const
+	void MeshRenderer::draw(const RenderTK::ShaderProgram& program) const
 	{
         glm::mat4 model{ 1.0f };
-        model = glm::translate(model, position);
+        model = glm::translate(model, position_);
         program.setUniform("model", model);
 
         glBindVertexArray(vao_);

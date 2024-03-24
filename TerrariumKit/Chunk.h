@@ -33,6 +33,7 @@ namespace ProcGenTK
 					  glm::vec3 position);
 
 			Chunk* next() const;
+			glm::vec3 position();
 			bool hasPopulatedVoxelMap() const;
 			bool isOutsideChunk(const glm::vec3& position) const;
 			GLubyte getVoxelByte(const glm::vec3& position) const;

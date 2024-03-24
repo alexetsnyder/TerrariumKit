@@ -12,6 +12,6 @@ namespace CompTK
 		public:
 			virtual ~IMeshRenderer() {};
 			virtual void sendData(const RenderTK::Mesh& mesh) = 0;
-			virtual void draw(const RenderTK::ShaderProgram& program, const glm::vec3& position) const = 0;
+			virtual void draw(const RenderTK::ShaderProgram& program) const = 0;
 	};
 }
