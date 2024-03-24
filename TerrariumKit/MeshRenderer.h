@@ -12,7 +12,7 @@ namespace CompTK
 	class MeshRenderer : public IMeshRenderer
 	{
 		public:
-			MeshRenderer(const char* textureFile);
+			MeshRenderer();
 			~MeshRenderer();
 			MeshRenderer(const MeshRenderer&) = delete;
 
@@ -29,7 +29,6 @@ namespace CompTK
 			GLuint vao_;
 			GLuint vbo_;
 			GLuint ebo_;
-			RenderTK::Texture texture_;
 			GLuint indicesCount_;			
 	};
 }

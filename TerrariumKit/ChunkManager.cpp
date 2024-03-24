@@ -7,7 +7,9 @@
 namespace ProcGenTK
 {
     ChunkManager::ChunkManager(const World* world)
-        : world_{ world }, pool_{ world->chunkSize() }
+        : world_{ world }, pool_{ world->chunkSize() },
+          chunkTexture_{ "Assets/Textures/Atlas.png",
+          RenderTK::TextureSettings{ GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST } }
     {
         float minHeight{ 32.0f };
         float varyHeight{ 16.0f };
@@ -95,6 +97,8 @@ namespace ProcGenTK
 
     void ChunkManager::draw(const RenderTK::ShaderProgram& program)
     {
+        chunkTexture_.bind();
+
         for (auto& pair : activeChunkMap_)
         {
             pair.second->draw(program);
@@ -145,7 +149,7 @@ namespace ProcGenTK
         chunk->createChunkMesh(chunkMeshInfo.chunkMesh);
         if (!chunkMeshInfo.chunkMesh.empty())
         {
-            chunk->setMeshRenderer(new CompTK::MeshRenderer("Assets/Textures/Atlas.png"));
+            chunk->setMeshRenderer(new CompTK::MeshRenderer());
         }
 
         chunkMeshInfoQueue_.push_back(chunkMeshInfo);

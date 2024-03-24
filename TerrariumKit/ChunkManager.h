@@ -7,6 +7,7 @@
 #include "IMeshRenderer.h"
 #include "ITerrainGen.h"
 #include "ShaderProgram.h"
+#include "Texture.h"
 #include "World.h"
 
 #include <glm/glm.hpp>
@@ -45,6 +46,8 @@ namespace ProcGenTK
 			void deleteInactiveChunks();
 
 			//const CompTK::IMeshRenderer* nullRenderer_;
+
+			RenderTK::Texture chunkTexture_;
 
 			ChunkPool pool_;
 			const World* world_;

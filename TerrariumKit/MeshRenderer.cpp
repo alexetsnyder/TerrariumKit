@@ -5,10 +5,9 @@
 
 namespace CompTK
 {
-	MeshRenderer::MeshRenderer(const char* textureFile)
+	MeshRenderer::MeshRenderer()
         : vao_{ 0 }, ebo_{ 0 }, vbo_{ 0 }, 
-          indicesCount_{ 0 }, texture_{ textureFile, 
-          RenderTK::TextureSettings{ GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST } }
+          indicesCount_{ 0 }
 	{
 
 	}
@@ -42,8 +41,6 @@ namespace CompTK
         glm::mat4 model{ 1.0f };
         model = glm::translate(model, position);
         program.setUniform("model", model);
-
-        texture_.bind();
 
         glBindVertexArray(vao_);
         glDrawElements(GL_TRIANGLES, indicesCount_, GL_UNSIGNED_INT, 0);
