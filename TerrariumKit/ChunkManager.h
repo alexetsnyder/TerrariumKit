@@ -43,7 +43,7 @@ namespace ProcGenTK
 			void draw(const RenderTK::ShaderProgram& program);
 
 		private:
-			ChunkMeshInfo nextChunkMeshInfo();
+			ChunkMeshInfo* nextChunkMeshInfo();
 			void createChunk(Chunk* chunk);
 			void setAllChunksInactive();
 			void deleteInactiveChunks();
@@ -61,7 +61,7 @@ namespace ProcGenTK
 			const ITerrainGen* terrainGen_;
 
 			std::list<Chunk*> chunkCreateQueue_;
-			std::list<ChunkMeshInfo> chunkMeshInfoQueue_;
+			std::list<ChunkMeshInfo*> chunkMeshInfoQueue_;
 
 			std::map<std::array<float, 3>, Chunk*> activeChunkMap_;
 			std::map<std::array<float, 3>, Chunk*> inactiveChunkMap_;

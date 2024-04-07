@@ -24,6 +24,11 @@ namespace ProcGenTK
     ChunkManager::~ChunkManager()
     {
         delete terrainGen_;
+
+        for (auto chunkMeshInfo : chunkMeshInfoQueue_)
+        {
+            delete chunkMeshInfo;
+        }
     }
 
     void ChunkManager::queueChunks()
@@ -82,8 +87,9 @@ namespace ProcGenTK
         int count = 0;
         while (!chunkMeshInfoQueue_.empty() && count++ < n)
         {
-            ChunkMeshInfo chunkMeshInfo{ nextChunkMeshInfo() };
-            chunkMeshInfo.chunkPointer->sendChunkMesh(chunkMeshInfo.chunkMesh);
+            ChunkMeshInfo* chunkMeshInfo{ nextChunkMeshInfo() };
+            chunkMeshInfo->chunkPointer->sendChunkMesh(chunkMeshInfo->chunkMesh);
+            delete chunkMeshInfo;
         }
     }
 
@@ -91,18 +97,18 @@ namespace ProcGenTK
     {
         if (world_->isInfinite() && world_->hasCurrentChunkIdChanged())
         {
-            startProfileTime("queueChunks()");
+            //startProfileTime("queueChunks()");
             queueChunks();
-            endProfileTime();
+            //endProfileTime();
         }
 
-        startProfileTime("createChunks(4)");
+        //startProfileTime("createChunks(4)");
         createChunks(4);
-        endProfileTime();
+        //endProfileTime();
 
-        startProfileTime("sendChunkData(4)");
+        //startProfileTime("sendChunkData(4)");
         sendChunkData(4);
-        endProfileTime();
+        //endProfileTime();
     }
 
     void ChunkManager::draw(const RenderTK::ShaderProgram& program)
@@ -142,9 +148,9 @@ namespace ProcGenTK
         }
     }
 
-    ChunkMeshInfo ChunkManager::nextChunkMeshInfo()
+    ChunkMeshInfo* ChunkManager::nextChunkMeshInfo()
     {
-        ChunkMeshInfo chunkMeshInfo{ chunkMeshInfoQueue_.front() };
+        ChunkMeshInfo* chunkMeshInfo{ chunkMeshInfoQueue_.front() };
         chunkMeshInfoQueue_.pop_front();
         return chunkMeshInfo;
     }
@@ -153,11 +159,11 @@ namespace ProcGenTK
     {
         chunk->populateVoxelMap();
 
-        ChunkMeshInfo chunkMeshInfo;
-        chunkMeshInfo.chunkPointer = chunk;
+        ChunkMeshInfo* chunkMeshInfo{ new ChunkMeshInfo() };
+        chunkMeshInfo->chunkPointer = chunk;
 
-        chunk->createChunkMesh(chunkMeshInfo.chunkMesh);
-        if (!chunkMeshInfo.chunkMesh.empty())
+        chunk->createChunkMesh(chunkMeshInfo->chunkMesh);
+        if (!chunkMeshInfo->chunkMesh.empty())
         {
             chunk->setMeshRenderer(rendererPool_.newMeshRenderer(chunk->position()));
         }
@@ -197,7 +203,7 @@ namespace ProcGenTK
             {
                 for (auto meshInfoIter{ chunkMeshInfoQueue_.begin() }; meshInfoIter != chunkMeshInfoQueue_.end(); meshInfoIter++)
                 {
-                    if (meshInfoIter->chunkPointer == pair.second)
+                    if ((*meshInfoIter)->chunkPointer == pair.second)
                     {
                         chunkMeshInfoQueue_.erase(meshInfoIter);
                         break;
