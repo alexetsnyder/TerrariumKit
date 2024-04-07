@@ -14,8 +14,10 @@
 #include <glm/glm.hpp>
 
 #include <array>
-#include <map>
+#include <chrono>
 #include <list>
+#include <map>
+#include <string_view>
 
 namespace ProcGenTK
 {
@@ -45,6 +47,10 @@ namespace ProcGenTK
 			void createChunk(Chunk* chunk);
 			void setAllChunksInactive();
 			void deleteInactiveChunks();
+
+			void startProfileTime(std::string_view name);
+			void endProfileTime();
+			std::chrono::steady_clock::time_point lastFrame_;
 
 			MemTK::MeshRendererPool rendererPool_;
 

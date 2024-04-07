@@ -4,12 +4,15 @@
 #include "NullMeshRenderer.h"
 #include "TerrainGen.h"
 
+#include <iostream>
+
 namespace ProcGenTK
 {
     ChunkManager::ChunkManager(const World* world)
         : world_{ world }, pool_{ world->chunkSize() }, rendererPool_{},
           chunkTexture_{ "Assets/Textures/Atlas.png",
-          RenderTK::TextureSettings{ GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST } }
+          RenderTK::TextureSettings{ GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST } },
+          lastFrame_{ std::chrono::steady_clock::now() }
     {
         float minHeight{ 32.0f };
         float varyHeight{ 16.0f };
@@ -88,11 +91,18 @@ namespace ProcGenTK
     {
         if (world_->isInfinite() && world_->hasCurrentChunkIdChanged())
         {
+            startProfileTime("queueChunks()");
             queueChunks();
+            endProfileTime();
         }
 
+        startProfileTime("createChunks(4)");
         createChunks(4);
+        endProfileTime();
+
+        startProfileTime("sendChunkData(4)");
         sendChunkData(4);
+        endProfileTime();
     }
 
     void ChunkManager::draw(const RenderTK::ShaderProgram& program)
@@ -203,5 +213,16 @@ namespace ProcGenTK
         }
 
         inactiveChunkMap_.clear();
+    }
+
+    void ChunkManager::startProfileTime(std::string_view name)
+    {
+        std::cout << "Profile: " << name << " ";
+        lastFrame_ = std::chrono::steady_clock::now();
+    }
+
+    void ChunkManager::endProfileTime()
+    {
+        std::cout << "Time: " << (std::chrono::steady_clock::now() - lastFrame_).count() << "\n";
     }
 }
